@@ -9,7 +9,9 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class RegisterController extends Controller
 {
@@ -46,10 +48,28 @@ class RegisterController extends Controller
             return $user;
         });
 
-        event(new Registered($user));
+        $mailError = null;
+
+        try {
+            event(new Registered($user));
+        } catch (TransportExceptionInterface $exception) {
+            Log::warning('Email verification send failed during registration.', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'exception' => $exception->getMessage(),
+            ]);
+
+            $mailError = 'We could not send a verification email right now. You can resend it from this page.';
+        }
 
         Auth::login($user);
 
-        return redirect()->route('verification.notice');
+        $redirect = redirect()->route('verification.notice');
+
+        if ($mailError) {
+            return $redirect->with('mail_error', $mailError);
+        }
+
+        return $redirect;
     }
 }

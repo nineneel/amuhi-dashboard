@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentSimulationRequest;
 use App\Http\Requests\SubscriptionStatusUpdateRequest;
+use App\InvoiceStatus;
+use App\Models\ActivityLog;
+use App\Models\Invoice;
+use App\Models\Notification;
+use App\Models\Payment;
 use App\Models\SubscriptionPlan;
+use App\PaymentStatus;
 use App\SubscriptionStatus;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
-    public function show(): View
+    public function show(Request $request): View
     {
-        $user = auth()->user();
+        $user = $request->user();
         $plans = SubscriptionPlan::query()
             ->where('is_active', true)
             ->orderBy('price')
@@ -44,21 +53,57 @@ class PaymentController extends Controller
         $dates = $this->resolveSubscriptionDates($plan, $status);
         $subscription = $user->currentSubscription();
 
-        if ($subscription) {
-            $subscription->update([
-                'subscription_plan_id' => $plan->id,
-                'status' => $status,
-                'starts_at' => $dates['starts_at'],
-                'ends_at' => $dates['ends_at'],
+        DB::transaction(function () use ($user, $plan, $status, $dates, &$subscription, $request) {
+            if ($subscription) {
+                $subscription->update([
+                    'subscription_plan_id' => $plan->id,
+                    'status' => $status,
+                    'starts_at' => $dates['starts_at'],
+                    'ends_at' => $dates['ends_at'],
+                ]);
+            } else {
+                $subscription = $user->subscriptions()->create([
+                    'subscription_plan_id' => $plan->id,
+                    'status' => $status,
+                    'starts_at' => $dates['starts_at'],
+                    'ends_at' => $dates['ends_at'],
+                ]);
+            }
+
+            $invoice = Invoice::query()->create([
+                'user_id' => $user->id,
+                'subscription_id' => $subscription->id,
+                'invoice_number' => 'INV-'.now()->format('Ymd').'-'.Str::upper(Str::random(6)),
+                'amount' => $plan->price,
+                'due_date' => now()->toDateString(),
+                'status' => InvoiceStatus::Paid->value,
             ]);
-        } else {
-            $user->subscriptions()->create([
-                'subscription_plan_id' => $plan->id,
-                'status' => $status,
-                'starts_at' => $dates['starts_at'],
-                'ends_at' => $dates['ends_at'],
+
+            Payment::query()->create([
+                'invoice_id' => $invoice->id,
+                'gateway_transaction_id' => 'demo-pay-'.Str::upper(Str::random(8)),
+                'amount' => $invoice->amount,
+                'status' => PaymentStatus::Success->value,
+                'paid_at' => now(),
             ]);
-        }
+
+            ActivityLog::query()->create([
+                'user_id' => $user->id,
+                'action' => 'Invoice paid',
+                'description' => 'Invoice #'.$invoice->invoice_number.' was paid successfully.',
+                'subject_type' => Invoice::class,
+                'subject_id' => $invoice->id,
+                'ip_address' => $request->ip(),
+            ]);
+
+            Notification::query()->create([
+                'user_id' => $user->id,
+                'type' => 'invoice',
+                'title' => 'Payment received',
+                'message' => 'Invoice #'.$invoice->invoice_number.' has been paid.',
+                'sent_via' => 'app',
+            ]);
+        });
 
         return redirect()->route('dashboard')
             ->with('success', 'Payment successful! (Demo Mode)');

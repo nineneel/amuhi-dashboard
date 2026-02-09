@@ -14,10 +14,14 @@
         <div class="d-flex justify-content-between align-items-center notifications-head">
             <h6 class="fw-bold text-dark mb-0">Notifications</h6>
             @if($unreadCount > 0)
-                <a href="javascript:void(0);" class="fs-11 text-success text-end ms-auto" data-bs-toggle="tooltip" title="Mark all as read">
-                    <i class="feather-check"></i>
-                    <span>Mark as Read</span>
-                </a>
+                <form method="POST" action="{{ route('notifications.read-all') }}">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-link fs-11 text-success text-end ms-auto p-0" data-bs-toggle="tooltip" title="Mark all as read">
+                        <i class="feather-check"></i>
+                        <span>Mark as Read</span>
+                    </button>
+                </form>
             @endif
         </div>
 
@@ -28,17 +32,21 @@
                 </div>
                 <div class="notifications-desc">
                     <a href="javascript:void(0);" class="font-body text-truncate-2-line">
-                        {{ $notification->data['message'] ?? 'New notification' }}
+                        {{ $notification->title ?? 'Notification' }}
                     </a>
+                    <p class="text-muted fs-13 mb-1">
+                        {{ $notification->message ?? $notification->data['message'] ?? 'New update available.' }}
+                    </p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="notifications-date text-muted border-bottom border-bottom-dashed">
                             {{ $notification->created_at->diffForHumans() }}
                         </div>
                         <div class="d-flex align-items-center float-end gap-2">
-                            <a href="javascript:void(0);" class="d-block wd-8 ht-8 rounded-circle bg-gray-300" data-bs-toggle="tooltip" title="Mark as Read"></a>
-                            <a href="javascript:void(0);" class="text-danger" data-bs-toggle="tooltip" title="Remove">
-                                <i class="feather-x fs-12"></i>
-                            </a>
+                            <form method="POST" action="{{ route('notifications.read', $notification) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-link p-0 d-block wd-8 ht-8 rounded-circle bg-gray-300" data-bs-toggle="tooltip" title="Mark as Read"></button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -52,7 +60,7 @@
 
         @if($unreadCount > 0)
             <div class="text-center notifications-footer">
-                <a href="javascript:void(0);" class="fs-13 fw-semibold text-dark">View All Notifications</a>
+                <a href="{{ route('notifications.index') }}" class="fs-13 fw-semibold text-dark">View All Notifications</a>
             </div>
         @endif
     </div>

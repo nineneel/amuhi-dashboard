@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordUpdateRequest;
+use App\Models\ActivityLog;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +15,7 @@ class SettingsController extends Controller
 {
     public function index(Request $request): View
     {
-        $user = auth()->user();
+        $user = $request->user();
         $user->load('settings');
 
         $section = $request->query('section', 'account');
@@ -32,11 +34,14 @@ class SettingsController extends Controller
             'language' => ['required', 'in:en,id'],
         ]);
 
-        $user = auth()->user();
+        $user = $request->user();
         $user->settings()->updateOrCreate(
             ['user_id' => $user->id],
             ['language' => $data['language']]
         );
+
+        $languageLabel = $data['language'] === 'id' ? 'Bahasa Indonesia' : 'English';
+        $this->recordSettingsActivity($request, 'Account settings updated', 'Language set to '.$languageLabel.'.');
 
         return redirect()->route('settings.index', ['section' => 'account'])
             ->with('success', 'Account settings updated successfully.');
@@ -49,13 +54,21 @@ class SettingsController extends Controller
             'notification_app' => ['nullable', 'boolean'],
         ]);
 
-        $user = auth()->user();
+        $user = $request->user();
         $user->settings()->updateOrCreate(
             ['user_id' => $user->id],
             [
                 'notification_email' => $request->boolean('notification_email'),
                 'notification_app' => $request->boolean('notification_app'),
             ]
+        );
+
+        $emailStatus = $request->boolean('notification_email') ? 'on' : 'off';
+        $appStatus = $request->boolean('notification_app') ? 'on' : 'off';
+        $this->recordSettingsActivity(
+            $request,
+            'Notification settings updated',
+            'Email notifications '.$emailStatus.', in-app notifications '.$appStatus.'.'
         );
 
         return redirect()->route('settings.index', ['section' => 'notifications'])
@@ -70,7 +83,7 @@ class SettingsController extends Controller
             'show_phone' => ['nullable', 'boolean'],
         ]);
 
-        $user = auth()->user();
+        $user = $request->user();
         $privacySettings = [
             'profile_visible' => $request->boolean('profile_visible'),
             'show_email' => $request->boolean('show_email'),
@@ -80,6 +93,15 @@ class SettingsController extends Controller
         $user->settings()->updateOrCreate(
             ['user_id' => $user->id],
             ['privacy_settings' => $privacySettings]
+        );
+
+        $profileVisibility = $request->boolean('profile_visible') ? 'visible' : 'hidden';
+        $showEmail = $request->boolean('show_email') ? 'visible' : 'hidden';
+        $showPhone = $request->boolean('show_phone') ? 'visible' : 'hidden';
+        $this->recordSettingsActivity(
+            $request,
+            'Privacy settings updated',
+            'Profile '.$profileVisibility.', email '.$showEmail.', phone '.$showPhone.'.'
         );
 
         return redirect()->route('settings.index', ['section' => 'privacy'])
@@ -92,7 +114,7 @@ class SettingsController extends Controller
             'theme' => ['required', 'in:light,dark,system'],
         ]);
 
-        $user = auth()->user();
+        $user = $request->user();
         $user->settings()->updateOrCreate(
             ['user_id' => $user->id],
             ['theme' => $data['theme']]
@@ -104,10 +126,12 @@ class SettingsController extends Controller
 
     public function updatePassword(PasswordUpdateRequest $request): RedirectResponse
     {
-        $user = auth()->user();
+        $user = $request->user();
         $user->update([
             'password' => Hash::make($request->validated()['password']),
         ]);
+
+        $this->recordSettingsActivity($request, 'Security settings updated', 'Password was changed.');
 
         return redirect()->route('settings.index', ['section' => 'security'])
             ->with('success', 'Password changed successfully.');
@@ -119,7 +143,7 @@ class SettingsController extends Controller
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = auth()->user();
+        $user = $request->user();
 
         Auth::logout();
 
@@ -129,5 +153,19 @@ class SettingsController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/')->with('success', 'Your account has been deleted.');
+    }
+
+    private function recordSettingsActivity(Request $request, string $action, string $description): void
+    {
+        $user = $request->user();
+
+        ActivityLog::query()->create([
+            'user_id' => $user->id,
+            'action' => $action,
+            'description' => $description,
+            'subject_type' => User::class,
+            'subject_id' => $user->id,
+            'ip_address' => $request->ip(),
+        ]);
     }
 }

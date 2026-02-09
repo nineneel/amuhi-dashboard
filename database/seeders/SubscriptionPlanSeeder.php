@@ -12,32 +12,36 @@ class SubscriptionPlanSeeder extends Seeder
      */
     public function run(): void
     {
-        SubscriptionPlan::create([
-            'name' => 'Annual Membership',
-            'description' => 'Full access to all AMUHI programs and events for one year',
-            'price' => 500000,
-            'duration_days' => 365,
-            'features' => [
-                'Access to all 6 AMUHI programs',
-                'Event registration',
-                'Digital certificate',
-                'Network access',
-                'Priority support',
-            ],
-            'is_active' => true,
-        ]);
+        SubscriptionPlan::query()->updateOrCreate(
+            ['name' => 'Annual Membership'],
+            [
+                'description' => 'Full access to all AMUHI programs and events for one year',
+                'price' => 500000,
+                'duration_days' => 365,
+                'features' => [
+                    'Access to all 6 AMUHI programs',
+                    'Event registration',
+                    'Digital certificate',
+                    'Network access',
+                    'Priority support',
+                ],
+                'is_active' => true,
+            ]
+        );
 
-        SubscriptionPlan::create([
-            'name' => 'Monthly Membership',
-            'description' => 'Full access to all AMUHI programs and events for one month',
-            'price' => 50000,
-            'duration_days' => 30,
-            'features' => [
-                'Access to all 6 AMUHI programs',
-                'Event registration',
-                'Network access',
-            ],
-            'is_active' => true,
-        ]);
+        SubscriptionPlan::query()->updateOrCreate(
+            ['name' => 'Monthly Membership'],
+            [
+                'description' => 'Full access to all AMUHI programs and events for one month',
+                'price' => 50000,
+                'duration_days' => 30,
+                'features' => [
+                    'Access to all 6 AMUHI programs',
+                    'Event registration',
+                    'Network access',
+                ],
+                'is_active' => true,
+            ]
+        );
     }
 }

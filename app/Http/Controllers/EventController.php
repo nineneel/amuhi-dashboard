@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\EventStatus;
+use App\Models\ActivityLog;
 use App\Models\Event;
+use App\Models\Notification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -115,6 +117,25 @@ class EventController extends Controller
             ['user_id' => $user->id],
             ['registered_at' => now(), 'status' => 'registered']
         );
+
+        if ($registration->wasRecentlyCreated) {
+            ActivityLog::query()->create([
+                'user_id' => $user->id,
+                'action' => 'Event registration',
+                'description' => 'You registered for '.$event->title.'.',
+                'subject_type' => Event::class,
+                'subject_id' => $event->id,
+                'ip_address' => $request->ip(),
+            ]);
+
+            Notification::query()->create([
+                'user_id' => $user->id,
+                'type' => 'event',
+                'title' => 'Registration confirmed',
+                'message' => 'You are registered for '.$event->title.'.',
+                'sent_via' => 'app',
+            ]);
+        }
 
         $message = $registration->wasRecentlyCreated
             ? 'You are registered for this event.'

@@ -7,8 +7,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
@@ -47,11 +49,15 @@ Route::middleware('auth')->group(function () {
         ->name('verification.resend');
 
     Route::middleware('verified')->group(function () {
-        Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/payment', [PaymentController::class, 'show'])->name('payments.show');
         Route::post('/payment', [PaymentController::class, 'simulate'])->name('payments.simulate');
         Route::put('/payment/status', [PaymentController::class, 'updateStatus'])->name('payments.status');
+
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::put('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+        Route::put('/notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 
         Route::middleware('subscribed')->group(function () {
             Route::get('/events', [EventController::class, 'index'])->name('events.index');

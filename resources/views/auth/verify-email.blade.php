@@ -21,6 +21,12 @@
                         </div>
                     @endif
 
+                    @if (session('mail_error'))
+                        <div class="alert alert-warning mt-4">
+                            {{ session('mail_error') }}
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('verification.resend') }}" class="w-100 mt-4 pt-2">
                         @csrf
 

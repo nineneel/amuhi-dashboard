@@ -1,5 +1,8 @@
+@php
+    $themePreference = auth()->user()?->settings?->theme ?? 'system';
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $themePreference === 'dark' ? 'app-skin-dark' : '' }}" data-theme="{{ $themePreference }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
@@ -185,15 +188,35 @@
             .nxl-container {
                 margin-left: 280px !important;
             }
-            .page-header {
-                left: 280px !important;
-            }
+        .page-header {
+            left: 280px !important;
+        }
+    }
+
+        .dashboard-next-event-card {
+            background-color: #f1f3f9;
+            border-color: #e5e7eb;
+        }
+
+        html.app-skin-dark .dashboard-next-event-card {
+            background-color: #121a2d;
+            border-color: #1b2436;
+        }
+
+        .notification-item--read {
+            background-color: #f5f7fb;
+            border-color: #e2e8f0;
+        }
+
+        html.app-skin-dark .notification-item--read {
+            background-color: #121a2d;
+            border-color: #1b2436;
         }
     </style>
 
     @stack('styles')
 </head>
-<body>
+<body data-theme-preference="{{ $themePreference }}" data-theme-update-url="{{ route('settings.appearance') }}">
     @include('layouts.partials.sidebar')
 
     @include('layouts.partials.header')
@@ -250,6 +273,69 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const html = document.documentElement;
+            let themePreference = document.body?.dataset.themePreference || 'system';
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const darkButton = document.querySelector('.dark-button');
+            const lightButton = document.querySelector('.light-button');
+
+            const resolveTheme = () => {
+                if (themePreference === 'system') {
+                    return mediaQuery.matches ? 'dark' : 'light';
+                }
+
+                return themePreference;
+            };
+
+            const applyTheme = (mode, persist = true) => {
+                html.classList.toggle('app-skin-dark', mode === 'dark');
+                if (persist) {
+                    localStorage.setItem('app-skin-dark', mode === 'dark' ? 'app-skin-dark' : 'app-skin-light');
+                }
+            };
+
+            const updateThemePreference = (mode) => {
+                const updateUrl = document.body?.dataset.themeUpdateUrl;
+                const token = document.querySelector('meta[name=\"csrf-token\"]')?.getAttribute('content');
+
+                themePreference = mode;
+                document.body.dataset.themePreference = mode;
+
+                if (!updateUrl || !token) {
+                    return;
+                }
+
+                fetch(updateUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                    },
+                    body: JSON.stringify({ theme: mode }),
+                }).catch(() => {});
+            };
+
+            applyTheme(resolveTheme(), false);
+
+            if (themePreference === 'system') {
+                mediaQuery.addEventListener('change', () => {
+                    applyTheme(resolveTheme(), false);
+                });
+            }
+
+            darkButton?.addEventListener('click', event => {
+                event.preventDefault();
+                applyTheme('dark');
+                updateThemePreference('dark');
+            });
+
+            lightButton?.addEventListener('click', event => {
+                event.preventDefault();
+                applyTheme('light');
+                updateThemePreference('light');
+            });
+
             const forceExpandedNav = () => {
                 document.documentElement.classList.remove('minimenu');
                 document.body.classList.remove('minimenu');
