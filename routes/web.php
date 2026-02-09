@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,10 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('verified')->group(function () {
         Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+
+        Route::get('/payment', [PaymentController::class, 'show'])->name('payments.show');
+        Route::post('/payment', [PaymentController::class, 'simulate'])->name('payments.simulate');
+        Route::put('/payment/status', [PaymentController::class, 'updateStatus'])->name('payments.status');
 
         Route::middleware('subscribed')->group(function () {
             Route::view('/events', 'events.index')->name('events.index');

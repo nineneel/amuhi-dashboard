@@ -56,7 +56,7 @@
             </strong>
             <p class="mb-0 fs-13">{{ $message }}</p>
         </div>
-        <a href="#" class="btn btn-sm {{ $status?->value === 'expired' ? 'btn-danger' : 'btn-primary' }}">
+        <a href="{{ route('payments.show') }}" class="btn btn-sm {{ $status?->value === 'expired' ? 'btn-danger' : 'btn-primary' }}">
             {{ $buttonText }}
         </a>
     </div>

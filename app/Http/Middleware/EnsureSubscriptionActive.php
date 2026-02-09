@@ -26,7 +26,7 @@ class EnsureSubscriptionActive
 
         if (! $hasActiveSubscription) {
             return redirect()
-                ->route('dashboard')
+                ->route('payments.show')
                 ->with('warning', 'Subscription required. Please complete payment to access this section.');
         }
 

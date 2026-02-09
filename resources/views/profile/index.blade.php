@@ -150,7 +150,7 @@
                                 <h6 class="mb-1">No Active Subscription</h6>
                                 <p class="text-muted mb-0 fs-13">Upgrade to access all features</p>
                             </div>
-                            <a href="#" class="btn btn-primary">
+                            <a href="{{ route('payments.show') }}" class="btn btn-primary">
                                 Upgrade Now
                             </a>
                         </div>

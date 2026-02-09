@@ -337,10 +337,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 - Payment banner moved under header, full-width with flush margins; clickable CTA + status-aware messaging.
 
 ### Phase 4: Subscription & Payment (Demo Mode)
-- [ ] Payment page (after email verification) - **demo/placeholder UI**
-- [ ] Demo "Pay Now" button - simulates successful payment
-- [ ] Subscription status management (manual toggle for testing)
-- [ ] Seeder to create demo subscription plans
+- [x] Payment page (after email verification) - **demo/placeholder UI**
+- [x] Demo "Pay Now" button - simulates successful payment
+- [x] Subscription status management (manual toggle for testing)
+- [x] Seeder to create demo subscription plans
 
 ### Phase 5: Core Features
 - [ ] Events list & calendar view
@@ -526,12 +526,9 @@ app/
 1. ~~**Approve packages**~~ - **Done** (dompdf + google2fa approved)
 2. ~~**Phase 1: Foundation**~~ - **Done** (migrations, models, factories, seeders, layouts, assets)
 3. ~~**Phase 2: Authentication**~~ - **Done** (routes, controllers, form requests, middleware, 2FA, UI template styling)
-
-### Current Status
-**Phase 2 Complete.** All authentication flows work end-to-end with full UI template styling applied.
+4. ~~**Phase 3: User Page**~~ - **Done** (profile page, setting page, dashboard reminder overlay)
 
 ### To Do
-1. **Phase 3: User Pages** - Build Profile & Settings pages (view/edit, sections), add payment banner component
 2. **Phase 4: Subscription (Demo)** - Payment page + simulate payment, subscription status toggle
 3. **Phase 5: Core Features** - Events, Invoices, Programs pages
 4. **Phase 6: Dashboard & Polish** - Dashboard widgets, notifications, dark mode
