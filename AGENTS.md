@@ -17,12 +17,14 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/sail (SAIL) - v1
 - pestphp/pest (PEST) - v4
 - phpunit/phpunit (PHPUNIT) - v12
+- tailwindcss (TAILWINDCSS) - v4
 
 ## Skills Activation
 
 This project has domain-specific skills available. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
 
 - `pest-testing` — Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature tests, adding assertions, testing Livewire components, browser testing, debugging test failures, working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion, coverage, or needs to verify functionality works.
+- `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
 
 ## Conventions
 
@@ -42,18 +44,6 @@ This project has domain-specific skills available. You MUST activate the relevan
 ## Frontend Bundling
 
 - If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
-
-## UI Templates & Assets
-
-- All UI templates and static HTML files are located in the `ui-template/` directory.
-- When referencing or working with UI templates, use the `@ui-template/` convention to indicate files from the UI template directory.
-- The UI template contains:
-  - HTML templates for various pages (analytics, apps, auth, customers, invoices, leads, projects, proposals, reports, settings, widgets, etc.)
-  - Static assets in `ui-template/assets/` (css, images, js, scss, vendors)
-  - Reusable partials in `ui-template/partials/`
-  - Documentation in `ui-template/docs/`
-- When implementing new features or pages, reference the appropriate template from `@ui-template/` to maintain consistency with the existing design system.
-- Example: For authentication pages, refer to templates like `@ui-template/auth-login-cover.html`, `@ui-template/auth-register-creative.html`, etc.
 
 ## Documentation Files
 
@@ -234,4 +224,12 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Do NOT delete tests without approval.
 - CRITICAL: ALWAYS use `search-docs` tool for version-specific Pest documentation and updated code examples.
 - IMPORTANT: Activate `pest-testing` every time you're working with a Pest or testing-related task.
+
+=== tailwindcss/core rules ===
+
+# Tailwind CSS
+
+- Always use existing Tailwind conventions; check project patterns before adding new ones.
+- IMPORTANT: Always use `search-docs` tool for version-specific Tailwind CSS documentation and updated code examples. Never rely on training data.
+- IMPORTANT: Activate `tailwindcss-development` every time you're working with a Tailwind CSS or styling-related task.
 </laravel-boost-guidelines>

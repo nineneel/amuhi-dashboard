@@ -80,13 +80,15 @@ EventRegistration
 
 ### Enums
 
-| Enum | Values |
-|------|--------|
-| `MemberType` | `PPUIPIHK`, `PT`, `PERSONAL` |
-| `SubscriptionStatus` | `Unpaid`, `Pending`, `Active`, `Expired` |
-| `InvoiceStatus` | `Pending`, `Paid`, `Overdue`, `Cancelled` |
-| `PaymentStatus` | `Pending`, `Success`, `Failed`, `Refunded` |
-| `EventStatus` | `Upcoming`, `Ongoing`, `Past`, `Cancelled` |
+| Enum | Values | Implementation |
+|------|--------|----------------|
+| `MemberType` | `PpuiPihk`, `Pt`, `Personal` | String-backed: `ppui_pihk`, `pt`, `personal` |
+| `SubscriptionStatus` | `Unpaid`, `Pending`, `Active`, `Expired` | String-backed: `unpaid`, `pending`, `active`, `expired` |
+| `InvoiceStatus` | `Pending`, `Paid`, `Overdue`, `Cancelled` | String-backed: `pending`, `paid`, `overdue`, `cancelled` |
+| `PaymentStatus` | `Pending`, `Success`, `Failed`, `Refunded` | String-backed: `pending`, `success`, `failed`, `refunded` |
+| `EventStatus` | `Upcoming`, `Ongoing`, `Past`, `Cancelled` | String-backed: `upcoming`, `ongoing`, `past`, `cancelled` |
+
+**Note:** All enums are located in `app/` directory (not `app/Enums/`) and use string-backed enum pattern for database compatibility.
 
 ---
 
@@ -276,14 +278,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 ## 6. Build Phases
 
-### Phase 1: Foundation
-- [ ] Install approved packages (`barryvdh/laravel-dompdf`, `pragmarx/google2fa-laravel`)
-- [ ] Create all migrations
-- [ ] Create all models with relationships
-- [ ] Create factories and seeders
-- [ ] Create enums
-- [ ] Setup Vite and copy assets from @ui-template
-- [ ] Create base layouts (app, guest, partials)
+### Phase 1: Foundation ✅ **COMPLETED**
+- [x] Install approved packages (`barryvdh/laravel-dompdf`, `pragmarx/google2fa-laravel`)
+- [x] Create all migrations
+- [x] Create all models with relationships
+- [x] Create factories and seeders
+- [x] Create enums
+- [x] Setup Vite and copy assets from @ui-template
+- [x] Create base layouts (app, guest, partials)
+
+**Completion Notes:**
+- All 5 enums created with string-backed values
+- 11 migrations created and successfully ran
+- 10 models created with full Eloquent relationships
+- User model updated with MustVerifyEmail and 2FA fields
+- 8 factories created for testing
+- SubscriptionPlanSeeder created with 2 demo plans (Annual: 500,000 / Monthly: 50,000)
+- Assets copied from @ui-template to Laravel directories
+- Base layouts created: app.blade.php, guest.blade.php, and 4 partials
 
 ### Phase 2: Authentication
 - [ ] Register page (with member type selection)
@@ -481,8 +493,23 @@ app/
 
 ---
 
-## Next Steps
+## Progress & Next Steps
 
+### Completed
 1. ~~**Approve packages**~~ - **Done** (dompdf + google2fa approved)
-2. **Start Phase 1** - Foundation (migrations, models, layouts)
-3. **Review @ui-template** - Identify exact templates to use for each page
+2. ~~**Phase 1: Foundation**~~ - **Done** (migrations, models, factories, seeders, layouts, assets)
+
+### Current Status
+**Phase 1 Complete!** All database tables created, models with relationships established, base layouts ready.
+
+### Next Phase
+**Phase 2: Authentication** - Implement full authentication system:
+- Register page with member type selection (PPUIPIHK, PT, Personal)
+- Login page with "Remember Me" and 2FA support
+- Email verification flow
+- Password reset functionality
+- Two-factor authentication setup
+
+### To Do
+3. **Start Phase 2** - Authentication (register, login, email verification, password reset, 2FA)
+4. **Review @ui-template** - Use `auth-login-cover.html` and `auth-register-creative.html` for auth pages
