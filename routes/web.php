@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function () {
             Route::view('/programs', 'programs.index')->name('programs.index');
             Route::view('/invoices', 'invoices.index')->name('invoices.index');
         });
+
+        Route::view('/profile', 'profile.index')->name('profile.index');
+        Route::view('/settings', 'settings.index')->name('settings.index');
     });
 
     Route::get('/two-factor', [TwoFactorController::class, 'show'])->name('two-factor.index');

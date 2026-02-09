@@ -1,75 +1,163 @@
 @extends('layouts.guest')
 
+@push('styles')
+<style>
+    .auth-minimal-wrapper .auth-minimal-inner .minimal-card-wrapper {
+        max-width: 640px;
+    }
+</style>
+@endpush
+
+@section('title', 'Register')
+
 @section('content')
-    <h1 class="text-2xl font-semibold text-gray-900">Create account</h1>
-    <p class="mt-1 text-sm text-gray-600">Join Amuhi to access programs and events.</p>
+<main class="auth-minimal-wrapper">
+    <div class="auth-minimal-inner">
+        <div class="minimal-card-wrapper">
+            <div class="card mb-4 mt-5 mx-4 mx-sm-0 position-relative">
+                <div class="wd-50 bg-white p-2 rounded-circle shadow-lg position-absolute translate-middle top-0 start-50">
+                    <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" class="img-fluid">
+                </div>
+                <div class="card-body p-sm-5">
+                    <h2 class="fs-20 fw-bolder mb-4">Register</h2>
+                    <h4 class="fs-13 fw-bold mb-2">Create your account</h4>
+                    <p class="fs-12 fw-medium text-muted">Join <strong>{{ config('app.name') }}</strong> to access programs and events. Let's get you setup.</p>
 
-    @if ($errors->any())
-        <div class="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-            <ul class="list-disc space-y-1 pl-4">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+                    @if ($errors->any())
+                        <div class="alert alert-danger mt-4">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('register') }}" class="w-100 mt-4 pt-2">
+                        @csrf
+
+                        <div class="row g-3 g-md-4">
+                            <div class="col-12">
+                                <select name="member_type"
+                                        id="member_type"
+                                        class="form-select member-type-select @error('member_type') is-invalid @enderror"
+                                        required>
+                                    <option value="">Select Member Type</option>
+                                    @foreach (\App\MemberType::cases() as $type)
+                                        <option value="{{ $type->value }}" @selected(old('member_type') === $type->value)>
+                                            {{ strtoupper(str_replace('_', ' ', $type->value)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('member_type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <input type="text"
+                                       name="name"
+                                       id="name"
+                                       class="form-control @error('name') is-invalid @enderror"
+                                       placeholder="Full Name"
+                                       value="{{ old('name') }}"
+                                       required
+                                       autofocus>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <input type="text"
+                                       name="company_name"
+                                       id="company_name"
+                                       class="form-control @error('company_name') is-invalid @enderror"
+                                       placeholder="Company Name (Optional)"
+                                       value="{{ old('company_name') }}">
+                                @error('company_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <input type="tel"
+                                       name="phone"
+                                       id="phone"
+                                       class="form-control @error('phone') is-invalid @enderror"
+                                       placeholder="Phone Number"
+                                       value="{{ old('phone') }}"
+                                       required>
+                                @error('phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <input type="email"
+                                       name="email"
+                                       id="email"
+                                       class="form-control @error('email') is-invalid @enderror"
+                                       placeholder="Email"
+                                       value="{{ old('email') }}"
+                                       required>
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <input type="password"
+                                       name="password"
+                                       id="password"
+                                       class="form-control @error('password') is-invalid @enderror"
+                                       placeholder="Password"
+                                       required>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <input type="password"
+                                       name="password_confirmation"
+                                       id="password_confirmation"
+                                       class="form-control"
+                                       placeholder="Confirm Password"
+                                       required>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox"
+                                           name="terms"
+                                           value="1"
+                                           class="custom-control-input @error('terms') is-invalid @enderror"
+                                           id="termsCondition"
+                                           {{ old('terms') ? 'checked' : '' }}
+                                           required>
+                                    <label class="custom-control-label c-pointer" for="termsCondition">
+                                        I agree to the <a href="#" class="text-primary">Terms & Conditions</a>
+                                    </label>
+                                    @error('terms')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <button type="submit" class="btn btn-lg btn-primary w-100">Create Account</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="mt-5 text-muted">
+                        <span>Already have an account?</span>
+                        <a href="{{ route('login') }}" class="fw-bold">Login</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    @endif
-
-    <form method="POST" action="{{ route('register') }}" class="mt-6 space-y-4">
-        @csrf
-
-        <div>
-            <label for="member_type" class="block text-sm font-medium text-gray-700">Member Type</label>
-            <select id="member_type" name="member_type" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                @foreach (\App\MemberType::cases() as $type)
-                    <option value="{{ $type->value }}" @selected(old('member_type') === $type->value)>
-                        {{ $type->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-            <input id="name" name="name" type="text" value="{{ old('name') }}" required autofocus class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-        </div>
-
-        <div>
-            <label for="company_name" class="block text-sm font-medium text-gray-700">Company Name (optional)</label>
-            <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-        </div>
-
-        <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-            <input id="phone" name="phone" type="text" value="{{ old('phone') }}" required class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-        </div>
-
-        <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input id="email" name="email" type="email" value="{{ old('email') }}" required class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-        </div>
-
-        <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <input id="password" name="password" type="password" required class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-        </div>
-
-        <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-            <input id="password_confirmation" name="password_confirmation" type="password" required class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-        </div>
-
-        <label class="flex items-center gap-2 text-sm text-gray-700">
-            <input type="checkbox" name="terms" value="1" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ old('terms') ? 'checked' : '' }}>
-            I agree to the terms and conditions
-        </label>
-
-        <button type="submit" class="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700">
-            Create account
-        </button>
-
-        <p class="text-center text-sm text-gray-600">
-            Already have an account?
-            <a class="text-indigo-600 hover:underline" href="{{ route('login') }}">Log in</a>
-        </p>
-    </form>
+    </div>
+</main>
 @endsection

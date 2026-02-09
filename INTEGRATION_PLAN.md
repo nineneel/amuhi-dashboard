@@ -193,15 +193,21 @@ resources/views/
 
 ### Template Mapping (@ui-template → Blade)
 
-| Feature | UI Template Reference |
-|---------|----------------------|
-| Login | `@ui-template/auth-login-cover.html` |
-| Register | `@ui-template/auth-register-creative.html` |
-| Dashboard | `@ui-template/analytics-*.html` or `@ui-template/index*.html` |
-| Profile | `@ui-template/apps-contacts-*.html` or `@ui-template/settings-*.html` |
-| Events | `@ui-template/apps-calendar.html` |
-| Invoices | `@ui-template/invoices-*.html` |
-| Settings | `@ui-template/settings-*.html` |
+| Feature | UI Template Reference | Status |
+|---------|----------------------|--------|
+| Login | `@ui-template/auth-login-minimal.html` | ✅ Done |
+| Register | `@ui-template/auth-register-minimal.html` | ✅ Done |
+| Forgot Password | `@ui-template/auth-reset-minimal.html` | ✅ Done |
+| Reset Password | `@ui-template/auth-resetting-minimal.html` | ✅ Done |
+| Verify Email | `@ui-template/auth-verify-minimal.html` | ✅ Done |
+| 2FA Challenge | `@ui-template/auth-verify-minimal.html` | ✅ Done |
+| Dashboard | `@ui-template/analytics-*.html` or `@ui-template/index*.html` | Pending |
+| Profile | `@ui-template/apps-contacts-*.html` or `@ui-template/settings-*.html` | Pending |
+| Events | `@ui-template/apps-calendar.html` | Pending |
+| Invoices | `@ui-template/invoices-*.html` | Pending |
+| Settings | `@ui-template/settings-*.html` | Pending |
+
+**Note:** All auth pages use the `auth-minimal-wrapper` layout for a consistent centered card design.
 
 ### Asset Setup (Vite)
 ```javascript
@@ -304,14 +310,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 - Assets copied from @ui-template to Laravel directories
 - Base layouts created: app.blade.php, guest.blade.php, and 4 partials
 
-### Phase 2: Authentication ✅ **COMPLETED (initial implementation)**
+### Phase 2: Authentication ✅ **COMPLETED**
 - [x] Register page (with member type selection)
 - [x] Login page
 - [x] Email verification flow
 - [x] Forgot/Reset password
 - [x] Two-factor authentication
+- [x] UI template styling applied (auth-minimal centered layout)
 
-**Notes:** Core flows, routes, controllers, middleware, and Blade views are in place. Views are functional but still need UI-template styling polish in a later pass.
+**Completion Notes:**
+- All authentication routes, controllers, form requests, and middleware implemented
+- All auth pages styled with UI template using `auth-minimal-wrapper` (centered card layout)
+- Consistent design across all auth pages: login, register, forgot password, reset password, verify email, 2FA
+- Logo positioned at top center of card
+- Responsive layout with proper spacing and form validation feedback
+- Laravel Pint formatting applied to all files
 
 ### Phase 3: User Pages
 - [ ] Profile page (view & edit)
@@ -507,15 +520,17 @@ app/
 ### Completed
 1. ~~**Approve packages**~~ - **Done** (dompdf + google2fa approved)
 2. ~~**Phase 1: Foundation**~~ - **Done** (migrations, models, factories, seeders, layouts, assets)
-3. ~~**Phase 2: Authentication (initial build)**~~ - **Done** (routes, controllers, form requests, middleware, 2FA, placeholder views)
+3. ~~**Phase 2: Authentication**~~ - **Done** (routes, controllers, form requests, middleware, 2FA, UI template styling)
 
 ### Current Status
-**Phase 2 Complete (initial).** Auth flows work end-to-end; styles remain to align with @ui-template during polish.
+**Phase 2 Complete.** All authentication flows work end-to-end with full UI template styling applied.
 
 ### To Do
-3. **Apply @ui-template code** - Re-skin auth pages with `auth-login-cover.html` and `auth-register-creative.html`.
-4. **Phase 3** - Build Profile & Settings pages (view/edit, sections), add payment banner component.
-5. **Phase 4 (demo)** - Payment page + simulate payment, subscription status toggle, seed demo plans.
+1. **Phase 3: User Pages** - Build Profile & Settings pages (view/edit, sections), add payment banner component
+2. **Phase 4: Subscription (Demo)** - Payment page + simulate payment, subscription status toggle
+3. **Phase 5: Core Features** - Events, Invoices, Programs pages
+4. **Phase 6: Dashboard & Polish** - Dashboard widgets, notifications, dark mode
+5. **Phase 7: Payment Integration** - Yokke payment gateway integration
 
 ### Next Phase
-**Phase 3: User Pages** - Profile, Settings, and payment banner; then subscription demo UI, using ui template code ui.
+**Phase 3: User Pages** - Profile page (view/edit all fields), Settings page (account, notifications, privacy, theme, 2FA, password, delete account), and payment banner component for unpaid users.
