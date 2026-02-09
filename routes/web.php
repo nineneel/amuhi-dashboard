@@ -7,8 +7,11 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,9 +54,16 @@ Route::middleware('auth')->group(function () {
         Route::put('/payment/status', [PaymentController::class, 'updateStatus'])->name('payments.status');
 
         Route::middleware('subscribed')->group(function () {
-            Route::view('/events', 'events.index')->name('events.index');
-            Route::view('/programs', 'programs.index')->name('programs.index');
-            Route::view('/invoices', 'invoices.index')->name('invoices.index');
+            Route::get('/events', [EventController::class, 'index'])->name('events.index');
+            Route::get('/events/calendar', [EventController::class, 'calendar'])->name('events.calendar');
+            Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+            Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register');
+
+            Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
+
+            Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+            Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+            Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download'])->name('invoices.download');
         });
 
         // Profile routes

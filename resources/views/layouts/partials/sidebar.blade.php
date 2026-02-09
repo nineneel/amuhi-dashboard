@@ -67,6 +67,9 @@
                     <a href="{{ route('invoices.index') }}" class="nxl-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}">
                         <span class="nxl-micon"><i class="feather-file-text"></i></span>
                         <span class="nxl-mtext">Invoices</span>
+                        @unless(auth()->user()->hasActiveSubscription())
+                            <span class="badge bg-soft-warning text-warning ms-auto">Paid</span>
+                        @endunless
                     </a>
                 </li>
 

@@ -343,11 +343,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 - [x] Seeder to create demo subscription plans
 
 ### Phase 5: Core Features
-- [ ] Events list & calendar view
-- [ ] Event registration (one-click)
-- [ ] Invoice list & details
-- [ ] Invoice PDF download
-- [ ] Programs page (coming soon)
+- [x] Events list & calendar view
+- [x] Event registration (one-click)
+- [x] Invoice list & details
+- [x] Invoice PDF download
+- [x] Programs page (coming soon)
 
 ### Phase 6: Dashboard & Polish
 - [ ] Dashboard widgets (welcome, activity, events, quick actions)
@@ -527,12 +527,12 @@ app/
 2. ~~**Phase 1: Foundation**~~ - **Done** (migrations, models, factories, seeders, layouts, assets)
 3. ~~**Phase 2: Authentication**~~ - **Done** (routes, controllers, form requests, middleware, 2FA, UI template styling)
 4. ~~**Phase 3: User Page**~~ - **Done** (profile page, setting page, dashboard reminder overlay)
+5. ~~**Phase 4: Subscription (Demo)**~~ - **Done** (payment page, demo pay flow, subscription status toggle, plan seeder)
+6. ~~**Phase 5: Core Features**~~ - **Done** (events list + calendar + registration, invoices list + details + PDF, programs page)
 
 ### To Do
-2. **Phase 4: Subscription (Demo)** - Payment page + simulate payment, subscription status toggle
-3. **Phase 5: Core Features** - Events, Invoices, Programs pages
-4. **Phase 6: Dashboard & Polish** - Dashboard widgets, notifications, dark mode
-5. **Phase 7: Payment Integration** - Yokke payment gateway integration
+1. **Phase 6: Dashboard & Polish** - Dashboard widgets, notifications, dark mode
+2. **Phase 7: Payment Integration** - Yokke payment gateway integration
 
 ### Next Phase
-**Phase 3: User Pages** - Profile page (view/edit all fields), Settings page (account, notifications, privacy, theme, 2FA, password, delete account), and payment banner component for unpaid users.
+**Phase 6: Dashboard & Polish** - Dashboard widgets, notifications, dark mode.
