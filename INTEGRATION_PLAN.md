@@ -483,7 +483,6 @@ app/
 
 ## Next Steps
 
-1. **Approve packages** - Confirm the 3 additional packages listed above
+1. ~~**Approve packages**~~ - **Done** (dompdf + google2fa approved)
 2. **Start Phase 1** - Foundation (migrations, models, layouts)
 3. **Review @ui-template** - Identify exact templates to use for each page
-
