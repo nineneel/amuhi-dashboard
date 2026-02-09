@@ -512,10 +512,10 @@ app/
 ### Current Status
 **Phase 2 Complete (initial).** Auth flows work end-to-end; styles remain to align with @ui-template during polish.
 
-### Next Phase
-**Phase 3: User Pages** - Profile, Settings, and payment banner; then subscription demo UI.
-
 ### To Do
+3. **Apply @ui-template code** - Re-skin auth pages with `auth-login-cover.html` and `auth-register-creative.html`.
 4. **Phase 3** - Build Profile & Settings pages (view/edit, sections), add payment banner component.
 5. **Phase 4 (demo)** - Payment page + simulate payment, subscription status toggle, seed demo plans.
-6. **Apply @ui-template styling** - Re-skin auth pages with `auth-login-cover.html` and `auth-register-creative.html`.
+
+### Next Phase
+**Phase 3: User Pages** - Profile, Settings, and payment banner; then subscription demo UI, using ui template code ui.
