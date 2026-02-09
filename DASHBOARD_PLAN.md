@@ -226,7 +226,7 @@ Settings → Select Section → Update Preferences → Save
 | Notifications | No | Yes | Yes | Header access |
 | Events | No | **Locked** | Yes | Requires subscription |
 | Programs | No | **Locked** | Yes | Requires subscription |
-| Invoices | No | **Locked** | Yes | Requires subscription |
+| Invoices | No | **Locked** | No | Requires subscription |
 
 ### Payment Status States
 | Status | Description | Access Level |

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\SubscriptionStatus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -87,5 +88,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function notifications(): HasMany
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscriptions()
+            ->where('status', SubscriptionStatus::Active->value)
+            ->where(fn ($q) => $q->whereNull('ends_at')->orWhere('ends_at', '>', now()))
+            ->exists();
+    }
+
+    public function currentSubscription(): ?Subscription
+    {
+        return $this->subscriptions()->with('subscriptionPlan')->latest()->first();
     }
 }

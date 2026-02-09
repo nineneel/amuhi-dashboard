@@ -1,8 +1,17 @@
 @extends('layouts.app')
 
+@section('title', 'Dashboard')
+@section('header', 'Dashboard')
+
 @section('content')
-    <div class="p-6">
-        <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
-        <p class="mt-2 text-sm text-gray-600">Welcome to Amuhi Dashboard. Features coming soon.</p>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome to {{ config('app.name') }}</h5>
+                    <p class="text-muted">Features coming soon.</p>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

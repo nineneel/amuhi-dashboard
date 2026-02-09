@@ -202,10 +202,10 @@ resources/views/
 | Verify Email | `@ui-template/auth-verify-minimal.html` | ✅ Done |
 | 2FA Challenge | `@ui-template/auth-verify-minimal.html` | ✅ Done |
 | Dashboard | `@ui-template/analytics-*.html` or `@ui-template/index*.html` | Pending |
-| Profile | `@ui-template/apps-contacts-*.html` or `@ui-template/settings-*.html` | Pending |
+| Profile | `@ui-template/apps-contacts-*.html` or `@ui-template/settings-*.html` | ✅ Done |
 | Events | `@ui-template/apps-calendar.html` | Pending |
 | Invoices | `@ui-template/invoices-*.html` | Pending |
-| Settings | `@ui-template/settings-*.html` | Pending |
+| Settings | `@ui-template/settings-*.html` | ✅ Done |
 
 **Note:** All auth pages use the `auth-minimal-wrapper` layout for a consistent centered card design.
 
@@ -326,10 +326,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 - Responsive layout with proper spacing and form validation feedback
 - Laravel Pint formatting applied to all files
 
-### Phase 3: User Pages
-- [ ] Profile page (view & edit)
-- [ ] Settings page (all sections)
-- [ ] Payment banner component (for unpaid users)
+### Phase 3: User Pages ✅ **COMPLETED**
+- [x] Profile page (view & edit)
+- [x] Settings page (all sections)
+- [x] Payment banner component (for unpaid users)
+
+**Completion Notes:**
+- Profile index + edit views built from template; hooked to user data, avatar/initial badge, plan badge, and action buttons.
+- Settings shell with sidebar + all section stubs wired; sidebar full-height, single scroll, footer spacing optimized.
+- Payment banner moved under header, full-width with flush margins; clickable CTA + status-aware messaging.
 
 ### Phase 4: Subscription & Payment (Demo Mode)
 - [ ] Payment page (after email verification) - **demo/placeholder UI**

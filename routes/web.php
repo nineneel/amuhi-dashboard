@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -49,8 +51,19 @@ Route::middleware('auth')->group(function () {
             Route::view('/invoices', 'invoices.index')->name('invoices.index');
         });
 
-        Route::view('/profile', 'profile.index')->name('profile.index');
-        Route::view('/settings', 'settings.index')->name('settings.index');
+        // Profile routes
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        // Settings routes
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+        Route::put('/settings/account', [SettingsController::class, 'updateAccount'])->name('settings.account');
+        Route::put('/settings/notifications', [SettingsController::class, 'updateNotifications'])->name('settings.notifications');
+        Route::put('/settings/privacy', [SettingsController::class, 'updatePrivacy'])->name('settings.privacy');
+        Route::put('/settings/appearance', [SettingsController::class, 'updateAppearance'])->name('settings.appearance');
+        Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password');
+        Route::delete('/settings/account', [SettingsController::class, 'destroyAccount'])->name('settings.destroy');
     });
 
     Route::get('/two-factor', [TwoFactorController::class, 'show'])->name('two-factor.index');

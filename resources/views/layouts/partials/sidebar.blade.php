@@ -1,42 +1,86 @@
-<aside class="w-64 bg-white shadow-md min-h-screen">
-    <nav class="mt-5 px-3">
-        <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-            <span>Dashboard</span>
-        </a>
+<nav class="nxl-navigation">
+    <div class="navbar-wrapper">
+        <div class="m-header">
+            <a href="{{ route('dashboard') }}" class="b-brand">
+                <img src="{{ asset('images/logo-full.png') }}" alt="{{ config('app.name') }}" class="logo logo-lg">
+                <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" class="logo logo-sm">
+            </a>
+        </div>
+        <div class="navbar-content">
+            <ul class="nxl-navbar">
+                <li class="nxl-item nxl-caption">
+                    <label>Navigation</label>
+                </li>
 
-        <div class="border-t my-3"></div>
+                {{-- Dashboard --}}
+                <li class="nxl-item">
+                    <a href="{{ route('dashboard') }}" class="nxl-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <span class="nxl-micon"><i class="feather-home"></i></span>
+                        <span class="nxl-mtext">Dashboard</span>
+                    </a>
+                </li>
 
-        <a href="{{ route('events.index') }}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-            <span>Events</span>
-        </a>
+                {{-- Events (Paid) --}}
+                <li class="nxl-item">
+                    <a href="{{ route('events.index') }}" class="nxl-link {{ request()->routeIs('events.*') ? 'active' : '' }}">
+                        <span class="nxl-micon"><i class="feather-calendar"></i></span>
+                        <span class="nxl-mtext">Events</span>
+                        @unless(auth()->user()->hasActiveSubscription())
+                            <span class="badge bg-soft-warning text-warning ms-auto">Paid</span>
+                        @endunless
+                    </a>
+                </li>
 
-        <a href="{{ route('programs.index') }}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-            <span>Programs</span>
-        </a>
+                {{-- Programs (Paid) --}}
+                <li class="nxl-item">
+                    <a href="{{ route('programs.index') }}" class="nxl-link {{ request()->routeIs('programs.*') ? 'active' : '' }}">
+                        <span class="nxl-micon"><i class="feather-grid"></i></span>
+                        <span class="nxl-mtext">Programs</span>
+                        @unless(auth()->user()->hasActiveSubscription())
+                            <span class="badge bg-soft-warning text-warning ms-auto">Paid</span>
+                        @endunless
+                    </a>
+                </li>
 
-        <div class="border-t my-3"></div>
+                <li class="nxl-item nxl-caption">
+                    <label>Account</label>
+                </li>
 
-        <a href="{{ route('invoices.index') }}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-            <span>Invoices</span>
-        </a>
+                {{-- Profile --}}
+                <li class="nxl-item">
+                    <a href="{{ route('profile.index') }}" class="nxl-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                        <span class="nxl-micon"><i class="feather-user"></i></span>
+                        <span class="nxl-mtext">Profile</span>
+                    </a>
+                </li>
 
-        <div class="border-t my-3"></div>
+                {{-- Settings --}}
+                <li class="nxl-item">
+                    <a href="{{ route('settings.index') }}" class="nxl-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                        <span class="nxl-micon"><i class="feather-settings"></i></span>
+                        <span class="nxl-mtext">Settings</span>
+                    </a>
+                </li>
 
-        <a href="{{ route('profile.index') }}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-            <span>Profile</span>
-        </a>
+                {{-- Invoices (Account) --}}
+                <li class="nxl-item">
+                    <a href="{{ route('invoices.index') }}" class="nxl-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}">
+                        <span class="nxl-micon"><i class="feather-file-text"></i></span>
+                        <span class="nxl-mtext">Invoices</span>
+                    </a>
+                </li>
 
-        <a href="{{ route('settings.index') }}" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-            <span>Settings</span>
-        </a>
-
-        <div class="border-t my-3"></div>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="w-full flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md text-left">
-                <span>Logout</span>
-            </button>
-        </form>
-    </nav>
-</aside>
+                {{-- Logout --}}
+                <li class="nxl-item">
+                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                        @csrf
+                    </form>
+                    <a href="{{ route('logout') }}" class="nxl-link logout-trigger">
+                        <span class="nxl-micon"><i class="feather-log-out"></i></span>
+                        <span class="nxl-mtext">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
