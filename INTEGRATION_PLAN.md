@@ -96,17 +96,23 @@ EventRegistration
 
 ### Routes
 ```
-POST   /register          → RegisterController@store
-GET    /login             → LoginController@showLoginForm
-POST   /login             → LoginController@login
-POST   /logout            → LoginController@logout
-GET    /email/verify      → VerificationController@notice
-GET    /email/verify/{id} → VerificationController@verify
-POST   /email/resend      → VerificationController@resend
-GET    /forgot-password   → ForgotPasswordController@showForm
-POST   /forgot-password   → ForgotPasswordController@sendResetLink
-GET    /reset-password    → ResetPasswordController@showForm
-POST   /reset-password    → ResetPasswordController@reset
+GET    /register                 → RegisterController@create
+POST   /register                 → RegisterController@store
+GET    /login                    → LoginController@create
+POST   /login                    → LoginController@store
+POST   /logout                   → LogoutController@__invoke
+GET    /email/verify             → VerificationController@notice
+GET    /email/verify/{id}/{hash} → VerificationController@verify
+POST   /email/resend             → VerificationController@resend
+GET    /forgot-password          → ForgotPasswordController@create
+POST   /forgot-password          → ForgotPasswordController@store
+GET    /reset-password/{token}   → ResetPasswordController@create
+POST   /reset-password           → ResetPasswordController@store
+GET    /two-factor/challenge     → TwoFactorController@challenge
+POST   /two-factor/challenge     → TwoFactorController@verifyChallenge
+GET    /two-factor               → TwoFactorController@show
+POST   /two-factor/enable        → TwoFactorController@enable
+POST   /two-factor/disable       → TwoFactorController@disable
 ```
 
 ### Controllers
@@ -132,8 +138,9 @@ app/Http/Requests/Auth/
 
 ### Two-Factor Authentication
 - Use `pragmarx/google2fa-laravel` package
-- Store secret in `users` table (encrypted column)
-- Recovery codes stored in `user_settings`
+- Store secret (encrypted) in `users.two_factor_secret`, toggle via `users.two_factor_enabled`
+- Recovery codes stored in `user_settings.two_factor_recovery_codes`
+- Challenge route protects login flow; enable/disable managed under `/two-factor`
 
 ---
 
@@ -297,12 +304,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 - Assets copied from @ui-template to Laravel directories
 - Base layouts created: app.blade.php, guest.blade.php, and 4 partials
 
-### Phase 2: Authentication
-- [ ] Register page (with member type selection)
-- [ ] Login page
-- [ ] Email verification flow
-- [ ] Forgot/Reset password
-- [ ] Two-factor authentication
+### Phase 2: Authentication ✅ **COMPLETED (initial implementation)**
+- [x] Register page (with member type selection)
+- [x] Login page
+- [x] Email verification flow
+- [x] Forgot/Reset password
+- [x] Two-factor authentication
+
+**Notes:** Core flows, routes, controllers, middleware, and Blade views are in place. Views are functional but still need UI-template styling polish in a later pass.
 
 ### Phase 3: User Pages
 - [ ] Profile page (view & edit)
@@ -498,18 +507,15 @@ app/
 ### Completed
 1. ~~**Approve packages**~~ - **Done** (dompdf + google2fa approved)
 2. ~~**Phase 1: Foundation**~~ - **Done** (migrations, models, factories, seeders, layouts, assets)
+3. ~~**Phase 2: Authentication (initial build)**~~ - **Done** (routes, controllers, form requests, middleware, 2FA, placeholder views)
 
 ### Current Status
-**Phase 1 Complete!** All database tables created, models with relationships established, base layouts ready.
+**Phase 2 Complete (initial).** Auth flows work end-to-end; styles remain to align with @ui-template during polish.
 
 ### Next Phase
-**Phase 2: Authentication** - Implement full authentication system:
-- Register page with member type selection (PPUIPIHK, PT, Personal)
-- Login page with "Remember Me" and 2FA support
-- Email verification flow
-- Password reset functionality
-- Two-factor authentication setup
+**Phase 3: User Pages** - Profile, Settings, and payment banner; then subscription demo UI.
 
 ### To Do
-3. **Start Phase 2** - Authentication (register, login, email verification, password reset, 2FA)
-4. **Review @ui-template** - Use `auth-login-cover.html` and `auth-register-creative.html` for auth pages
+4. **Phase 3** - Build Profile & Settings pages (view/edit, sections), add payment banner component.
+5. **Phase 4 (demo)** - Payment page + simulate payment, subscription status toggle, seed demo plans.
+6. **Apply @ui-template styling** - Re-skin auth pages with `auth-login-cover.html` and `auth-register-creative.html`.
