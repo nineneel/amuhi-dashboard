@@ -11,7 +11,7 @@
 
     <title>@yield('title', 'Authentication') - {{ config('app.name', 'AMUHI') }}</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="{{ url('css/bootstrap.min.css') }}">

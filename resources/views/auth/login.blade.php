@@ -65,6 +65,7 @@
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox"
                                            name="remember"
+                                           value="1"
                                            class="custom-control-input"
                                            id="rememberMe"
                                            {{ old('remember') ? 'checked' : '' }}>

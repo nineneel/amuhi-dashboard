@@ -2,8 +2,8 @@
     <div class="navbar-wrapper">
         <div class="m-header">
             <a href="{{ route('dashboard') }}" class="b-brand">
-                <img src="{{ asset('images/logo-full.png') }}" alt="{{ config('app.name') }}" class="logo logo-lg">
-                <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" class="logo logo-sm">
+                <img src="{{ asset('images/logo-full.png') }}" alt="{{ config('app.name') }}" class="logo logo-lg" style="max-height: 200px; width: auto;">
+                <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" class="logo logo-sm" style="max-height: 360px; width: auto;">
             </a>
         </div>
         <div class="navbar-content">

@@ -58,10 +58,8 @@
             </div>
         @endforelse
 
-        @if($unreadCount > 0)
-            <div class="text-center notifications-footer">
-                <a href="{{ route('notifications.index') }}" class="fs-13 fw-semibold text-dark">View All Notifications</a>
-            </div>
-        @endif
+        <div class="text-center notifications-footer">
+            <a href="{{ route('notifications.index') }}" class="fs-13 fw-semibold text-dark">View All Notifications</a>
+        </div>
     </div>
 </div>

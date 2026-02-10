@@ -19,7 +19,7 @@
 
 @section('content')
     <div class="row g-4">
-        <div class="col-xl-8">
+        <div class="col-12">
             <div class="card stretch">
                 <div class="card-body">
                     <div class="d-flex flex-column flex-lg-row align-items-start justify-content-between gap-4">
@@ -44,17 +44,14 @@
                                 </span>
                             @else
                                 <a href="{{ route('payments.show') }}" class="btn btn-primary">
-                                    <i class="feather-credit-card me-1"></i>Upgrade Now
+                                    <i class="feather-user-plus me-1"></i>Join Member
                                 </a>
                             @endif
                         </div>
                     </div>
 
                     <div class="mt-4 pt-4 border-top">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <h6 class="mb-0">Next Event</h6>
-                            <a href="{{ route('events.index') }}" class="btn btn-sm btn-light">View All</a>
-                        </div>
+                        <h6 class="mb-2">Next Event</h6>
                         @if($nextEvent)
                             <div class="dashboard-next-event-card border rounded p-3">
                                 <div class="d-flex flex-column flex-md-row align-items-start gap-3">
@@ -79,7 +76,7 @@
                                         @else
                                             <form method="POST" action="{{ route('events.register', $nextEvent) }}">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-light">Register</button>
+                                                <button type="submit" class="btn btn-sm btn-primary">Register</button>
                                             </form>
                                         @endif
                                     </div>
@@ -89,87 +86,13 @@
                             <div class="dashboard-next-event-card border rounded p-3 d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6 class="mb-1">No upcoming events</h6>
-                                    <p class="text-muted fs-13 mb-0">We’ll add events here once they’re announced.</p>
+                                    <p class="text-muted fs-13 mb-0">We'll add events here once they're announced.</p>
                                 </div>
                                 <a href="{{ route('events.index') }}" class="btn btn-sm btn-light">Browse Events</a>
                             </div>
                         @endif
                     </div>
 
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4">
-            <div class="card stretch">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Quick Actions</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex flex-column gap-2">
-                        <a href="{{ route('events.index') }}" class="btn btn-light w-100 text-start">
-                            <i class="feather-calendar me-2"></i>Explore Events
-                        </a>
-                        <a href="{{ route('programs.index') }}" class="btn btn-light w-100 text-start">
-                            <i class="feather-grid me-2"></i>View Programs
-                        </a>
-                        <a href="{{ route('invoices.index') }}" class="btn btn-light w-100 text-start">
-                            <i class="feather-file-text me-2"></i>Invoices
-                        </a>
-                        <a href="{{ route('settings.index') }}" class="btn btn-light w-100 text-start">
-                            <i class="feather-settings me-2"></i>Settings
-                        </a>
-                        <a href="{{ route('notifications.index') }}" class="btn btn-light w-100 text-start">
-                            <i class="feather-bell me-2"></i>Notifications
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4 mt-4">
-        <div class="col-md-6 col-xl-4">
-            <div class="card stretch stretch-full">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted fs-12">Upcoming Events</span>
-                            <h4 class="mb-0">{{ $stats['upcoming_events'] }}</h4>
-                        </div>
-                        <div class="avatar-text bg-soft-primary text-primary">
-                            <i class="feather-calendar"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <div class="card stretch stretch-full">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted fs-12">Registered</span>
-                            <h4 class="mb-0">{{ $stats['registered_events'] }}</h4>
-                        </div>
-                        <div class="avatar-text bg-soft-success text-success">
-                            <i class="feather-check-circle"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <div class="card stretch stretch-full">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted fs-12">Open Invoices</span>
-                            <h4 class="mb-0">{{ $stats['open_invoices'] }}</h4>
-                        </div>
-                        <div class="avatar-text bg-soft-warning text-warning">
-                            <i class="feather-file-text"></i>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -259,12 +182,12 @@
                 </div>
             </div>
 
-            <div class="card mt-4">
+            <div class="card mt-4 mb-0">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="card-title mb-0">Recent Invoices</h5>
                     <a href="{{ route('invoices.index') }}" class="btn btn-sm btn-light">View All</a>
                 </div>
-                <div class="card-body">
+                <div class="card-body pb-0">
                     @forelse($recentInvoices as $invoice)
                         @php
                             $invoiceStatus = $invoice->status?->value ?? 'pending';
@@ -294,49 +217,6 @@
                             <p class="text-muted mb-0">Invoices will appear after payments are processed.</p>
                         </div>
                     @endforelse
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4 mt-4">
-        <div class="col-12">
-            <div class="card stretch">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title mb-0">Latest Notifications</h5>
-                    <a href="{{ route('notifications.index') }}" class="btn btn-sm btn-light">View All</a>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        @forelse($recentNotifications as $notification)
-                            <div class="col-md-6 col-xl-4">
-                                <div class="border rounded p-3 h-100">
-                                    <div class="d-flex align-items-start gap-3">
-                                        <div class="avatar-text bg-soft-info text-info">
-                                            <i class="feather-bell"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-1">{{ $notification->title ?? 'Notification' }}</h6>
-                                            <p class="text-muted fs-13 mb-2">
-                                                {{ $notification->message ?? $notification->data['message'] ?? 'New update available.' }}
-                                            </p>
-                                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col-12">
-                                <div class="text-center py-4">
-                                    <div class="avatar-text avatar-xl bg-soft-primary text-primary mx-auto mb-3">
-                                        <i class="feather-bell"></i>
-                                    </div>
-                                    <h6 class="mb-2">No notifications yet</h6>
-                                    <p class="text-muted mb-0">You will see updates and reminders here.</p>
-                                </div>
-                            </div>
-                        @endforelse
-                    </div>
                 </div>
             </div>
         </div>
