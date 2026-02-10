@@ -12,8 +12,16 @@
                 </div>
                 <div class="card-body p-sm-5">
                     <h2 class="fs-20 fw-bolder mb-4">Two-Factor Authentication</h2>
-                    <h4 class="fs-13 fw-bold mb-2">Enter your authentication code</h4>
-                    <p class="fs-12 fw-medium text-muted">Please enter the code from your authenticator app to continue.</p>
+                    <h4 class="fs-13 fw-bold mb-2">Enter your email verification code</h4>
+                    <p class="fs-12 fw-medium text-muted">
+                        We've emailed a 6-digit code to <strong>{{ $maskedEmail }}</strong>. You can also use a recovery code.
+                    </p>
+
+                    @if (session('status'))
+                        <div class="alert alert-success mt-4">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
                     @if ($errors->any())
                         <div class="alert alert-danger mt-4">
@@ -33,11 +41,11 @@
                                    name="code"
                                    id="code"
                                    class="form-control @error('code') is-invalid @enderror"
-                                   placeholder="Authentication Code"
+                                   placeholder="Email verification or recovery code"
                                    required
                                    autofocus
                                    autocomplete="off"
-                                   maxlength="6">
+                                   maxlength="10">
                             @error('code')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -49,7 +57,12 @@
                     </form>
 
                     <div class="mt-5 text-muted text-center">
-                        <p class="mb-0">Lost access to your device?</p>
+                        <p class="mb-0">Didn't receive a code?</p>
+                        <form method="POST" action="{{ route('two-factor.challenge.resend') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-link p-0 fw-bold align-baseline">Resend code</button>
+                        </form>
+                        <span class="mx-2">|</span>
                         <a href="{{ route('login') }}" class="fw-bold">Cancel</a>
                     </div>
                 </div>

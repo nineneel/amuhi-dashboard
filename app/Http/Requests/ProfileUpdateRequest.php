@@ -17,7 +17,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user()->id)],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::in([$this->user()->email])],
             'member_type' => ['required', Rule::enum(MemberType::class)],
             'company_name' => ['nullable', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:25'],
@@ -30,6 +30,7 @@ class ProfileUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'email.in' => 'Email address cannot be changed.',
             'photo.max' => 'The photo must not be larger than 2MB.',
         ];
     }

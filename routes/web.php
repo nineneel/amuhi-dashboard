@@ -32,6 +32,7 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/two-factor/challenge', [TwoFactorController::class, 'challenge'])->name('two-factor.challenge');
     Route::post('/two-factor/challenge', [TwoFactorController::class, 'verifyChallenge'])->name('two-factor.verify');
+    Route::post('/two-factor/challenge/resend', [TwoFactorController::class, 'resendChallenge'])->name('two-factor.challenge.resend');
 });
 
 Route::middleware('auth')->group(function () {
@@ -88,8 +89,15 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/two-factor', [TwoFactorController::class, 'show'])->name('two-factor.index');
+    Route::post('/two-factor/enable/send', [TwoFactorController::class, 'sendEnableCode'])->name('two-factor.enable.send');
     Route::post('/two-factor/enable', [TwoFactorController::class, 'enable'])->name('two-factor.enable');
     Route::post('/two-factor/disable', [TwoFactorController::class, 'disable'])->name('two-factor.disable');
 });
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return redirect()->route('login');
+})->name('home');

@@ -32,7 +32,7 @@ class LoginController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if ($user->two_factor_enabled && $user->two_factor_secret !== null) {
+        if ($user->two_factor_enabled) {
             Auth::logout();
 
             $request->session()->put('2fa:user:id', $user->getKey());
