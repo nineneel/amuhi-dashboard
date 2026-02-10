@@ -13,7 +13,7 @@
                 <div class="card-body p-sm-5">
                     <h2 class="fs-20 fw-bolder mb-4">Verify Your Email</h2>
                     <h4 class="fs-13 fw-bold mb-2">Check your inbox</h4>
-                    <p class="fs-12 fw-medium text-muted">Thanks for signing up! Please verify your email address by clicking the link we just emailed to you.</p>
+                    <p class="fs-12 fw-medium text-muted">Thanks for joining AMUHI! Please verify your email address by clicking the link we just emailed to you.</p>
 
                     @if (session('status'))
                         <div class="alert alert-success mt-4">

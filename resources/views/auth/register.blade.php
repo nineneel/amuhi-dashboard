@@ -21,7 +21,7 @@
                 <div class="card-body p-sm-5">
                     <h2 class="fs-20 fw-bolder mb-4">Register</h2>
                     <h4 class="fs-13 fw-bold mb-2">Create your account</h4>
-                    <p class="fs-12 fw-medium text-muted">Join <strong>{{ config('app.name') }}</strong> to access programs and events. Let's get you setup.</p>
+                    <p class="fs-12 fw-medium text-muted">Join <strong>{{ config('app.name') }}</strong>, Asosiasi Milenial Umroh Haji Indonesia. Access exclusive programs, events, and member benefits.</p>
 
                     @if ($errors->any())
                         <div class="alert alert-danger mt-4">

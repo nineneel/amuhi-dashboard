@@ -57,13 +57,15 @@
                     </form>
 
                     <div class="mt-5 text-muted text-center">
-                        <p class="mb-0">Didn't receive a code?</p>
-                        <form method="POST" action="{{ route('two-factor.challenge.resend') }}" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-link p-0 fw-bold align-baseline">Resend code</button>
-                        </form>
-                        <span class="mx-2">|</span>
-                        <a href="{{ route('login') }}" class="fw-bold">Cancel</a>
+                        <p class="mb-1">Didn't receive a code?</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <form method="POST" action="{{ route('two-factor.challenge.resend') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-link p-0 fw-bold align-baseline">Resend code</button>
+                            </form>
+                            <span class="mx-2">|</span>
+                            <a href="{{ route('login') }}" class="fw-bold">Cancel</a>
+                        </div>
                     </div>
                 </div>
             </div>

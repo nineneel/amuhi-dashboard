@@ -8,11 +8,11 @@
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="{{ config('app.name') }} - Dashboard">
-    <meta name="keyword" content="amuhi, dashboard">
-    <meta name="author" content="{{ config('app.name') }}">
+    <meta name="description" content="AMUHI - Asosiasi Milenial Umroh Haji Indonesia. Member dashboard for programs, events, and membership management.">
+    <meta name="keyword" content="amuhi, umroh, haji, dashboard, membership">
+    <meta name="author" content="AMUHI">
 
-    <title>@yield('title', 'Dashboard') - {{ config('app.name', 'Amuhi Dashboard') }}</title>
+    <title>@yield('title', 'Dashboard') - {{ config('app.name', 'AMUHI') }}</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
 

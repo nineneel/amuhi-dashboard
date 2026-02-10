@@ -13,7 +13,7 @@
                 <div class="card-body p-sm-5">
                     <h2 class="fs-20 fw-bolder mb-4">Login</h2>
                     <h4 class="fs-13 fw-bold mb-2">Login to your account</h4>
-                    <p class="fs-12 fw-medium text-muted">Welcome back to <strong>{{ config('app.name') }}</strong>, access your dashboard and manage your membership.</p>
+                    <p class="fs-12 fw-medium text-muted">Welcome back to <strong>{{ config('app.name') }}</strong>. Access your member dashboard, programs, and events.</p>
 
                     @if ($errors->any())
                         <div class="alert alert-danger mt-4">
