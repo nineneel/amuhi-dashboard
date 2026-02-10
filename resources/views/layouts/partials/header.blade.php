@@ -1,4 +1,4 @@
-<header class="nxl-header">
+<header class="nxl-header nxl-header-compact">
     <div class="header-wrapper">
         {{-- Header Left --}}
         <div class="header-left d-flex align-items-center gap-4">
@@ -11,36 +11,28 @@
                 </div>
             </a>
 
-            {{-- Page Title --}}
-            <h5 class="mb-0 d-none d-lg-block">@yield('header', 'Dashboard')</h5>
+            {{-- Breadcrumb --}}
+            @hasSection('breadcrumb')
+                <ul class="breadcrumb mb-0">
+                    @yield('breadcrumb')
+                </ul>
+            @endif
         </div>
 
         {{-- Header Right --}}
-        <div class="header-right d-flex align-items-center gap-4 ms-auto">
-
-            {{-- Dark/Light Theme Toggle --}}
-            <div class="nxl-h-item dark-light-theme">
-                <a href="javascript:void(0);" class="nxl-head-link me-0 dark-button">
-                    <i class="feather-moon"></i>
-                </a>
-                <a href="javascript:void(0);" class="nxl-head-link me-0 light-button" style="display: none">
-                    <i class="feather-sun"></i>
-                </a>
-            </div>
-
-            {{-- Notifications Dropdown --}}
-            @include('layouts.partials.notifications-dropdown')
-
+        <div class="header-right d-flex align-items-center ms-auto">
             {{-- User Profile Dropdown --}}
             <div class="dropdown nxl-h-item">
-                <a href="javascript:void(0);" data-bs-toggle="dropdown" role="button" data-bs-auto-close="outside">
+                <a href="javascript:void(0);" class="d-flex align-items-center gap-2 profile-dropdown-trigger" data-bs-toggle="dropdown" role="button" data-bs-auto-close="outside">
                     @if(auth()->user()->profile?->photo)
-                        <img src="{{ Storage::url(auth()->user()->profile->photo) }}" alt="{{ auth()->user()->name }}" class="img-fluid user-avtar me-0">
+                        <img src="{{ Storage::url(auth()->user()->profile->photo) }}" alt="{{ auth()->user()->name }}" class="img-fluid user-avtar user-avtar-sm me-0">
                     @else
-                        <div class="avatar-text avatar-md rounded-circle bg-primary text-white me-0">
+                        <div class="avatar-text avatar-sm rounded-circle bg-primary text-white me-0">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </div>
                     @endif
+                    <span class="d-none d-md-block fw-medium text-truncate" style="max-width: 120px;">{{ auth()->user()->name }}</span>
+                    <i class="feather-chevron-down fs-12 d-none d-md-block"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-user-dropdown">
                     <div class="dropdown-header border-0">
@@ -63,6 +55,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="dropdown-divider"></div>
+                    {{-- Theme Toggle --}}
+                    <button type="button" class="dropdown-item d-flex align-items-center justify-content-between theme-toggle-item">
+                        <span class="d-flex align-items-center">
+                            <i class="feather-moon me-2"></i>
+                            <span>Dark Mode</span>
+                        </span>
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" id="theme-toggle-switch" role="switch">
+                        </div>
+                    </button>
+                    {{-- Notifications --}}
+                    <a href="{{ route('notifications.index') }}" class="dropdown-item d-flex align-items-center justify-content-between">
+                        <span class="d-flex align-items-center">
+                            <i class="feather-bell me-2"></i>
+                            <span>Notifications</span>
+                        </span>
+                        @php
+                            $unreadCount = auth()->user()->notifications()->whereNull('read_at')->count();
+                        @endphp
+                        @if($unreadCount > 0)
+                            <span class="badge bg-danger">{{ $unreadCount > 99 ? '99+' : $unreadCount }}</span>
+                        @endif
+                    </a>
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('profile.index') }}" class="dropdown-item">
                         <i class="feather-user"></i>

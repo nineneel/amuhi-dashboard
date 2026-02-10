@@ -212,6 +212,133 @@
             background-color: #121a2d;
             border-color: #1b2436;
         }
+
+        /* Compact header */
+        .nxl-header.nxl-header-compact {
+            height: 50px;
+            min-height: 50px;
+        }
+
+        .nxl-header.nxl-header-compact .header-wrapper {
+            height: 50px;
+            min-height: 50px;
+            padding: 0 20px;
+        }
+
+        /* Smaller user avatar in header */
+        .user-avtar-sm {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            min-height: 32px;
+            max-width: 32px;
+            max-height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            display: block;
+        }
+
+        .avatar-sm {
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            font-size: 14px !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        /* Profile dropdown trigger */
+        .profile-dropdown-trigger {
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+            text-decoration: none;
+            color: #111827;
+            cursor: pointer;
+        }
+
+        .profile-dropdown-trigger:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08);
+        }
+
+        html.app-skin-dark .profile-dropdown-trigger:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.2);
+        }
+
+        html.app-skin-dark .profile-dropdown-trigger {
+            color: #e5e7eb;
+        }
+
+        .profile-dropdown-trigger:active {
+            transform: translateY(1px);
+        }
+
+        .profile-dropdown-trigger .user-avtar-sm,
+        .profile-dropdown-trigger .avatar-text {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            min-height: 32px;
+        }
+
+        .theme-toggle-item {
+            cursor: pointer;
+        }
+
+        /* Breadcrumb styling */
+        .breadcrumb {
+            background: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .breadcrumb .breadcrumb-item a {
+            color: #4b5563;
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .breadcrumb .breadcrumb-item a:hover {
+            color: var(--bs-primary);
+        }
+
+        .breadcrumb .breadcrumb-item.active,
+        .breadcrumb .breadcrumb-item:last-child {
+            color: #1f2937;
+        }
+
+        html.app-skin-dark .breadcrumb .breadcrumb-item a {
+            color: #cbd5e1;
+        }
+
+        html.app-skin-dark .breadcrumb .breadcrumb-item a:hover {
+            color: var(--bs-primary);
+        }
+
+        html.app-skin-dark .breadcrumb .breadcrumb-item.active,
+        html.app-skin-dark .breadcrumb .breadcrumb-item:last-child {
+            color: #e5e7eb;
+        }
+
+        /* Adjust content area for compact header */
+        .nxl-container {
+            top: 50px !important;
+            min-height: calc(100vh - 30px) !important;
+            padding-top: 32px !important;
+        }
+
+        .nxl-content {
+            padding-top: 0 !important;
+        }
+
+        .main-content {
+            padding-top: 0 !important;
+        }
     </style>
 
     @stack('styles')
@@ -224,8 +351,6 @@
     <main class="nxl-container">
         <div class="nxl-content d-flex flex-column min-vh-100">
             <x-payment-banner :user="auth()->user()" />
-
-            @yield('page-header')
 
             <div class="main-content flex-grow-1 @yield('content-class')">
                 @yield('content')
@@ -276,8 +401,8 @@
             const html = document.documentElement;
             let themePreference = document.body?.dataset.themePreference || 'system';
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            const darkButton = document.querySelector('.dark-button');
-            const lightButton = document.querySelector('.light-button');
+            const themeToggleSwitch = document.getElementById('theme-toggle-switch');
+            const themeToggleItem = document.querySelector('.theme-toggle-item');
 
             const resolveTheme = () => {
                 if (themePreference === 'system') {
@@ -292,6 +417,14 @@
                 if (persist) {
                     localStorage.setItem('app-skin-dark', mode === 'dark' ? 'app-skin-dark' : 'app-skin-light');
                 }
+            };
+
+            const syncThemeSwitch = mode => {
+                if (!themeToggleSwitch) {
+                    return;
+                }
+
+                themeToggleSwitch.checked = mode === 'dark';
             };
 
             const updateThemePreference = (mode) => {
@@ -316,24 +449,40 @@
                 }).catch(() => {});
             };
 
-            applyTheme(resolveTheme(), false);
+            const initialMode = resolveTheme();
+            applyTheme(initialMode, false);
+            syncThemeSwitch(initialMode);
 
             if (themePreference === 'system') {
                 mediaQuery.addEventListener('change', () => {
-                    applyTheme(resolveTheme(), false);
+                    const nextMode = resolveTheme();
+                    applyTheme(nextMode, false);
+                    syncThemeSwitch(nextMode);
                 });
             }
 
-            darkButton?.addEventListener('click', event => {
-                event.preventDefault();
-                applyTheme('dark');
-                updateThemePreference('dark');
+            const toggleTheme = mode => {
+                applyTheme(mode);
+                updateThemePreference(mode);
+                syncThemeSwitch(mode);
+            };
+
+            themeToggleSwitch?.addEventListener('click', event => {
+                event.stopPropagation();
             });
 
-            lightButton?.addEventListener('click', event => {
-                event.preventDefault();
-                applyTheme('light');
-                updateThemePreference('light');
+            themeToggleSwitch?.addEventListener('change', event => {
+                const mode = event.target.checked ? 'dark' : 'light';
+                toggleTheme(mode);
+            });
+
+            themeToggleItem?.addEventListener('click', event => {
+                event.stopPropagation();
+                const nextMode = themeToggleSwitch?.checked ? 'light' : 'dark';
+                if (themeToggleSwitch) {
+                    themeToggleSwitch.checked = nextMode === 'dark';
+                }
+                toggleTheme(nextMode);
             });
 
             const forceExpandedNav = () => {

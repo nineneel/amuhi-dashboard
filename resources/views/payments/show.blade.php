@@ -3,6 +3,11 @@
 @section('title', 'Subscription')
 @section('header', 'Subscription')
 
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item">Subscription</li>
+@endsection
+
 @section('content')
     <div class="row g-4">
         <div class="col-12">

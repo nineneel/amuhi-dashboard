@@ -3,18 +3,9 @@
 @section('title', 'Dashboard')
 @section('header', 'Dashboard')
 
-@section('page-header')
-    <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
-            <div class="page-header-title">
-                <h5 class="m-b-10">Dashboard</h5>
-            </div>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item">Dashboard</li>
-            </ul>
-        </div>
-    </div>
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item">Dashboard</li>
 @endsection
 
 @section('content')
@@ -26,7 +17,7 @@
                         <div>
                             <p class="text-muted mb-2">Welcome back</p>
                             <h4 class="mb-2">{{ $user->name }}</h4>
-                            <p class="text-muted mb-0 fs-13">
+                            {{-- <p class="text-muted mb-0 fs-13">
                                 @if($subscription && $user->hasActiveSubscription())
                                     Your {{ $subscription->subscriptionPlan?->name ?? 'membership' }} is active.
                                     @if($subscription->ends_at)
@@ -35,7 +26,7 @@
                                 @else
                                     You are currently on the free plan. Upgrade to unlock all AMUHI programs.
                                 @endif
-                            </p>
+                            </p> --}}
                         </div>
                         <div class="d-flex flex-wrap gap-2 align-items-center">
                             @if($user->hasActiveSubscription())

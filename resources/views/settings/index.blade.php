@@ -5,6 +5,11 @@
 @section('content-class', 'p-0 d-flex align-items-stretch')
 @section('footer-class', '')
 
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item">Settings</li>
+@endsection
+
 @section('content')
     <div class="d-flex flex-grow-1">
         {{-- Settings Sidebar --}}

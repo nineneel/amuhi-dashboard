@@ -40,7 +40,7 @@ class RegisterController extends Controller
             $user->settings()->create([
                 'notification_email' => true,
                 'notification_app' => true,
-                'language' => 'en',
+                'language' => 'id',
                 'theme' => 'light',
                 'privacy_settings' => [],
             ]);

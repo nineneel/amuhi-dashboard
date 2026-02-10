@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
             [
                 'notification_email' => true,
                 'notification_app' => true,
-                'language' => 'en',
+                'language' => 'id',
                 'theme' => 'dark',
                 'privacy_settings' => [
                     'profile_visible' => true,

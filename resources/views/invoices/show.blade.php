@@ -3,34 +3,22 @@
 @section('title', 'Invoice Details')
 @section('header', 'Invoice Details')
 
-@section('page-header')
-    <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
-            <div class="page-header-title">
-                <h5 class="m-b-10">Invoice Details</h5>
-            </div>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('invoices.index') }}">Invoices</a></li>
-                <li class="breadcrumb-item">Details</li>
-            </ul>
-        </div>
-        <div class="page-header-right ms-auto">
-            <div class="page-header-right-items">
-                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <a href="{{ route('invoices.download', $invoice) }}" class="btn btn-primary">
-                        <i class="feather-download me-2"></i>Download PDF
-                    </a>
-                    <a href="{{ route('invoices.index') }}" class="btn btn-light">
-                        <i class="feather-arrow-left me-2"></i>Back
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('invoices.index') }}">Invoices</a></li>
+    <li class="breadcrumb-item">Details</li>
 @endsection
 
 @section('content')
+    <div class="d-flex justify-content-end gap-2 mb-3">
+        <a href="{{ route('invoices.download', $invoice) }}" class="btn btn-primary">
+            <i class="feather-download me-2"></i>Download PDF
+        </a>
+        <a href="{{ route('invoices.index') }}" class="btn btn-light">
+            <i class="feather-arrow-left me-2"></i>Back
+        </a>
+    </div>
+
     @php
         $statusValue = $invoice->status?->value ?? 'pending';
         $statusLabel = match ($statusValue) {

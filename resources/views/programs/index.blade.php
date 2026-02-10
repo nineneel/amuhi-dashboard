@@ -3,18 +3,9 @@
 @section('title', 'Programs')
 @section('header', 'Programs')
 
-@section('page-header')
-    <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
-            <div class="page-header-title">
-                <h5 class="m-b-10">Programs</h5>
-            </div>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item">Programs</li>
-            </ul>
-        </div>
-    </div>
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item">Programs</li>
 @endsection
 
 @section('content')

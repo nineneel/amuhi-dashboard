@@ -3,19 +3,10 @@
 @section('title', 'Two-Factor Authentication')
 @section('header', 'Two-Factor Authentication')
 
-@section('page-header')
-    <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
-            <div class="page-header-title">
-                <h5 class="m-b-10">Two-Factor Authentication</h5>
-            </div>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('settings.index', ['section' => 'security']) }}">Security</a></li>
-                <li class="breadcrumb-item">Two-Factor Authentication</li>
-            </ul>
-        </div>
-    </div>
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('settings.index', ['section' => 'security']) }}">Security</a></li>
+    <li class="breadcrumb-item">Two-Factor Authentication</li>
 @endsection
 
 @section('content')

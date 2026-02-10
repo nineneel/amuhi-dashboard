@@ -3,34 +3,22 @@
 @section('title', 'Notifications')
 @section('header', 'Notifications')
 
-@section('page-header')
-    <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
-            <div class="page-header-title">
-                <h5 class="m-b-10">Notifications</h5>
-            </div>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item">Notifications</li>
-            </ul>
-        </div>
-        <div class="page-header-right ms-auto">
-            <div class="page-header-right-items">
-                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <form method="POST" action="{{ route('notifications.read-all') }}">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit" class="btn btn-light">
-                            <i class="feather-check me-2"></i>Mark All Read
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item">Notifications</li>
 @endsection
 
 @section('content')
+    <div class="d-flex justify-content-end mb-3">
+        <form method="POST" action="{{ route('notifications.read-all') }}">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="btn btn-light">
+                <i class="feather-check me-2"></i>Mark All Read
+            </button>
+        </form>
+    </div>
+
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
