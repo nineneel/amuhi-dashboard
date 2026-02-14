@@ -171,13 +171,13 @@
 
 	            <div class="space-y-6 lg:col-span-4">
 	                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-	                    <h3 class="mb-3 text-base font-semibold text-gray-900 dark:text-white">{{ __('ui.payments.current_subscription') }}</h3>
+	                    <h3 class="mb-2 text-base font-semibold text-gray-900 dark:text-white">{{ __('ui.payments.current_subscription') }}</h3>
 	                    <span
 	                        class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
 	                        {{ $subscriptionStatusLabel }}
 	                    </span>
 
-	                    <dl class="mt-4 space-y-3">
+	                    <dl class="mt-5 space-y-3">
 	                        <div>
 	                            <dt class="text-xs text-gray-500 dark:text-gray-400">{{ __('ui.payments.plan') }}</dt>
 	                            <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ $currentSubscription?->subscriptionPlan?->name ?? __('ui.common.none') }}</dd>

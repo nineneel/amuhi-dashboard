@@ -39,9 +39,8 @@
 
                     <h3 class="mt-4 text-lg font-semibold text-gray-800 dark:text-white/90">{{ $user->name }}</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $user->email }}</p>
-
 		                    <span class="mt-3 inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
-		                        {{ __('ui.profile.subscription') }}: ({{ $subscriptionStatusLabel }})
+		                        {{ __('ui.profile.subscription') }} - {{ $subscriptionStatusLabel }}
 		                    </span>
 		                </div>
 

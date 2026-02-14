@@ -111,7 +111,7 @@ return [
         'subscription_required' => 'Membership required',
         'subscription_required_message' => 'Your account has limited access. Activate your membership to unlock events, programs, and invoices.',
         'welcome_back' => 'Welcome back',
-	        'member_status' => 'Membership:',
+	        'member_status' => 'Membership',
         'unread_notifications' => 'Unread Notifications',
         'invoices' => 'Invoices',
         'pending_invoices' => 'Pending Invoices',
