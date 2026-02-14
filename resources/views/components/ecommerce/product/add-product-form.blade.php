@@ -66,65 +66,42 @@ function test_input($data) {
                             placeholder="Enter product name" />
                     </div>
 
-                    <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Category
-                        </label>
-                        <div class="relative z-20 bg-transparent">
-                            <select name="category"
-                                class="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                <option value="">Select Category</option>
-                                <option value="Laptop" <?php echo ($category == "Laptop") ? "selected" : ""; ?>>Laptop</option>
-                                <option value="Phone" <?php echo ($category == "Phone") ? "selected" : ""; ?>>Phone</option>
-                                <option value="Watch" <?php echo ($category == "Watch") ? "selected" : ""; ?>>Watch</option>
-                                <option value="Electronics" <?php echo ($category == "Electronics") ? "selected" : ""; ?>>Electronics</option>
-                                <option value="Accessories" <?php echo ($category == "Accessories") ? "selected" : ""; ?>>Accessories</option>
-                            </select>
-                            <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
-                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
+                    <x-form.select
+                        label="Category"
+                        name="category"
+                        class="focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:outline-none"
+                    >
+                        <option value="">Select Category</option>
+                        <option value="Laptop" <?php echo ($category == "Laptop") ? "selected" : ""; ?>>Laptop</option>
+                        <option value="Phone" <?php echo ($category == "Phone") ? "selected" : ""; ?>>Phone</option>
+                        <option value="Watch" <?php echo ($category == "Watch") ? "selected" : ""; ?>>Watch</option>
+                        <option value="Electronics" <?php echo ($category == "Electronics") ? "selected" : ""; ?>>Electronics</option>
+                        <option value="Accessories" <?php echo ($category == "Accessories") ? "selected" : ""; ?>>Accessories</option>
+                    </x-form.select>
 
-                    <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Brand</label>
-                        <div class="relative z-20 bg-transparent">
-                            <select name="brand"
-                                class="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                <option value="">Select Brand</option>
-                                <option value="Apple" <?php echo ($brand == "Apple") ? "selected" : ""; ?>>Apple</option>
-                                <option value="Samsung" <?php echo ($brand == "Samsung") ? "selected" : ""; ?>>Samsung</option>
-                                <option value="LG" <?php echo ($brand == "LG") ? "selected" : ""; ?>>LG</option>
-                            </select>
-                            <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
-                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
+                    <x-form.select
+                        label="Brand"
+                        name="brand"
+                        class="focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:outline-none"
+                    >
+                        <option value="">Select Brand</option>
+                        <option value="Apple" <?php echo ($brand == "Apple") ? "selected" : ""; ?>>Apple</option>
+                        <option value="Samsung" <?php echo ($brand == "Samsung") ? "selected" : ""; ?>>Samsung</option>
+                        <option value="LG" <?php echo ($brand == "LG") ? "selected" : ""; ?>>LG</option>
+                    </x-form.select>
 
-                    <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Color</label>
-                        <div class="relative z-20 bg-transparent">
-                            <select name="color"
-                                class="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                <option value="">Select color</option>
-                                <option value="Black" <?php echo ($color == "Black") ? "selected" : ""; ?>>Black</option>
-                                <option value="White" <?php echo ($color == "White") ? "selected" : ""; ?>>White</option>
-                                <option value="Silver" <?php echo ($color == "Silver") ? "selected" : ""; ?>>Silver</option>
-                                <option value="Blue" <?php echo ($color == "Blue") ? "selected" : ""; ?>>Blue</option>
-                                <option value="Gold" <?php echo ($color == "Gold") ? "selected" : ""; ?>>Gold</option>
-                            </select>
-                            <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
-                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
+                    <x-form.select
+                        label="Color"
+                        name="color"
+                        class="focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:outline-none"
+                    >
+                        <option value="">Select color</option>
+                        <option value="Black" <?php echo ($color == "Black") ? "selected" : ""; ?>>Black</option>
+                        <option value="White" <?php echo ($color == "White") ? "selected" : ""; ?>>White</option>
+                        <option value="Silver" <?php echo ($color == "Silver") ? "selected" : ""; ?>>Silver</option>
+                        <option value="Blue" <?php echo ($color == "Blue") ? "selected" : ""; ?>>Blue</option>
+                        <option value="Gold" <?php echo ($color == "Gold") ? "selected" : ""; ?>>Gold</option>
+                    </x-form.select>
 
                     <div class="col-span-full">
                         <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -207,24 +184,15 @@ function test_input($data) {
                             placeholder="1" />
                     </div>
 
-                    <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Availability Status
-                        </label>
-                        <div class="relative z-20 bg-transparent">
-                            <select name="availability"
-                                class="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                <option value="">Select Availability</option>
-                                <option value="In Stock" <?php echo ($availability == "In Stock") ? "selected" : ""; ?>>In Stock</option>
-                                <option value="Out of Stock" <?php echo ($availability == "Out of Stock") ? "selected" : ""; ?>>Out of Stock</option>
-                            </select>
-                            <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
-                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
+                    <x-form.select
+                        label="Availability Status"
+                        name="availability"
+                        class="focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:outline-none"
+                    >
+                        <option value="">Select Availability</option>
+                        <option value="In Stock" <?php echo ($availability == "In Stock") ? "selected" : ""; ?>>In Stock</option>
+                        <option value="Out of Stock" <?php echo ($availability == "Out of Stock") ? "selected" : ""; ?>>Out of Stock</option>
+                    </x-form.select>
                 </div>
             </div>
         </div>

@@ -60,14 +60,10 @@
                                     class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400" />
                             </div>
 
-                            <div>
-                                <label for="language" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Language</label>
-                                <select id="language" name="language"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
-                                    <option value="en" @selected(($settings?->language ?? 'en') === 'en')>English</option>
-                                    <option value="id" @selected(($settings?->language ?? 'en') === 'id')>Bahasa Indonesia</option>
-                                </select>
-                            </div>
+                            <x-form.select label="Language" name="language" id="language">
+                                <option value="en" @selected(($settings?->language ?? 'en') === 'en')>English</option>
+                                <option value="id" @selected(($settings?->language ?? 'en') === 'id')>Bahasa Indonesia</option>
+                            </x-form.select>
                         </div>
 
                         <button type="submit"
@@ -150,15 +146,11 @@
                         @csrf
                         @method('PUT')
 
-                        <div>
-                            <label for="theme" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Theme preference</label>
-                            <select id="theme" name="theme"
-                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
-                                <option value="light" @selected(($settings?->theme ?? 'light') === 'light')>Light</option>
-                                <option value="dark" @selected(($settings?->theme ?? 'light') === 'dark')>Dark</option>
-                                <option value="system" @selected(($settings?->theme ?? 'light') === 'system')>System</option>
-                            </select>
-                        </div>
+                        <x-form.select label="Theme preference" name="theme" id="theme">
+                            <option value="light" @selected(($settings?->theme ?? 'light') === 'light')>Light</option>
+                            <option value="dark" @selected(($settings?->theme ?? 'light') === 'dark')>Dark</option>
+                            <option value="system" @selected(($settings?->theme ?? 'light') === 'system')>System</option>
+                        </x-form.select>
 
                         <button type="submit"
                             class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition">

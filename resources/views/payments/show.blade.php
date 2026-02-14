@@ -85,26 +85,18 @@
                     @csrf
                     @method('PUT')
 
-                    <div>
-                        <label for="plan_id" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Plan</label>
-                        <select id="plan_id" name="plan_id"
-                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
-                            @foreach ($plans as $plan)
-                                <option value="{{ $plan->id }}" @selected((int) old('plan_id', $selectedPlanId) === $plan->id)>{{ $plan->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <x-form.select label="Plan" name="plan_id" id="plan_id">
+                        @foreach ($plans as $plan)
+                            <option value="{{ $plan->id }}" @selected((int) old('plan_id', $selectedPlanId) === $plan->id)>{{ $plan->name }}</option>
+                        @endforeach
+                    </x-form.select>
 
-                    <div>
-                        <label for="status" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Status</label>
-                        <select id="status" name="status"
-                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
-                            <option value="unpaid">Unpaid</option>
-                            <option value="pending">Pending</option>
-                            <option value="active">Active</option>
-                            <option value="expired">Expired</option>
-                        </select>
-                    </div>
+                    <x-form.select label="Status" name="status" id="status">
+                        <option value="unpaid">Unpaid</option>
+                        <option value="pending">Pending</option>
+                        <option value="active">Active</option>
+                        <option value="expired">Expired</option>
+                    </x-form.select>
 
                     <div class="flex items-end">
                         <button type="submit"

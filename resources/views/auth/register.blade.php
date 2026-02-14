@@ -4,7 +4,7 @@
     <div class="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
         <div class="relative flex min-h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
             <div class="flex w-full flex-1 flex-col pb-5 lg:w-1/2">
-                <div class="mx-auto w-full max-w-md pt-5 sm:py-10">
+                {{-- <div class="mx-auto w-full max-w-md pt-5 sm:py-10">
                     <a href="{{ url('/') }}"
                         class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                         <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -12,7 +12,7 @@
                         </svg>
                         Back to home
                     </a>
-                </div>
+                </div> --}}
 
                 <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
                     <div class="mb-5 sm:mb-8">
@@ -31,21 +31,12 @@
                     <form action="{{ route('register') }}" method="POST">
                         @csrf
                         <div class="space-y-5">
-                            <div>
-                                <label for="member_type" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Member Type <span class="text-error-500">*</span>
-                                </label>
-                                <select id="member_type" name="member_type" required
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
-                                    <option value="">Select member type</option>
-                                    <option value="ppui_pihk" @selected(old('member_type') === 'ppui_pihk')>PPUI PIHK</option>
-                                    <option value="pt" @selected(old('member_type') === 'pt')>PT</option>
-                                    <option value="personal" @selected(old('member_type') === 'personal')>Personal</option>
-                                </select>
-                                @error('member_type')
-                                    <p class="mt-1 text-sm text-error-500">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            <x-form.select label="Member Type" name="member_type" id="member_type" required>
+                                <option value="">Select member type</option>
+                                <option value="ppui_pihk" @selected(old('member_type') === 'ppui_pihk')>PPUI PIHK</option>
+                                <option value="pt" @selected(old('member_type') === 'pt')>PT</option>
+                                <option value="personal" @selected(old('member_type') === 'personal')>Personal</option>
+                            </x-form.select>
 
                             <div>
                                 <x-form.input label="Name" type="text" name="name" id="name" placeholder="Enter your full name"
