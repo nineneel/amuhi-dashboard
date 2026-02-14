@@ -12,6 +12,7 @@ return [
         'dashboard' => 'Dashboard',
         'events' => 'Events',
         'programs' => 'Programs',
+        'forum' => 'Forum',
 
         'profile' => 'Profile',
         'app_settings' => 'Settings',
@@ -269,7 +270,22 @@ return [
         'count_title' => ':count AMUHI Programs',
         'subtitle' => 'Program pages are being finalized. Feature launch is coming soon.',
         'coming_soon' => 'Coming Soon',
+        'details' => 'Details',
+        'module_under_development' => 'In development. Coming soon.',
+    ],
+
+    'forum' => [
+        'title' => 'Forum',
+        'count_title' => ':count Forum Modules',
+        'subtitle' => 'Forum features are being finalized. Feature launch is coming soon.',
+        'coming_soon' => 'Coming Soon',
         'module_under_development' => 'This module is under development and will be available in an upcoming release.',
+        'modules' => [
+            'categories' => 'Categories',
+            'discussions' => 'Discussions',
+            'member_qa' => 'Member Q&A',
+            'announcements' => 'Announcements',
+        ],
     ],
 
     'notifications' => [

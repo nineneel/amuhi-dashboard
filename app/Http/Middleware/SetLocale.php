@@ -15,9 +15,15 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = $request->user()?->settings?->language
-            ?? $request->session()->get('locale')
-            ?? config('app.locale');
+        if (! $request->user()) {
+            // Force Indonesian for guests (login/register/forgot password/etc),
+            // even if an old session locale exists.
+            $locale = 'id';
+        } else {
+            $locale = $request->user()?->settings?->language
+                ?? $request->session()->get('locale')
+                ?? config('app.locale');
+        }
 
         if (in_array($locale, ['en', 'id'], true)) {
             app()->setLocale($locale);

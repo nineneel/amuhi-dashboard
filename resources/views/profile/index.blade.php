@@ -107,9 +107,10 @@
 	                    </div>
 	                </div>
 	                <div class="mt-5">
-	                    <a href="{{ route('invoices.index') }}"
-	                        class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
-	                        {{ __('ui.payments.view_invoices') }}
+	                    <a href="{{ route('invoices.index') }}">
+	                        <x-ui.button variant="primary" size="sm">
+	                            {{ __('ui.payments.view_invoices') }}
+	                        </x-ui.button>
 	                    </a>
 	                </div>
 	            </x-common.component-card>

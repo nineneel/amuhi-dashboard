@@ -12,6 +12,7 @@ return [
         'dashboard' => 'Home',
         'events' => 'Aktifitas',
         'programs' => 'Program',
+        'forum' => 'Forum',
 
         'profile' => 'Profil',
         'app_settings' => 'Pengaturan',
@@ -269,7 +270,22 @@ return [
         'count_title' => ':count Program AMUHI',
         'subtitle' => 'Halaman program sedang diselesaikan. Peluncuran fitur segera hadir.',
         'coming_soon' => 'Segera Hadir',
+        'details' => 'Detail',
+        'module_under_development' => 'Sedang dikembangkan. Segera hadir.',
+    ],
+
+    'forum' => [
+        'title' => 'Forum',
+        'count_title' => ':count Modul Forum',
+        'subtitle' => 'Fitur forum sedang diselesaikan. Peluncuran fitur segera hadir.',
+        'coming_soon' => 'Segera Hadir',
         'module_under_development' => 'Modul ini sedang dikembangkan dan akan tersedia pada rilis berikutnya.',
+        'modules' => [
+            'categories' => 'Kategori',
+            'discussions' => 'Diskusi',
+            'member_qa' => 'Tanya Jawab Anggota',
+            'announcements' => 'Pengumuman',
+        ],
     ],
 
     'notifications' => [

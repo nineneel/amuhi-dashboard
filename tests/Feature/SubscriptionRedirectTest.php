@@ -37,3 +37,14 @@ it('redirects an unpaid member to payment when opening programs', function () {
         ->assertRedirect(route('payments.show'))
         ->assertSessionHas('warning');
 });
+
+it('redirects an unpaid member to payment when opening forum', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('forum.index'))
+        ->assertRedirect(route('payments.show'))
+        ->assertSessionHas('warning');
+});

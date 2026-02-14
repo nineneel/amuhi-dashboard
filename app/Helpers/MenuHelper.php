@@ -18,6 +18,11 @@ class MenuHelper
                 'path' => '/events',
             ],
             [
+                'icon' => 'chat',
+                'name' => __('ui.nav.forum'),
+                'path' => '/forum',
+            ],
+            [
                 'icon' => 'pages',
                 'name' => __('ui.nav.programs'),
                 'path' => '/programs',

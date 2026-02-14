@@ -75,20 +75,18 @@
             </div>
 
             <div class="rounded-2xl border border-gray-200 bg-white px-6 py-4 dark:border-gray-800 dark:bg-white/[0.03]">
-                <div class="mb-3 flex items-center justify-between">
+                <div class="mb-3 flex items-center">
                     <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">
                         {{ __('ui.dashboard.upcoming_events') }}</h3>
-                    <a href="{{ route('events.index') }}"
-                        class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">{{ __('ui.common.view_all') }}</a>
                 </div>
 
                 @if ($upcomingEvents->isEmpty())
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.dashboard.no_upcoming_events') }}</p>
                 @else
-                    <div class="space-y-2.5">
-                        @foreach ($upcomingEvents as $event)
-                            @php
-                                $status = $event->status?->value ?? 'upcoming';
+	                    <div class="space-y-2.5">
+	                        @foreach ($upcomingEvents as $event)
+	                            @php
+	                                $status = $event->status?->value ?? 'upcoming';
                                 $eventStatusKey = 'ui.events.status.' . $status;
                                 $eventStatusLabel = trans()->has($eventStatusKey)
                                     ? __($eventStatusKey)
@@ -103,67 +101,72 @@
                                     $eventImage = asset('storage/' . $eventImage);
                                 }
                             @endphp
-                            <div
-                                class="task rounded-xl border border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-white/5">
-                                <div class="flex items-stretch gap-4">
-                                    <div
-                                        class="w-36 shrink-0 self-stretch overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
-                                        @if ($eventImage)
-                                            <img src="{{ $eventImage }}" alt="{{ $event->title }}"
-                                                class="h-full w-full object-cover">
+	                            <div
+	                                class="task rounded-xl border border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-white/5">
+	                                <div class="flex items-stretch gap-4">
+	                                    <div
+	                                        class="w-36 h-44 shrink-0 self-stretch overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+	                                        @if ($eventImage)
+	                                            <img src="{{ $eventImage }}" alt="{{ $event->title }}"
+	                                                class="h-full w-full object-cover">
                                         @else
                                             <div
-                                                class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400 dark:bg-gray-900/70 dark:text-gray-500 [&_svg]:h-6 [&_svg]:w-6">
-                                                {!! \App\Helpers\MenuHelper::getIconSvg('pages') !!}
+                                                class="flex h-full w-full items-center justify-center bg-gray-100 dark:bg-gray-900/70">
+                                                <img src="/images/logo/logo-dark.png" alt="AMUHI"
+                                                    class="h-28 w-28 object-contain opacity-80 dark:brightness-0 dark:invert"
+                                                    loading="lazy">
                                             </div>
                                         @endif
                                     </div>
 
-                                    <div class="min-w-0 flex-1">
-                                        <div class="flex flex-wrap items-start justify-between gap-2">
-                                            <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">
-                                                {{ $event->title }}</h4>
-                                            <div class="flex items-center gap-2">
-                                                <span
-                                                    class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $eventStatusStyles[$status] ?? $eventStatusStyles['upcoming'] }}">
-                                                    {{ $eventStatusLabel }}
-                                                </span>
-                                                @if ($isRegistered)
+                                    <div class="min-w-0 flex-1 flex flex-col">
+                                        <div>
+                                            <div class="flex flex-wrap items-start justify-between gap-2">
+                                                <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">
+                                                    {{ $event->title }}</h4>
+                                                <div class="flex items-center gap-2">
                                                     <span
-                                                        class="inline-flex rounded-full bg-success-50 px-2.5 py-1 text-xs font-medium text-success-700 dark:bg-success-500/10 dark:text-success-400">
-                                                        {{ __('ui.dashboard.registered') }}
+                                                        class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $eventStatusStyles[$status] ?? $eventStatusStyles['upcoming'] }}">
+                                                        {{ $eventStatusLabel }}
                                                     </span>
+                                                    @if ($isRegistered)
+                                                        <span
+                                                            class="inline-flex rounded-full bg-success-50 px-2.5 py-1 text-xs font-medium text-success-700 dark:bg-success-500/10 dark:text-success-400">
+                                                            {{ __('ui.dashboard.registered') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-2 space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                                                <p class="flex items-center gap-2">
+                                                    <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
+                                                        {!! \App\Helpers\MenuHelper::getIconSvg('calendar') !!}
+                                                    </span>
+                                                    {{ optional($event->starts_at)->format('d M Y, H:i') ?? __('ui.common.tba') }}
+                                                    @if ($event->ends_at)
+                                                        - {{ $event->ends_at->format('d M Y, H:i') }}
+                                                    @endif
+                                                </p>
+                                                <p class="flex items-center gap-2">
+                                                    <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
+                                                        {!! \App\Helpers\MenuHelper::getIconSvg('pages') !!}
+                                                    </span>
+                                                    {{ $event->location ?: __('ui.common.tba') }}
+                                                </p>
+                                                @if (($event->event_registrations_count ?? 0) >= 3)
+                                                    <p class="flex items-center gap-2">
+                                                        <span
+                                                            class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
+                                                            {!! \App\Helpers\MenuHelper::getIconSvg('user-profile') !!}
+                                                        </span>
+                                                        {{ trans_choice('ui.dashboard.participants', $event->event_registrations_count ?? 0, ['count' => $event->event_registrations_count ?? 0]) }}
+                                                    </p>
                                                 @endif
                                             </div>
                                         </div>
 
-                                        <div class="mt-2 space-y-1 text-xs text-gray-500 dark:text-gray-400">
-                                            <p class="flex items-center gap-2">
-                                                <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
-                                                    {!! \App\Helpers\MenuHelper::getIconSvg('calendar') !!}
-                                                </span>
-                                                {{ optional($event->starts_at)->format('d M Y, H:i') ?? __('ui.common.tba') }}
-                                                @if ($event->ends_at)
-                                                    - {{ $event->ends_at->format('d M Y, H:i') }}
-                                                @endif
-                                            </p>
-                                            <p class="flex items-center gap-2">
-                                                <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
-                                                    {!! \App\Helpers\MenuHelper::getIconSvg('pages') !!}
-                                                </span>
-                                                {{ $event->location ?: __('ui.common.tba') }}
-                                            </p>
-                                            @if (($event->event_registrations_count ?? 0) >= 3)
-                                                <p class="flex items-center gap-2">
-                                                    <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
-                                                        {!! \App\Helpers\MenuHelper::getIconSvg('user-profile') !!}
-                                                    </span>
-                                                    {{ trans_choice('ui.dashboard.participants', $event->event_registrations_count ?? 0, ['count' => $event->event_registrations_count ?? 0]) }}
-                                                </p>
-                                            @endif
-                                        </div>
-
-                                        <div class="mt-2 flex flex-wrap items-center gap-2">
+                                        <div class="mt-auto flex flex-wrap items-center gap-2 pt-3">
                                             <a href="{{ route('events.show', $event) }}"
                                                 class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
                                                 {{ __('ui.common.view_details') }}
@@ -175,6 +178,13 @@
                         @endforeach
                     </div>
                 @endif
+
+                <div class="mt-4 flex justify-end">
+                    <a href="{{ route('events.index') }}"
+                        class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+                        {{ __('ui.common.view_all') }}
+                    </a>
+                </div>
             </div>
         </div>
 

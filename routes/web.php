@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
@@ -73,6 +74,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register');
 
             Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
+            Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
 
             Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
             Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
