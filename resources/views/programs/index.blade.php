@@ -1,49 +1,41 @@
 @extends('layouts.app')
 
-@section('title', 'Programs')
-@section('header', 'Programs')
-
-@section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-    <li class="breadcrumb-item">Programs</li>
-@endsection
-
 @section('content')
     @php
         $programs = [
-            ['name' => 'AMUHI Academy', 'icon' => 'programs/academy.png', 'desc' => 'Training, certification, and industry readiness programs.'],
-            ['name' => 'AMUHI Check', 'icon' => 'programs/check.png', 'desc' => 'Compliance checks and operational assessments.'],
-            ['name' => 'AMUHI Protect', 'icon' => 'programs/protect.png', 'desc' => 'Risk management, insurance, and protection services.'],
-            ['name' => 'AMUHI Care', 'icon' => 'programs/care.png', 'desc' => 'Member care, guidance, and community support.'],
-            ['name' => 'AMUHI Network', 'icon' => 'programs/network.png', 'desc' => 'Industry networking and partnership opportunities.'],
-            ['name' => 'AMUHI Digital', 'icon' => 'programs/digital.png', 'desc' => 'Digital tools, dashboards, and reports.'],
+            'AMUHI Academy',
+            'AMUHI Check',
+            'AMUHI Protect',
+            'AMUHI Care',
+            'AMUHI Network',
+            'AMUHI Digital',
         ];
     @endphp
 
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="card stretch">
-                <div class="card-body text-center">
-                    <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" width="64" height="64" class="mx-auto mb-3 d-block">
-                    <h4 class="mb-2">Programs are launching soon</h4>
-                    <p class="text-muted mb-0">We are preparing six flagship AMUHI programs to support members throughout the year.</p>
-                </div>
+    <x-common.page-breadcrumb pageTitle="Programs" />
+
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03] lg:p-8">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white/90">6 AMUHI Programs</h2>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    Program pages are being finalized. Feature launch is coming soon.
+                </p>
             </div>
+            <span class="inline-flex rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                Coming Soon
+            </span>
         </div>
 
-        @foreach($programs as $program)
-            <div class="col-md-6 col-xl-4">
-                <div class="card stretch h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <img src="{{ asset('images/' . $program['icon']) }}" alt="{{ $program['name'] }}" width="48" height="48" class="rounded-circle">
-                            <span class="badge bg-soft-warning text-warning">Coming Soon</span>
-                        </div>
-                        <h5 class="mb-2">{{ $program['name'] }}</h5>
-                        <p class="text-muted fs-13 mb-0">{{ $program['desc'] }}</p>
-                    </div>
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            @foreach ($programs as $program)
+                <div class="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900">
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">{{ $program }}</h3>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        This module is under development and will be available in an upcoming release.
+                    </p>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 @endsection

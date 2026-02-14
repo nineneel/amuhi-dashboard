@@ -1,217 +1,142 @@
 @extends('layouts.app')
 
-@section('title', 'Subscription')
-@section('header', 'Subscription')
-
-@section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-    <li class="breadcrumb-item">Subscription</li>
-@endsection
-
 @section('content')
-    <div class="row g-4">
-        <div class="col-12">
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+    @php
+        $subscriptionStatus = $currentSubscription?->status?->value ?? \App\SubscriptionStatus::Unpaid->value;
 
-            @if(session('warning'))
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    {{ session('warning') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+        $statusClasses = [
+            'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
+            'pending' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
+            'expired' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
+            'unpaid' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
+        ];
+    @endphp
 
-            @if($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>We couldn't process that request.</strong>
-                    <ul class="mb-0 mt-2 ps-3">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+    <x-common.page-breadcrumb
+        pageTitle="Payment"
+        :items="[
+            ['label' => 'Profile', 'href' => route('profile.index')],
+            ['label' => 'Payment'],
+        ]"
+    />
 
-            <div class="alert alert-info d-flex align-items-center gap-3 mb-0" role="alert">
-                <i class="feather-info fs-4"></i>
-                <div>
-                    <strong>Demo mode is enabled.</strong>
-                    <span class="d-block fs-13">Payments are simulated and no real charges are made.</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    @if (session('success'))
+        <x-ui.alert variant="success" title="Success" :message="session('success')" class="mb-6" />
+    @endif
 
-    <div class="row g-4 mt-1">
-        <div class="col-xl-8">
-            <div class="card stretch stretch-full">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <div>
-                        <h5 class="card-title mb-1">Choose Your Plan</h5>
-                        <p class="text-muted mb-0 fs-13">Select a subscription plan to unlock all AMUHI features.</p>
-                    </div>
-                    <span class="badge bg-soft-primary text-primary">Demo Mode</span>
-                </div>
-                <div class="card-body">
-                    <div class="row g-4">
-                        @forelse($plans as $plan)
-                            @php
-                                $isSelected = $selectedPlanId === $plan->id;
-                                $isCurrent = $currentSubscription?->subscription_plan_id === $plan->id;
-                            @endphp
-                            <div class="col-md-6">
-                                <div class="card h-100 border {{ $isSelected ? 'border-primary' : 'border-light' }}">
-                                    <div class="card-body d-flex flex-column">
-                                        <div class="d-flex align-items-start justify-content-between mb-3">
-                                            <div>
-                                                <h6 class="mb-1">{{ $plan->name }}</h6>
-                                                <p class="text-muted fs-12 mb-0">{{ $plan->description }}</p>
-                                            </div>
-                                            @if($isCurrent)
-                                                <span class="badge bg-soft-success text-success">Current</span>
-                                            @else
-                                                <span class="badge bg-soft-info text-info">Available</span>
-                                            @endif
-                                        </div>
-                                        <div class="d-flex align-items-baseline gap-2 mb-3">
-                                            <span class="fs-3 fw-bold text-dark">Rp {{ number_format((float) $plan->price, 0, ',', '.') }}</span>
-                                            <span class="text-muted fs-12">/ {{ $plan->duration_days ? $plan->duration_days.' days' : 'Lifetime' }}</span>
-                                        </div>
-                                        @if(! empty($plan->features))
-                                            <ul class="list-unstyled mb-4">
-                                                @foreach($plan->features as $feature)
-                                                    <li class="d-flex align-items-center gap-2 mb-2">
-                                                        <i class="feather-check text-success"></i>
-                                                        <span class="fs-13">{{ $feature }}</span>
-                                                    </li>
+    @if (session('warning'))
+        <x-ui.alert variant="warning" title="Notice" :message="session('warning')" class="mb-6" />
+    @endif
+
+    @if ($errors->any())
+        <x-ui.alert variant="error" title="Payment error" :message="$errors->first()" class="mb-6" />
+    @endif
+
+    <div class="grid gap-6 xl:grid-cols-12">
+        <div class="space-y-6 xl:col-span-8">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <h3 class="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">Subscription Plan</h3>
+                <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+                    Select a plan, then simulate a successful payment to activate your account in demo mode.
+                </p>
+
+                <form method="POST" action="{{ route('payments.simulate') }}" class="space-y-4">
+                    @csrf
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        @foreach ($plans as $plan)
+                            <label class="cursor-pointer rounded-xl border border-gray-200 p-4 transition hover:border-brand-300 dark:border-gray-800 dark:hover:border-brand-800">
+                                <div class="flex items-start gap-3">
+                                    <input type="radio" name="plan_id" value="{{ $plan->id }}"
+                                        class="mt-1 h-4 w-4 border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
+                                        @checked((int) old('plan_id', $selectedPlanId) === $plan->id)>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-800 dark:text-white/90">{{ $plan->name }}</p>
+                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $plan->description }}</p>
+                                        <p class="mt-2 text-sm font-medium text-brand-600 dark:text-brand-400">
+                                            Rp {{ number_format((float) $plan->price, 0, ',', '.') }} / {{ $plan->duration_days }} days
+                                        </p>
+                                        @if (! empty($plan->features))
+                                            <ul class="mt-2 space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                                                @foreach ($plan->features as $feature)
+                                                    <li>• {{ $feature }}</li>
                                                 @endforeach
                                             </ul>
-                                        @else
-                                            <p class="text-muted fs-13 mb-4">Plan details will be available soon.</p>
                                         @endif
-                                        <form method="POST" action="{{ route('payments.simulate') }}" class="mt-auto">
-                                            @csrf
-                                            <input type="hidden" name="plan_id" value="{{ $plan->id }}">
-                                            <button type="submit" class="btn btn-primary w-100">
-                                                <i class="feather-credit-card me-1"></i>Pay Now (Demo)
-                                            </button>
-                                        </form>
                                     </div>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="col-12">
-                                <div class="alert alert-warning mb-0">
-                                    No active subscription plans are available yet.
-                                </div>
-                            </div>
-                        @endforelse
+                            </label>
+                        @endforeach
                     </div>
-                </div>
+
+                    <button type="submit"
+                        class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600">
+                        Simulate Successful Payment
+                    </button>
+                </form>
+            </div>
+
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <h3 class="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">Manual Status Update (Demo)</h3>
+                <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+                    Use this only for testing unpaid, pending, active, and expired states.
+                </p>
+
+                <form method="POST" action="{{ route('payments.status') }}" class="grid gap-4 sm:grid-cols-3">
+                    @csrf
+                    @method('PUT')
+
+                    <div>
+                        <label for="plan_id" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Plan</label>
+                        <select id="plan_id" name="plan_id"
+                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                            @foreach ($plans as $plan)
+                                <option value="{{ $plan->id }}" @selected((int) old('plan_id', $selectedPlanId) === $plan->id)>{{ $plan->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="status" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Status</label>
+                        <select id="status" name="status"
+                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                            <option value="unpaid">Unpaid</option>
+                            <option value="pending">Pending</option>
+                            <option value="active">Active</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-end">
+                        <button type="submit"
+                            class="inline-flex w-full items-center justify-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+                            Update Status
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="col-xl-4">
-            @php
-                $statusValue = $currentSubscription?->status?->value ?? 'unpaid';
-                $statusLabel = match ($statusValue) {
-                    'active' => 'Active',
-                    'pending' => 'Pending',
-                    'expired' => 'Expired',
-                    'unpaid' => 'Unpaid',
-                    default => 'Unpaid',
-                };
-                $statusClass = match ($statusValue) {
-                    'active' => 'bg-soft-success text-success',
-                    'pending' => 'bg-soft-info text-info',
-                    'expired' => 'bg-soft-danger text-danger',
-                    default => 'bg-soft-warning text-warning',
-                };
-                $statusMessage = match ($statusValue) {
-                    'active' => 'Your subscription is active. Enjoy full access to all AMUHI features.',
-                    'pending' => 'Your payment is being processed. Access will unlock once confirmed.',
-                    'expired' => 'Your subscription has expired. Renew to regain full access.',
-                    default => 'You are currently on the free plan. Upgrade to unlock premium features.',
-                };
-            @endphp
-            <div class="card stretch">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Current Subscription</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <h6 class="mb-0">Status</h6>
-                        <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
+
+        <div class="space-y-6 xl:col-span-4">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <h3 class="mb-3 text-base font-semibold text-gray-800 dark:text-white/90">Current Subscription</h3>
+                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
+                    {{ ucfirst($subscriptionStatus) }}
+                </span>
+
+                <dl class="mt-4 space-y-3">
+                    <div>
+                        <dt class="text-xs text-gray-500 dark:text-gray-400">Plan</dt>
+                        <dd class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $currentSubscription?->subscriptionPlan?->name ?? 'None' }}</dd>
                     </div>
-                    <p class="text-muted fs-13">{{ $statusMessage }}</p>
-                    <div class="border rounded p-3 bg-light">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-muted fs-13">Plan</span>
-                            <span class="fw-semibold">{{ $currentSubscription?->subscriptionPlan?->name ?? 'No plan selected' }}</span>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mt-2">
-                            <span class="text-muted fs-13">Valid Until</span>
-                            <span class="fw-semibold">
-                                @if($currentSubscription?->ends_at)
-                                    {{ $currentSubscription->ends_at->format('d M Y') }}
-                                @elseif($statusValue === 'active')
-                                    Lifetime
-                                @else
-                                    -
-                                @endif
-                            </span>
-                        </div>
+                    <div>
+                        <dt class="text-xs text-gray-500 dark:text-gray-400">Starts</dt>
+                        <dd class="text-sm font-medium text-gray-800 dark:text-white/90">{{ optional($currentSubscription?->starts_at)->format('d M Y') ?? '-' }}</dd>
                     </div>
-                </div>
-            </div>
-
-            <div class="card stretch mt-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Demo Controls</h5>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted fs-13">Use this section to manually toggle subscription status for testing.</p>
-                    <form method="POST" action="{{ route('payments.status') }}">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="mb-3">
-                            <label for="plan_id" class="form-label">Plan</label>
-                            <select id="plan_id" name="plan_id" class="form-select @error('plan_id') is-invalid @enderror">
-                                @foreach($plans as $plan)
-                                    <option value="{{ $plan->id }}" {{ old('plan_id', $selectedPlanId) == $plan->id ? 'selected' : '' }}>
-                                        {{ $plan->name }} (Rp {{ number_format((float) $plan->price, 0, ',', '.') }})
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('plan_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select id="status" name="status" class="form-select @error('status') is-invalid @enderror">
-                                @foreach(\App\SubscriptionStatus::cases() as $status)
-                                    <option value="{{ $status->value }}" {{ old('status', $statusValue) === $status->value ? 'selected' : '' }}>
-                                        {{ ucfirst($status->value) }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <button type="submit" class="btn btn-light w-100">
-                            <i class="feather-refresh-ccw me-1"></i>Update Status
-                        </button>
-                    </form>
-                </div>
+                    <div>
+                        <dt class="text-xs text-gray-500 dark:text-gray-400">Ends</dt>
+                        <dd class="text-sm font-medium text-gray-800 dark:text-white/90">{{ optional($currentSubscription?->ends_at)->format('d M Y') ?? '-' }}</dd>
+                    </div>
+                </dl>
             </div>
         </div>
     </div>

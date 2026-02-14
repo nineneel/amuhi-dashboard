@@ -1,75 +1,47 @@
-@extends('layouts.guest')
-
-@section('title', 'Two-Factor Authentication')
+@extends('layouts.fullscreen-layout')
 
 @section('content')
-<main class="auth-minimal-wrapper">
-    <div class="auth-minimal-inner">
-        <div class="minimal-card-wrapper">
-            <div class="card mb-4 mt-5 mx-4 mx-sm-0 position-relative">
-                <div class="wd-50 bg-white p-2 rounded-circle shadow-lg position-absolute translate-middle top-0 start-50">
-                    <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" class="img-fluid">
-                </div>
-                <div class="card-body p-sm-5">
-                    <h2 class="fs-20 fw-bolder mb-4">Two-Factor Authentication</h2>
-                    <h4 class="fs-13 fw-bold mb-2">Enter your email verification code</h4>
-                    <p class="fs-12 fw-medium text-muted">
-                        We've emailed a 6-digit code to <strong>{{ $maskedEmail }}</strong>. You can also use a recovery code.
-                    </p>
+    <div class="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-12">
+        <x-common.common-grid-shape />
 
-                    @if (session('status'))
-                        <div class="alert alert-success mt-4">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+        <div class="relative z-10 w-full max-w-xl rounded-2xl border border-gray-200 bg-white p-8 shadow-theme-lg dark:border-gray-800 dark:bg-gray-900 sm:p-10">
+            <h1 class="mb-3 text-2xl font-semibold text-gray-900 dark:text-white">Two-Factor Authentication</h1>
+            <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                Enter the 6-digit code sent to {{ $maskedEmail }} or use a recovery code.
+            </p>
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger mt-4">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+            @if (session('status'))
+                <x-ui.alert variant="success" title="Code sent" :message="session('status')" class="mb-5" />
+            @endif
 
-                    <form method="POST" action="{{ route('two-factor.verify') }}" class="w-100 mt-4 pt-2">
-                        @csrf
+            @if ($errors->any())
+                <x-ui.alert variant="error" title="Invalid code" :message="$errors->first()" class="mb-5" />
+            @endif
 
-                        <div class="mb-4">
-                            <input type="text"
-                                   name="code"
-                                   id="code"
-                                   class="form-control @error('code') is-invalid @enderror"
-                                   placeholder="Email verification or recovery code"
-                                   required
-                                   autofocus
-                                   autocomplete="off"
-                                   maxlength="10">
-                            @error('code')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+            <form method="POST" action="{{ route('two-factor.verify') }}" class="space-y-5">
+                @csrf
+                <x-form.input label="Verification Code" type="text" name="code" id="code"
+                    placeholder="123456 or recovery code" required autofocus />
 
-                        <div class="mt-5">
-                            <button type="submit" class="btn btn-lg btn-primary w-100">Verify</button>
-                        </div>
-                    </form>
+                <button type="submit"
+                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+                    Verify and Continue
+                </button>
+            </form>
 
-                    <div class="mt-5 text-muted text-center">
-                        <p class="mb-1">Didn't receive a code?</p>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <form method="POST" action="{{ route('two-factor.challenge.resend') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-link p-0 fw-bold align-baseline">Resend code</button>
-                            </form>
-                            <span class="mx-2">|</span>
-                            <a href="{{ route('login') }}" class="fw-bold">Cancel</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="mt-5 grid gap-3">
+                <form method="POST" action="{{ route('two-factor.challenge.resend') }}">
+                    @csrf
+                    <button type="submit"
+                        class="flex w-full items-center justify-center rounded-lg border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+                        Resend Verification Code
+                    </button>
+                </form>
+
+                <a href="{{ route('login') }}" class="text-center text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">
+                    Back to Sign In
+                </a>
             </div>
         </div>
     </div>
-</main>
 @endsection

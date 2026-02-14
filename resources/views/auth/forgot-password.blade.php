@@ -1,65 +1,69 @@
-@extends('layouts.guest')
-
-@section('title', 'Forgot Password')
+@extends('layouts.fullscreen-layout')
 
 @section('content')
-<main class="auth-minimal-wrapper">
-    <div class="auth-minimal-inner">
-        <div class="minimal-card-wrapper">
-            <div class="card mb-4 mt-5 mx-4 mx-sm-0 position-relative">
-                <div class="wd-50 bg-white p-2 rounded-circle shadow-lg position-absolute translate-middle top-0 start-50">
-                    <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" class="img-fluid">
+    <div class="z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
+        <div class="relative flex min-h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
+            <div class="flex w-full flex-1 flex-col lg:w-1/2">
+                <div class="mx-auto w-full max-w-md pt-10">
+                    <a href="{{ route('login') }}"
+                        class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12.7083 5L7.5 10.2083L12.7083 15.4167" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Back to sign in
+                    </a>
                 </div>
-                <div class="card-body p-sm-5">
-                    <h2 class="fs-20 fw-bolder mb-4">Reset Password</h2>
-                    <h4 class="fs-13 fw-bold mb-2">Reset your password</h4>
-                    <p class="fs-12 fw-medium text-muted">Enter your email and a reset link will be sent to you.</p>
+
+                <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
+                    <div class="mb-5 sm:mb-8">
+                        <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
+                            Forgot Password
+                        </h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Enter your account email and we will send a reset link.
+                        </p>
+                    </div>
 
                     @if (session('status'))
-                        <div class="alert alert-success mt-4">
-                            {{ session('status') }}
-                        </div>
+                        <x-ui.alert variant="success" title="Reset link sent" :message="session('status')" class="mb-5" />
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert alert-danger mt-4">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        <x-ui.alert variant="error" title="Unable to send reset link" :message="$errors->first()" class="mb-5" />
                     @endif
 
-                    <form method="POST" action="{{ route('password.email') }}" class="w-100 mt-4 pt-2">
+                    <form method="POST" action="{{ route('password.email') }}">
                         @csrf
+                        <div class="space-y-5">
+                            <div>
+                                <x-form.input label="Email" type="email" name="email" id="email" placeholder="Enter your email"
+                                    :value="old('email')" required autofocus />
+                            </div>
 
-                        <div class="mb-4">
-                            <input type="email"
-                                   name="email"
-                                   id="email"
-                                   class="form-control @error('email') is-invalid @enderror"
-                                   placeholder="Email"
-                                   value="{{ old('email') }}"
-                                   required
-                                   autofocus>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mt-5">
-                            <button type="submit" class="btn btn-lg btn-primary w-100">Send Reset Link</button>
+                            <div>
+                                <button type="submit"
+                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+                                    Send Reset Link
+                                </button>
+                            </div>
                         </div>
                     </form>
+                </div>
+            </div>
 
-                    <div class="mt-5 text-muted">
-                        <span>Remember your password?</span>
-                        <a href="{{ route('login') }}" class="fw-bold">Back to Login</a>
+            <div class="bg-brand-950 relative hidden min-h-screen w-full items-center lg:grid lg:w-1/2 dark:bg-white/5">
+                <div class="z-1 flex items-center justify-center">
+                    <x-common.common-grid-shape />
+                    <div class="flex max-w-xs flex-col items-center">
+                        <a href="{{ url('/') }}" class="mb-4 block">
+                            <img src="/images/logo/auth-logo.svg" alt="Logo" />
+                        </a>
+                        <p class="text-center text-gray-400 dark:text-white/60">
+                            Secure recovery for your AMUHI account access.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
 @endsection

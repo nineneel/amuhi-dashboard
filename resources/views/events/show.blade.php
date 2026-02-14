@@ -1,147 +1,107 @@
 @extends('layouts.app')
 
-@section('title', 'Event Details')
-@section('header', 'Event Details')
-
-@section('page-header')
-    <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
-            <div class="page-header-title">
-                <h5 class="m-b-10">Event Details</h5>
-            </div>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('events.index') }}">Events</a></li>
-                <li class="breadcrumb-item">Details</li>
-            </ul>
-        </div>
-        <div class="page-header-right ms-auto">
-            <div class="page-header-right-items">
-                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <a href="{{ route('events.index') }}" class="btn btn-light">
-                        <i class="feather-arrow-left me-2"></i>Back to Events
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-
 @section('content')
     @php
-        $statusValue = $event->status?->value ?? 'upcoming';
-        $statusLabel = match ($statusValue) {
-            'ongoing' => 'Ongoing',
-            'past' => 'Past',
-            'cancelled' => 'Cancelled',
-            default => 'Upcoming',
-        };
-        $statusClass = match ($statusValue) {
-            'ongoing' => 'bg-soft-info text-info',
-            'past' => 'bg-soft-secondary text-muted',
-            'cancelled' => 'bg-soft-danger text-danger',
-            default => 'bg-soft-success text-success',
-        };
+        $status = $event->status?->value ?? 'upcoming';
+        $statusStyles = [
+            'upcoming' => 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400',
+            'ongoing' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
+            'past' => 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+            'cancelled' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
+        ];
+        $canRegister = ! in_array($status, ['past', 'cancelled'], true);
+        $eventImage = $event->image;
+
+        if ($eventImage && ! \Illuminate\Support\Str::startsWith($eventImage, ['http://', 'https://', '/'])) {
+            $eventImage = asset('storage/' . $eventImage);
+        }
     @endphp
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    <x-common.page-breadcrumb
+        pageTitle="Event Details"
+        :items="[
+            ['label' => 'Events', 'href' => route('events.index')],
+            ['label' => 'Event Details'],
+        ]"
+    />
+
+    @if (session('success'))
+        <x-ui.alert variant="success" title="Success" :message="session('success')" class="mb-6" />
     @endif
 
-    @if(session('warning'))
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ session('warning') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    @if (session('warning'))
+        <x-ui.alert variant="warning" title="Notice" :message="session('warning')" class="mb-6" />
     @endif
 
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <div class="card stretch">
-                <div class="card-body">
-                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <h4 class="mb-0">{{ $event->title }}</h4>
-                        <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
-                        @if($isRegistered)
-                            <span class="badge bg-soft-success text-success">Registered</span>
-                        @endif
-                    </div>
+    <div class="grid gap-6 xl:grid-cols-12">
+        <div class="space-y-6 xl:col-span-8">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white/90">{{ $event->title }}</h2>
+                    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusStyles[$status] ?? $statusStyles['upcoming'] }}">
+                        {{ ucfirst($status) }}
+                    </span>
+                </div>
 
-                    <div class="d-flex flex-wrap gap-4 mb-4">
-                        <div class="d-flex align-items-center gap-2 text-muted">
-                            <i class="feather-calendar"></i>
-                            <span>
-                                @if($event->starts_at)
-                                    {{ $event->starts_at->format('d M Y, H:i') }}
-                                @else
-                                    Date TBA
-                                @endif
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 text-muted">
-                            <i class="feather-map-pin"></i>
-                            <span>{{ $event->location ?: 'Location TBA' }}</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 text-muted">
-                            <i class="feather-users"></i>
-                            <span>{{ $event->event_registrations_count }} registered</span>
-                        </div>
+                @if ($eventImage)
+                    <div class="mb-4">
+                        <img src="{{ $eventImage }}" alt="{{ $event->title }}"
+                            class="h-52 w-full rounded-xl border border-gray-200 object-cover dark:border-gray-800">
                     </div>
+                @endif
 
-                    <div class="border-top pt-3">
-                        <h6 class="text-uppercase text-muted fs-12 mb-2">About this event</h6>
-                        <p class="text-muted mb-0">
-                            {{ $event->description ?: 'Full event details will be announced soon. Keep an eye on this page for updates.' }}
-                        </p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Starts At</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ optional($event->starts_at)->format('d M Y, H:i') ?? 'TBA' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Ends At</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ optional($event->ends_at)->format('d M Y, H:i') ?? 'TBA' }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Location</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $event->location ?: 'TBA' }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Description</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">{{ $event->description ?: 'No description available.' }}</p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
-            <div class="card stretch">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Your Registration</h5>
-                </div>
-                <div class="card-body">
-                    @if($isRegistered)
-                        <div class="alert alert-success mb-3">
-                            You are registered for this event.
-                        </div>
-                        <button type="button" class="btn btn-success w-100" disabled>
-                            <i class="feather-check-circle me-1"></i>Registered
-                        </button>
-                    @elseif(in_array($statusValue, ['past', 'cancelled'], true))
-                        <div class="alert alert-warning mb-3">
-                            Registration is closed for this event.
-                        </div>
-                        <button type="button" class="btn btn-secondary w-100" disabled>
-                            <i class="feather-lock me-1"></i>Registration closed
-                        </button>
-                    @else
-                        <p class="text-muted fs-13">Register now to secure your spot. It's a one-click registration.</p>
-                        <form method="POST" action="{{ route('events.register', $event) }}">
-                            @csrf
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="feather-check-circle me-1"></i>Register for Event
-                            </button>
-                        </form>
-                    @endif
-                </div>
-            </div>
 
-            <div class="card stretch mt-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Need help?</h5>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted fs-13 mb-3">Questions about this event? Reach out to the AMUHI team.</p>
-                    <a href="mailto:support@amuhi.id" class="btn btn-light w-100">
-                        <i class="feather-mail me-1"></i>Contact Support
-                    </a>
-                </div>
+        <div class="space-y-6 xl:col-span-4">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <h3 class="mb-3 text-base font-semibold text-gray-800 dark:text-white/90">Registration</h3>
+                <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+                    {{ $event->event_registrations_count }} member(s) have registered for this event.
+                </p>
+
+                @if ($isRegistered)
+                    <button type="button"
+                        class="inline-flex w-full cursor-default items-center justify-center rounded-lg border border-success-300 px-4 py-2.5 text-sm font-medium text-success-600 dark:border-success-500/40 dark:text-success-400">
+                        You are registered
+                    </button>
+                @elseif ($canRegister)
+                    <form method="POST" action="{{ route('events.register', $event) }}">
+                        @csrf
+                        <button type="submit"
+                            class="inline-flex w-full items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600">
+                            Register for Event
+                        </button>
+                    </form>
+                @else
+                    <button type="button"
+                        class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+                        Registration closed
+                    </button>
+                @endif
+
+                <a href="{{ route('events.index') }}"
+                    class="mt-3 inline-flex w-full items-center justify-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+                    Back to Events
+                </a>
             </div>
         </div>
     </div>

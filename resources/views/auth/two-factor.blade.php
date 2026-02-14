@@ -1,155 +1,83 @@
 @extends('layouts.app')
 
-@section('title', 'Two-Factor Authentication')
-@section('header', 'Two-Factor Authentication')
-
-@section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('settings.index', ['section' => 'security']) }}">Security</a></li>
-    <li class="breadcrumb-item">Two-Factor Authentication</li>
-@endsection
-
 @section('content')
-    <p class="text-muted mb-4">Add an extra layer of security to your account.</p>
+    <x-common.page-breadcrumb
+        pageTitle="Two-Factor Authentication"
+        :items="[
+            ['label' => 'Profile', 'href' => route('profile.index')],
+            ['label' => 'Two-Factor Authentication'],
+        ]"
+    />
 
     @if (session('status'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('status') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <x-ui.alert variant="success" title="Success" :message="session('status')" class="mb-6" />
     @endif
 
     @if ($errors->any())
-        <div class="alert alert-danger" role="alert">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+        <x-ui.alert variant="error" title="Unable to update" :message="$errors->first()" class="mb-6" />
     @endif
 
-    @if (! $twoFactorEnabled)
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Enable two-factor authentication</h5>
-            </div>
-            <div class="card-body">
-                <p class="text-muted mb-4">
-                    We'll send a 6-digit verification code to your email address to confirm activation.
-                </p>
+    <div class="grid gap-6 lg:grid-cols-2">
+        <x-common.component-card title="Email Verification Code" desc="Two-factor authentication is verified with a one-time code sent to your email.">
+            @if ($twoFactorEnabled)
+                <x-ui.alert variant="success" title="Two-factor is active"
+                    message="Your account is protected with email verification and optional recovery codes." />
 
-                <div class="d-flex flex-column gap-3 mb-4">
-                    <div class="d-flex align-items-start gap-3">
-                        <div class="avatar-text bg-soft-primary text-primary">
-                            <i class="feather-mail"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1">Send a verification code</h6>
-                            <p class="text-muted fs-13 mb-0">We'll email a code to <strong>{{ $maskedEmail }}</strong>.</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-start gap-3">
-                        <div class="avatar-text bg-soft-warning text-warning">
-                            <i class="feather-hash"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1">Enter the 6-digit code</h6>
-                            <p class="text-muted fs-13 mb-0">Codes expire after 30 minutes.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row g-3 align-items-end">
-                    <div class="col-lg-4">
-                        <form method="POST" action="{{ route('two-factor.enable.send') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-primary w-100">
-                                <i class="feather-send me-2"></i>Send code
-                            </button>
-                            @if ($enableCodeSent)
-                                <div class="text-muted fs-12 mt-2">A code was sent to {{ $maskedEmail }}.</div>
-                            @endif
-                        </form>
-                    </div>
-                    <div class="col-lg-8">
-                        <form method="POST" action="{{ route('two-factor.enable') }}">
-                            @csrf
-
-                            <div class="row g-3 align-items-end">
-                                <div class="col-lg-7">
-                                    <label class="form-label" for="code">Email verification code</label>
-                                    <input
-                                        id="code"
-                                        name="code"
-                                        type="text"
-                                        inputmode="numeric"
-                                        autocomplete="one-time-code"
-                                        maxlength="6"
-                                        required
-                                        class="form-control @error('code') is-invalid @enderror"
-                                    />
-                                    @error('code')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-lg-5">
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="feather-shield me-2"></i>Enable two-factor
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @else
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Two-factor status</h5>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-success d-flex align-items-center gap-3 mb-4">
-                    <i class="feather-shield fs-3"></i>
-                    <div>
-                        <strong>Two-factor authentication is enabled.</strong>
-                        <p class="mb-0 fs-13">Keep your recovery codes safe in case you lose access.</p>
-                    </div>
-                </div>
-
-                <form method="POST" action="{{ route('two-factor.disable') }}">
+                <form method="POST" action="{{ route('two-factor.disable') }}" class="pt-3">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger">
-                        <i class="feather-shield-off me-2"></i>Disable two-factor
+                    <button type="submit"
+                        class="inline-flex items-center justify-center rounded-lg border border-error-300 px-4 py-2.5 text-sm font-medium text-error-600 transition hover:bg-error-50 dark:border-error-500/40 dark:text-error-400 dark:hover:bg-error-500/10">
+                        Disable Two-Factor Authentication
                     </button>
                 </form>
-            </div>
-        </div>
+            @else
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    We will send a 6-digit verification code to <span class="font-medium text-gray-700 dark:text-gray-300">{{ $maskedEmail }}</span>.
+                </p>
 
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Recovery codes</h5>
-            </div>
-            <div class="card-body">
-                <p class="text-muted mb-4">Use a recovery code if you lose access to your email.</p>
+                @if (! $enableCodeSent)
+                    <form method="POST" action="{{ route('two-factor.enable.send') }}" class="pt-1">
+                        @csrf
+                        <button type="submit"
+                            class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition">
+                            Send Verification Code
+                        </button>
+                    </form>
+                @else
+                    <x-ui.alert variant="info" title="Code sent"
+                        :message="'A verification code was sent to '.$maskedEmail.'. Enter it below to enable two-factor authentication.'" />
 
-                <div class="row g-2">
-                    @forelse ($recoveryCodes as $code)
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="border rounded bg-light p-2 text-center font-monospace fs-12">
-                                {{ $code }}
-                            </div>
+                    <form method="POST" action="{{ route('two-factor.enable') }}" class="space-y-4 pt-1">
+                        @csrf
+                        <x-form.input label="Verification Code" type="text" name="code" id="code"
+                            placeholder="Enter 6-digit code" required />
+
+                        <button type="submit"
+                            class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition">
+                            Enable Two-Factor Authentication
+                        </button>
+                    </form>
+                @endif
+            @endif
+        </x-common.component-card>
+
+        <x-common.component-card title="Recovery Codes" desc="Store these codes securely as backup login methods.">
+            @if (empty($recoveryCodes))
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Recovery codes will appear after two-factor authentication is enabled.
+                </p>
+            @else
+                <div class="grid gap-3 sm:grid-cols-2">
+                    @foreach ($recoveryCodes as $recoveryCode)
+                        <div class="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-sm text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
+                            {{ $recoveryCode }}
                         </div>
-                    @empty
-                        <div class="col-12">
-                            <div class="alert alert-warning mb-0">
-                                No recovery codes available.
-                            </div>
-                        </div>
-                    @endforelse
+                    @endforeach
                 </div>
-            </div>
-        </div>
-    @endif
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Each recovery code can be used once if you cannot access your email code.
+                </p>
+            @endif
+        </x-common.component-card>
+    </div>
 @endsection

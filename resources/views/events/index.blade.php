@@ -1,135 +1,213 @@
 @extends('layouts.app')
 
-@section('title', 'Events')
-@section('header', 'Events')
-
-@section('page-header')
-    <div class="page-header">
-        <div class="page-header-left d-flex align-items-center">
-            <div class="page-header-title">
-                <h5 class="m-b-10">Events</h5>
-            </div>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item">Events</li>
-            </ul>
-        </div>
-        <div class="page-header-right ms-auto">
-            <div class="page-header-right-items">
-                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <a href="{{ route('events.calendar') }}" class="btn btn-light-brand">
-                        <i class="feather-calendar me-2"></i>Calendar View
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    @php
+        $events = $allEvents;
+
+        $statusStyles = [
+            'upcoming' => 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400',
+            'ongoing' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
+            'past' => 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+            'cancelled' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
+        ];
+
+        $upcomingCount = $events->filter(fn ($event) => $event->status?->value === \App\EventStatus::Upcoming->value)->count();
+        $ongoingCount = $events->filter(fn ($event) => $event->status?->value === \App\EventStatus::Ongoing->value)->count();
+        $pastCount = $events->filter(fn ($event) => $event->status?->value === \App\EventStatus::Past->value)->count();
+        $registeredCount = $registeredEvents->count();
+    @endphp
+
+    <x-common.page-breadcrumb pageTitle="Events" />
+
+    @if (session('success'))
+        <x-ui.alert variant="success" title="Success" :message="session('success')" class="mb-6" />
     @endif
 
-    @if(session('warning'))
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ session('warning') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    @if (session('warning'))
+        <x-ui.alert variant="warning" title="Notice" :message="session('warning')" class="mb-6" />
     @endif
 
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
-        <a href="{{ route('events.index') }}" class="btn btn-sm {{ $filter === 'all' ? 'btn-primary' : 'btn-light' }}">
-            All Events
-        </a>
-        <a href="{{ route('events.index', ['filter' => 'registered']) }}" class="btn btn-sm {{ $filter === 'registered' ? 'btn-primary' : 'btn-light' }}">
-            Registered
-        </a>
+    <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h2 class="font-semibold text-gray-800 dark:text-white/90">Overview</h2>
+            </div>
+            <div>
+                <a href="{{ route('events.calendar') }}"
+                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+                    Calendar View
+                </a>
+            </div>
+        </div>
+
+        <div
+            class="grid grid-cols-1 rounded-xl border border-gray-200 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-y-0 dark:divide-gray-800 dark:border-gray-800">
+            <div class="border-b p-5 sm:border-r lg:border-b-0">
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Upcoming</p>
+                <h3 class="text-3xl text-gray-800 dark:text-white/90">{{ $upcomingCount }}</h3>
+            </div>
+            <div class="border-b p-5 lg:border-b-0">
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Ongoing</p>
+                <h3 class="text-3xl text-gray-800 dark:text-white/90">{{ $ongoingCount }}</h3>
+            </div>
+            <div class="border-b p-5 sm:border-r sm:border-b-0">
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Past</p>
+                <h3 class="text-3xl text-gray-800 dark:text-white/90">{{ $pastCount }}</h3>
+            </div>
+            <div class="p-5">
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Registered Events</p>
+                <h3 class="text-3xl text-gray-800 dark:text-white/90">{{ $registeredCount }}</h3>
+            </div>
+        </div>
     </div>
 
-    <div class="row g-4">
-        @forelse($events as $event)
-            @php
-                $statusValue = $event->status?->value ?? 'upcoming';
-                $statusLabel = match ($statusValue) {
-                    'ongoing' => 'Ongoing',
-                    'past' => 'Past',
-                    'cancelled' => 'Cancelled',
-                    default => 'Upcoming',
-                };
-                $statusClass = match ($statusValue) {
-                    'ongoing' => 'bg-soft-info text-info',
-                    'past' => 'bg-soft-secondary text-muted',
-                    'cancelled' => 'bg-soft-danger text-danger',
-                    default => 'bg-soft-success text-success',
-                };
-                $dateLabel = $event->starts_at ? $event->starts_at->format('d M Y, H:i') : 'Date TBA';
-                $locationLabel = $event->location ?: 'Location TBA';
-            @endphp
-            <div class="col-12">
-                <div class="card stretch">
-                    <div class="card-body">
-                        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
-                            <div class="flex-grow-1">
-                                <div class="d-flex align-items-center gap-2 mb-2">
-                                    <h5 class="mb-0">{{ $event->title }}</h5>
-                                    <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
-                                    @if($event->is_registered)
-                                        <span class="badge bg-soft-success text-success">Registered</span>
+    <div class="grid gap-6 xl:grid-cols-12">
+        <div class="space-y-6 xl:col-span-8">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Event List</h3>
+                    <a href="{{ route('events.calendar') }}" class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">Calendar view</a>
+                </div>
+
+                @if ($events->isEmpty())
+                    <p class="text-sm text-gray-500 dark:text-gray-400">No events have been published yet.</p>
+                @else
+                    <div class="space-y-4">
+                        @foreach ($events as $event)
+                            @php
+                                $status = $event->status?->value ?? 'upcoming';
+                                $isRegistered = (bool) ($event->is_registered ?? false);
+                                $canRegister = ! in_array($status, ['past', 'cancelled'], true);
+                                $eventImage = $event->image;
+
+                                if ($eventImage && ! \Illuminate\Support\Str::startsWith($eventImage, ['http://', 'https://', '/'])) {
+                                    $eventImage = asset('storage/' . $eventImage);
+                                }
+                            @endphp
+                            <div class="task rounded-xl border border-gray-200 bg-white p-5 shadow-theme-sm transition-all hover:shadow-lg dark:border-gray-800 dark:bg-white/5">
+                                <div class="flex items-start gap-4">
+                                    @if ($eventImage)
+                                        <div class="h-44 w-52 shrink-0 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+                                            <img src="{{ $eventImage }}" alt="{{ $event->title }}" class="h-full w-full object-cover">
+                                        </div>
+                                    @endif
+
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex flex-wrap items-start justify-between gap-3">
+                                            <h4 class="text-base font-semibold text-gray-800 dark:text-white/90">{{ $event->title }}</h4>
+                                            <div class="flex items-center gap-2">
+                                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusStyles[$status] ?? $statusStyles['upcoming'] }}">
+                                                    {{ ucfirst($status) }}
+                                                </span>
+                                                @if ($isRegistered)
+                                                    <span class="inline-flex rounded-full bg-success-50 px-2.5 py-1 text-xs font-medium text-success-700 dark:bg-success-500/10 dark:text-success-400">
+                                                        Registered
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2 space-y-1.5 text-sm text-gray-500 dark:text-gray-400">
+                                            <p class="flex items-center gap-2">
+                                                <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
+                                                    {!! \App\Helpers\MenuHelper::getIconSvg('calendar') !!}
+                                                </span>
+                                                {{ optional($event->starts_at)->format('d M Y, H:i') ?? 'TBA' }}
+                                                @if ($event->ends_at)
+                                                    - {{ $event->ends_at->format('d M Y, H:i') }}
+                                                @endif
+                                            </p>
+
+                                            <p class="flex items-center gap-2">
+                                                <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
+                                                    {!! \App\Helpers\MenuHelper::getIconSvg('pages') !!}
+                                                </span>
+                                                {{ $event->location ?: 'TBA' }}
+                                            </p>
+
+                                            <p class="flex items-center gap-2">
+                                                <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
+                                                    {!! \App\Helpers\MenuHelper::getIconSvg('user-profile') !!}
+                                                </span>
+                                                {{ $event->registrations_count }} participant(s)
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if ($event->description)
+                                    <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">{{ $event->description }}</p>
+                                @endif
+
+                                <div class="mt-4 flex flex-wrap items-center gap-2">
+                                    <a href="{{ route('events.show', $event) }}"
+                                        class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+                                        View Details
+                                    </a>
+
+                                    @if ($isRegistered)
+                                        <button type="button"
+                                            class="inline-flex cursor-default items-center justify-center rounded-lg border border-success-300 px-4 py-2 text-sm font-medium text-success-600 dark:border-success-500/40 dark:text-success-400">
+                                            You are registered
+                                        </button>
+                                    @elseif ($canRegister)
+                                        <form method="POST" action="{{ route('events.register', $event) }}">
+                                            @csrf
+                                            <button type="submit"
+                                                class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-600">
+                                                Register
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button"
+                                            class="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+                                            Registration closed
+                                        </button>
                                     @endif
                                 </div>
-                                <p class="text-muted mb-3 fs-13">
-                                    {{ $event->description ? \Illuminate\Support\Str::limit($event->description, 140) : 'Event details will be announced soon.' }}
-                                </p>
-                                <div class="d-flex flex-wrap gap-3">
-                                    <div class="d-flex align-items-center gap-2 text-muted fs-13">
-                                        <i class="feather-calendar"></i>
-                                        <span>{{ $dateLabel }}</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 text-muted fs-13">
-                                        <i class="feather-map-pin"></i>
-                                        <span>{{ $locationLabel }}</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 text-muted fs-13">
-                                        <i class="feather-users"></i>
-                                        <span>{{ $event->registrations_count }} registered</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="space-y-6 xl:col-span-4">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <h3 class="mb-3 text-base font-semibold text-gray-800 dark:text-white/90">My Registered Events</h3>
+
+                @if ($registeredEvents->isEmpty())
+                    <p class="text-sm text-gray-500 dark:text-gray-400">You have not registered for any events yet.</p>
+                @else
+                    <div class="space-y-3">
+                        @foreach ($registeredEvents as $event)
+                            @php
+                                $eventImage = $event->image;
+
+                                if ($eventImage && ! \Illuminate\Support\Str::startsWith($eventImage, ['http://', 'https://', '/'])) {
+                                    $eventImage = asset('storage/' . $eventImage);
+                                }
+                            @endphp
+                            <a href="{{ route('events.show', $event) }}"
+                                class="task block rounded-xl border border-gray-200 bg-white p-5 shadow-theme-sm transition-all hover:shadow-lg dark:border-gray-800 dark:bg-white/5">
+                                <div class="flex items-start gap-3">
+                                    @if ($eventImage)
+                                        <img src="{{ $eventImage }}" alt="{{ $event->title }}"
+                                            class="h-12 w-16 rounded-lg border border-gray-200 object-cover dark:border-gray-800">
+                                    @endif
+
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $event->title }}</p>
+                                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                            {{ optional($event->starts_at)->format('d M Y, H:i') ?? 'TBA' }}
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="d-flex align-items-start gap-2">
-                                <a href="{{ route('events.show', $event) }}" class="btn btn-light">Details</a>
-                                @if($event->is_registered)
-                                    <button type="button" class="btn btn-success" disabled>Registered</button>
-                                @elseif(in_array($statusValue, ['past', 'cancelled'], true))
-                                    <button type="button" class="btn btn-secondary" disabled>Registration closed</button>
-                                @else
-                                    <form method="POST" action="{{ route('events.register', $event) }}">
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="feather-check-circle me-1"></i>Register
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
-                        </div>
+                            </a>
+                        @endforeach
                     </div>
-                </div>
+                @endif
             </div>
-        @empty
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="avatar-text avatar-xl bg-soft-primary text-primary mx-auto mb-3">
-                            <i class="feather-calendar"></i>
-                        </div>
-                        <h5 class="mb-2">No events available</h5>
-                        <p class="text-muted mb-0">New events will be announced soon. Check back later.</p>
-                    </div>
-                </div>
-            </div>
-        @endforelse
+        </div>
     </div>
 @endsection

@@ -1,47 +1,44 @@
-@extends('layouts.guest')
-
-@section('title', 'Verify Email')
+@extends('layouts.fullscreen-layout')
 
 @section('content')
-<main class="auth-minimal-wrapper">
-    <div class="auth-minimal-inner">
-        <div class="minimal-card-wrapper">
-            <div class="card mb-4 mt-5 mx-4 mx-sm-0 position-relative">
-                <div class="wd-50 bg-white p-2 rounded-circle shadow-lg position-absolute translate-middle top-0 start-50">
-                    <img src="{{ asset('images/logo-abbr.png') }}" alt="{{ config('app.name') }}" class="img-fluid">
-                </div>
-                <div class="card-body p-sm-5">
-                    <h2 class="fs-20 fw-bolder mb-4">Verify Your Email</h2>
-                    <h4 class="fs-13 fw-bold mb-2">Check your inbox</h4>
-                    <p class="fs-12 fw-medium text-muted">Thanks for joining AMUHI! Please verify your email address by clicking the link we just emailed to you.</p>
+    <div class="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-12">
+        <x-common.common-grid-shape />
 
-                    @if (session('status'))
-                        <div class="alert alert-success mt-4">
-                            A new verification link has been sent to your email address.
-                        </div>
-                    @endif
+        <div class="relative z-10 w-full max-w-xl rounded-2xl border border-gray-200 bg-white p-8 shadow-theme-lg dark:border-gray-800 dark:bg-gray-900 sm:p-10">
+            <h1 class="mb-3 text-2xl font-semibold text-gray-900 dark:text-white">Verify Your Email</h1>
+            <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                We sent a verification link to your email. Verify your account to continue.
+            </p>
 
-                    @if (session('mail_error'))
-                        <div class="alert alert-warning mt-4">
-                            {{ session('mail_error') }}
-                        </div>
-                    @endif
+            @if (session('status'))
+                <x-ui.alert variant="success" title="Email sent" :message="session('status')" class="mb-5" />
+            @endif
 
-                    <form method="POST" action="{{ route('verification.resend') }}" class="w-100 mt-4 pt-2">
-                        @csrf
+            @if (session('mail_error'))
+                <x-ui.alert variant="warning" title="Delivery issue" :message="session('mail_error')" class="mb-5" />
+            @endif
 
-                        <div class="mt-5">
-                            <button type="submit" class="btn btn-lg btn-primary w-100">Resend Verification Email</button>
-                        </div>
-                    </form>
+            @if ($errors->any())
+                <x-ui.alert variant="error" title="Verification issue" :message="$errors->first()" class="mb-5" />
+            @endif
 
-                    <form method="POST" action="{{ route('logout') }}" class="mt-3">
-                        @csrf
-                        <button type="submit" class="btn btn-lg btn-outline-secondary w-100">Logout</button>
-                    </form>
-                </div>
+            <div class="space-y-3">
+                <form method="POST" action="{{ route('verification.resend') }}">
+                    @csrf
+                    <button type="submit"
+                        class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+                        Resend Verification Link
+                    </button>
+                </form>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="flex w-full items-center justify-center rounded-lg border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+                        Sign Out
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-</main>
 @endsection
