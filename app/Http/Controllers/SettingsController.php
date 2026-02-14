@@ -40,11 +40,13 @@ class SettingsController extends Controller
             ['language' => $data['language']]
         );
 
+        app()->setLocale($data['language']);
+
         $languageLabel = $data['language'] === 'id' ? 'Bahasa Indonesia' : 'English';
         $this->recordSettingsActivity($request, 'Account settings updated', 'Language set to '.$languageLabel.'.');
 
         return redirect()->route('settings.index', ['section' => 'account'])
-            ->with('success', 'Account settings updated successfully.');
+            ->with('success', __('ui.settings.account_saved'));
     }
 
     public function updateNotifications(Request $request): RedirectResponse
@@ -72,7 +74,7 @@ class SettingsController extends Controller
         );
 
         return redirect()->route('settings.index', ['section' => 'notifications'])
-            ->with('success', 'Notification settings updated successfully.');
+            ->with('success', __('ui.settings.notifications_saved'));
     }
 
     public function updatePrivacy(Request $request): RedirectResponse
@@ -105,7 +107,7 @@ class SettingsController extends Controller
         );
 
         return redirect()->route('settings.index', ['section' => 'privacy'])
-            ->with('success', 'Privacy settings updated successfully.');
+            ->with('success', __('ui.settings.privacy_saved'));
     }
 
     public function updateAppearance(Request $request): RedirectResponse
@@ -121,7 +123,7 @@ class SettingsController extends Controller
         );
 
         return redirect()->route('settings.index', ['section' => 'appearance'])
-            ->with('success', 'Appearance settings updated successfully.');
+            ->with('success', __('ui.settings.appearance_saved'));
     }
 
     public function updatePassword(PasswordUpdateRequest $request): RedirectResponse
@@ -134,7 +136,7 @@ class SettingsController extends Controller
         $this->recordSettingsActivity($request, 'Security settings updated', 'Password was changed.');
 
         return redirect()->route('settings.index', ['section' => 'security'])
-            ->with('success', 'Password changed successfully.');
+            ->with('success', __('ui.settings.password_saved'));
     }
 
     public function destroyAccount(Request $request): RedirectResponse
@@ -152,7 +154,7 @@ class SettingsController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'Your account has been deleted.');
+        return redirect('/')->with('success', __('ui.settings.account_deleted'));
     }
 
     private function recordSettingsActivity(Request $request, string $action, string $description): void

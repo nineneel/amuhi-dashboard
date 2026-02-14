@@ -4,54 +4,54 @@
     <div class="z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
         <div class="relative flex min-h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
             <div class="flex w-full flex-1 flex-col lg:w-1/2">
-                <div class="mx-auto w-full max-w-md pt-10">
-                    <a href="{{ route('login') }}"
-                        class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+	                <div class="mx-auto w-full max-w-md pt-10">
+	                    <a href="{{ route('login') }}"
+	                        class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                         <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M12.7083 5L7.5 10.2083L12.7083 15.4167" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        Back to sign in
-                    </a>
-                </div>
+	                        {{ __('ui.auth_extra.back_to_sign_in') }}
+	                    </a>
+	                </div>
 
                 <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
-                    <div class="mb-5 sm:mb-8">
-                        <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
-                            Complete Registration
-                        </h1>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Set your password to finish creating your account.
-                        </p>
-                    </div>
+	                    <div class="mb-5 sm:mb-8">
+	                        <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
+	                            {{ __('ui.auth_extra.complete_registration_title') }}
+	                        </h1>
+	                        <p class="text-sm text-gray-500 dark:text-gray-400">
+	                            {{ __('ui.auth_extra.complete_registration_subtitle') }}
+	                        </p>
+	                    </div>
 
-                    @if ($errors->any())
-                        <x-ui.alert variant="error" title="Unable to complete registration" :message="$errors->first()" class="mb-5" />
-                    @endif
+	                    @if ($errors->any())
+	                        <x-ui.alert variant="error" :title="__('ui.auth_extra.unable_to_complete_registration')" :message="$errors->first()" class="mb-5" />
+	                    @endif
 
                     <form method="POST" action="{{ route('registration.complete.store') }}">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
                         <input type="hidden" name="email" value="{{ $email }}">
 
-                        <div class="space-y-5">
-                            <div>
-                                <x-form.input label="Password" type="password" name="password" id="password"
-                                    placeholder="Create a password" required autofocus />
-                            </div>
+	                        <div class="space-y-5">
+	                            <div>
+	                                <x-form.input :label="__('ui.forms.password')" type="password" name="password" id="password"
+	                                    :placeholder="__('ui.auth_extra.create_password')" required autofocus />
+	                            </div>
+
+	                            <div>
+	                                <x-form.input :label="__('ui.forms.confirm_password')" type="password" name="password_confirmation"
+	                                    id="password_confirmation" :placeholder="__('ui.auth_extra.confirm_password')" required />
+	                            </div>
 
                             <div>
-                                <x-form.input label="Confirm Password" type="password" name="password_confirmation"
-                                    id="password_confirmation" placeholder="Confirm password" required />
-                            </div>
-
-                            <div>
-                                <button type="submit"
-                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
-                                    Complete Registration
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+	                                <button type="submit"
+	                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+	                                    {{ __('ui.auth_extra.complete_registration_title') }}
+	                                </button>
+	                            </div>
+	                        </div>
+	                    </form>
                 </div>
             </div>
 
@@ -62,13 +62,12 @@
                         <a href="{{ url('/') }}" class="mb-4 block">
                             <img src="/images/logo/auth-logo.png" alt="Logo" />
                         </a>
-                        <p class="text-center text-gray-400 dark:text-white/60">
-                            Almost there. Choose a strong password to protect your account.
-                        </p>
-                    </div>
-                </div>
-            </div>
+	                        <p class="text-center text-gray-400 dark:text-white/60">
+	                            {{ __('ui.auth_extra.almost_there') }}
+	                        </p>
+	                    </div>
+	                </div>
+	            </div>
         </div>
     </div>
 @endsection
-

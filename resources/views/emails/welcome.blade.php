@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to AMUHI Dashboard</title>
+    <title>{{ __('ui.email.welcome_title') }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,16 +53,16 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to AMUHI Dashboard!</h1>
+            <h1>{{ __('ui.email.welcome_heading') }}</h1>
         </div>
         <div class="content">
-            <p>Hi {{ $user->name }},</p>
-            <p>Thank you for joining AMUHI Dashboard! We are excited to have you on board.</p>
-            <p>Get started by exploring your dashboard and setting up your profile.</p>
-            <a href="{{ route('login') }}" class="button text-white">Login to Dashboard</a>
+            <p>{{ __('ui.email.hi_name', ['name' => $user->name]) }}</p>
+            <p>{{ __('ui.email.welcome_body') }}</p>
+            <p>{{ __('ui.email.get_started') }}</p>
+            <a href="{{ route('login') }}" class="button text-white">{{ __('ui.email.login_to_dashboard') }}</a>
         </div>
         <div class="footer">
-            <p>&copy; {{ date('Y') }} AMUHI Dashboard. All rights reserved.</p>
+            <p>&copy; {{ __('ui.email.copyright', ['year' => date('Y')]) }}</p>
         </div>
     </div>
 </body>

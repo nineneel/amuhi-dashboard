@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice {{ $invoice->invoice_number }}</title>
+    <title>{{ __('ui.pdf.invoice_title', ['number' => $invoice->invoice_number]) }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,8 +54,8 @@
 <body>
     <div class="header">
         <div>
-            <h1>Invoice {{ $invoice->invoice_number }}</h1>
-            <p class="muted">Generated on {{ now()->format('d M Y, H:i') }}</p>
+            <h1>{{ __('ui.pdf.invoice_title', ['number' => $invoice->invoice_number]) }}</h1>
+            <p class="muted">{{ __('ui.pdf.generated_on', ['date' => now()->format('d M Y, H:i')]) }}</p>
         </div>
         <div>
             <p class="muted">AMUHI Dashboard</p>
@@ -63,34 +63,44 @@
     </div>
 
     <div class="card">
-        <p><strong>Member:</strong> {{ $invoice->user->name }}</p>
-        <p><strong>Email:</strong> {{ $invoice->user->email }}</p>
-        <p><strong>Plan:</strong> {{ $invoice->subscription?->subscriptionPlan?->name ?? 'Membership' }}</p>
-        <p><strong>Amount:</strong> Rp {{ number_format((float) $invoice->amount, 0, ',', '.') }}</p>
-        <p><strong>Status:</strong> {{ ucfirst($invoice->status?->value ?? 'pending') }}</p>
-        <p><strong>Due Date:</strong> {{ optional($invoice->due_date)->format('d M Y') ?? '-' }}</p>
+        @php
+            $invoiceStatus = $invoice->status?->value ?? 'pending';
+            $invoiceStatusKey = 'ui.invoices.status_labels.'.$invoiceStatus;
+            $invoiceStatusLabel = trans()->has($invoiceStatusKey) ? __($invoiceStatusKey) : ucfirst($invoiceStatus);
+        @endphp
+        <p><strong>{{ __('ui.pdf.member') }}</strong> {{ $invoice->user->name }}</p>
+        <p><strong>{{ __('ui.forms.email') }}:</strong> {{ $invoice->user->email }}</p>
+        <p><strong>{{ __('ui.invoices.plan') }}:</strong> {{ $invoice->subscription?->subscriptionPlan?->name ?? 'Membership' }}</p>
+        <p><strong>{{ __('ui.invoices.amount') }}:</strong> Rp {{ number_format((float) $invoice->amount, 0, ',', '.') }}</p>
+        <p><strong>{{ __('ui.invoices.status') }}:</strong> {{ $invoiceStatusLabel }}</p>
+        <p><strong>{{ __('ui.invoices.due_date') }}:</strong> {{ optional($invoice->due_date)->format('d M Y') ?? '-' }}</p>
     </div>
 
     <div class="card">
-        <h3>Payments</h3>
+        <h3>{{ __('ui.pdf.payments') }}</h3>
         @if ($invoice->payments->isEmpty())
-            <p class="muted">No payments recorded.</p>
+            <p class="muted">{{ __('ui.pdf.no_payments') }}</p>
         @else
             <table>
                 <thead>
                     <tr>
-                        <th>Transaction ID</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Paid At</th>
+                        <th>{{ __('ui.invoices.transaction_id') }}</th>
+                        <th>{{ __('ui.invoices.amount') }}</th>
+                        <th>{{ __('ui.invoices.status') }}</th>
+                        <th>{{ __('ui.invoices.paid_at') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($invoice->payments as $payment)
+                        @php
+                            $paymentStatus = $payment->status?->value ?? 'pending';
+                            $paymentStatusKey = 'ui.invoices.payment_status_labels.'.$paymentStatus;
+                            $paymentStatusLabel = trans()->has($paymentStatusKey) ? __($paymentStatusKey) : ucfirst($paymentStatus);
+                        @endphp
                         <tr>
                             <td>{{ $payment->gateway_transaction_id ?? '-' }}</td>
                             <td>Rp {{ number_format((float) $payment->amount, 0, ',', '.') }}</td>
-                            <td>{{ ucfirst($payment->status?->value ?? 'pending') }}</td>
+                            <td>{{ $paymentStatusLabel }}</td>
                             <td>{{ optional($payment->paid_at)->format('d M Y, H:i') ?? '-' }}</td>
                         </tr>
                     @endforeach

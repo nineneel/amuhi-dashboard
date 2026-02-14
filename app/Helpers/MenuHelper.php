@@ -9,17 +9,17 @@ class MenuHelper
         return [
             [
                 'icon' => 'dashboard',
-                'name' => 'Dashboard',
+                'name' => __('ui.nav.dashboard'),
                 'path' => '/dashboard',
             ],
             [
                 'icon' => 'calendar',
-                'name' => 'Events',
+                'name' => __('ui.nav.events'),
                 'path' => '/events',
             ],
             [
                 'icon' => 'pages',
-                'name' => 'Programs',
+                'name' => __('ui.nav.programs'),
                 'path' => '/programs',
             ],
         ];
@@ -30,17 +30,17 @@ class MenuHelper
         return [
             [
                 'icon' => 'user-profile',
-                'name' => 'Profile',
+                'name' => __('ui.nav.profile'),
                 'path' => '/profile',
             ],
             [
                 'icon' => 'forms',
-                'name' => 'Settings',
+                'name' => __('ui.nav.app_settings'),
                 'path' => '/settings',
             ],
             [
                 'icon' => 'authentication',
-                'name' => 'Logout',
+                'name' => __('ui.nav.logout'),
                 'path' => '/logout',
                 'method' => 'POST',
             ],
@@ -56,11 +56,11 @@ class MenuHelper
     {
         return [
             [
-                'title' => 'Menu',
+                'title' => __('ui.nav.menu'),
                 'items' => self::getMainNavItems(),
             ],
             [
-                'title' => 'Settings',
+                'title' => __('ui.nav.settings'),
                 'items' => self::getSettingsNavItems(),
             ],
         ];

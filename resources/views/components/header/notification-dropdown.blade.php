@@ -34,20 +34,20 @@
         </svg>
     </button>
 
-    <div x-show="dropdownOpen" x-transition:enter="transition ease-out duration-100"
+	    <div x-show="dropdownOpen" x-transition:enter="transition ease-out duration-100"
         x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100"
         x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
         class="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0"
-        style="display: none;">
-        <div class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
-            <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">Notifications</h5>
-            @if ($unreadCount > 0)
-                <span class="rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
-                    {{ $unreadCount }} unread
-                </span>
-            @endif
-        </div>
+	        style="display: none;">
+	        <div class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
+	            <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">{{ __('ui.header.notifications') }}</h5>
+	            @if ($unreadCount > 0)
+	                <span class="rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+	                    {{ __('ui.header.unread_count', ['count' => $unreadCount]) }}
+	                </span>
+	            @endif
+	        </div>
 
         <ul class="custom-scrollbar flex h-auto flex-col overflow-y-auto">
             @forelse ($notifications as $notification)
@@ -62,18 +62,18 @@
                         </div>
                     </div>
                 </li>
-            @empty
-                <li>
-                    <div class="rounded-lg px-4 py-5 text-center text-sm text-gray-500 dark:text-gray-400">
-                        No notifications yet.
-                    </div>
-                </li>
-            @endforelse
-        </ul>
+	            @empty
+	                <li>
+	                    <div class="rounded-lg px-4 py-5 text-center text-sm text-gray-500 dark:text-gray-400">
+	                        {{ __('ui.header.no_notifications') }}
+	                    </div>
+	                </li>
+	            @endforelse
+	        </ul>
 
-        <a href="{{ route('notifications.index') }}"
-            class="mt-3 inline-flex items-center justify-center rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
-            View All Notifications
-        </a>
-    </div>
-</div>
+	        <a href="{{ route('notifications.index') }}"
+	            class="mt-3 inline-flex items-center justify-center rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+	            {{ __('ui.header.view_all_notifications') }}
+	        </a>
+	    </div>
+	</div>

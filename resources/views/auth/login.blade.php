@@ -15,72 +15,72 @@
                 </div> --}}
 
                 <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
-                    <div class="mb-5 sm:mb-8">
-                        <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
-                            Sign In
-                        </h1>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Enter your email and password to continue.
-                        </p>
-                    </div>
+	                    <div class="mb-5 sm:mb-8">
+	                        <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
+	                            {{ __('ui.auth.sign_in_title') }}
+	                        </h1>
+	                        <p class="text-sm text-gray-500 dark:text-gray-400">
+	                            {{ __('ui.auth.sign_in_subtitle') }}
+	                        </p>
+	                    </div>
 
-                    @if (session('status'))
-                        <x-ui.alert variant="success" title="Success" :message="session('status')" class="mb-5" />
-                    @endif
+	                    @if (session('status'))
+	                        <x-ui.alert variant="success" :title="__('ui.common.success')" :message="session('status')" class="mb-5" />
+	                    @endif
 
-                    @if ($errors->any())
-                        <x-ui.alert variant="error" title="Unable to sign in" :message="$errors->first()" class="mb-5" />
-                    @endif
+	                    @if ($errors->any())
+	                        <x-ui.alert variant="error" :title="__('ui.auth.unable_to_sign_in')" :message="$errors->first()" class="mb-5" />
+	                    @endif
 
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="space-y-5">
-                            <div>
-                                <x-form.input label="Email" type="email" name="email" id="email" placeholder="Enter your email"
-                                    :value="old('email')" required autofocus />
-                            </div>
+	                            <div>
+	                                <x-form.input :label="__('ui.forms.email')" type="email" name="email" id="email" :placeholder="__('ui.forms.placeholder.enter_email')"
+	                                    :value="old('email')" required autofocus />
+	                            </div>
 
-                            <div>
-                                <x-form.input label="Password" type="password" name="password" id="password"
-                                    placeholder="Enter your password" required />
-                            </div>
+	                            <div>
+	                                <x-form.input :label="__('ui.forms.password')" type="password" name="password" id="password"
+	                                    :placeholder="__('ui.forms.placeholder.enter_password')" required />
+	                            </div>
 
                             <div class="flex items-center justify-between">
                                 <x-form.checkbox
                                     name="remember"
                                     id="remember"
                                     :checked="(bool) old('remember')"
-                                    containerClass="flex cursor-pointer items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
-                                    labelClass="font-normal text-gray-600 dark:text-gray-400"
-                                >
-                                    Remember me
-                                </x-form.checkbox>
+	                                    containerClass="flex cursor-pointer items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+	                                    labelClass="font-normal text-gray-600 dark:text-gray-400"
+	                                >
+	                                    {{ __('ui.forms.remember_me') }}
+	                                </x-form.checkbox>
 
-                                <a href="{{ route('password.request') }}"
-                                    class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                                    Forgot password?
-                                </a>
-                            </div>
+	                                <a href="{{ route('password.request') }}"
+	                                    class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">
+	                                    {{ __('ui.forms.forgot_password') }}
+	                                </a>
+	                            </div>
 
                             <div>
-                                <button type="submit"
-                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
-                                    Sign In
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+	                                <button type="submit"
+	                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+	                                    {{ __('ui.buttons.sign_in') }}
+	                                </button>
+	                            </div>
+	                        </div>
+	                    </form>
 
                     <div class="mt-5">
-                        <p class="text-center text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400">
-                            Don't have an account?
-                            <a href="{{ route('register') }}" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                                Sign Up
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+	                        <p class="text-center text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400">
+	                            {{ __('ui.auth.no_account') }}
+	                            <a href="{{ route('register') }}" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
+	                                {{ __('ui.buttons.sign_up') }}
+	                            </a>
+	                        </p>
+	                    </div>
+	                </div>
+	            </div>
 
             <div class="bg-brand-950 relative hidden min-h-screen w-full items-center lg:grid lg:w-1/2 dark:bg-white/5">
                 <div class="z-1 flex items-center justify-center">

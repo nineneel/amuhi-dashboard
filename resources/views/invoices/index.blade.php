@@ -28,22 +28,22 @@
     @endphp
 
     <x-common.page-breadcrumb
-        pageTitle="Invoices"
+        :pageTitle="__('ui.invoices.title')"
         :items="[
-            ['label' => 'Profile', 'href' => route('profile.index')],
-            ['label' => 'Invoices'],
+            ['label' => __('ui.profile.title'), 'href' => route('profile.index')],
+            ['label' => __('ui.invoices.title')],
         ]"
     />
 
     <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="mb-6 flex items-center justify-between">
             <div>
-                <h2 class="font-semibold text-gray-800 dark:text-white/90">Overview</h2>
+                <h2 class="font-semibold text-gray-800 dark:text-white/90">{{ __('ui.common.overview') }}</h2>
             </div>
             <div>
                 <a href="{{ route('payments.show') }}"
                     class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition">
-                    Manage Subscription
+                    {{ __('ui.common.manage_subscription') }}
                 </a>
             </div>
         </div>
@@ -51,19 +51,19 @@
         <div
             class="grid grid-cols-1 rounded-xl border border-gray-200 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-y-0 dark:divide-gray-800 dark:border-gray-800">
             <div class="border-b p-5 sm:border-r lg:border-b-0">
-                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Overdue</p>
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">{{ __('ui.invoices.overdue') }}</p>
                 <h3 class="text-3xl text-gray-800 dark:text-white/90">{{ $summary['overdue'] }}</h3>
             </div>
             <div class="border-b p-5 lg:border-b-0">
-                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Due within next 30 days</p>
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">{{ __('ui.invoices.due_within_30_days') }}</p>
                 <h3 class="text-3xl text-gray-800 dark:text-white/90">{{ $dueWithinThirtyDays }}</h3>
             </div>
             <div class="border-b p-5 sm:border-r sm:border-b-0">
-                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Paid Invoices</p>
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">{{ __('ui.invoices.paid_invoices') }}</p>
                 <h3 class="text-3xl text-gray-800 dark:text-white/90">{{ $summary['paid'] }}</h3>
             </div>
             <div class="p-5">
-                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Total Amount</p>
+                <p class="mb-1.5 text-sm text-gray-400 dark:text-gray-500">{{ __('ui.invoices.total_amount') }}</p>
                 <h3 class="text-3xl text-gray-800 dark:text-white/90">Rp {{ number_format($totalAmount, 0, ',', '.') }}</h3>
             </div>
         </div>
@@ -72,28 +72,28 @@
     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
             <div>
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Invoices</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Your most recent invoices list</p>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">{{ __('ui.invoices.title') }}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.invoices.most_recent') }}</p>
             </div>
         </div>
 
         @if ($invoices->isEmpty())
             <div class="px-5 py-6">
-                <p class="text-sm text-gray-500 dark:text-gray-400">No invoices available for your account.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.invoices.no_invoices') }}</p>
             </div>
         @else
             <div class="custom-scrollbar overflow-x-auto">
                 <table class="w-full table-auto">
                     <thead>
                         <tr class="border-b border-gray-200 dark:divide-gray-800 dark:border-gray-800">
-                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">Invoice Number</th>
-                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">Creation Date</th>
-                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">Due Date</th>
-                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">Plan</th>
-                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">Total</th>
-                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">Status</th>
+                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('ui.invoices.invoice_number') }}</th>
+                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('ui.invoices.creation_date') }}</th>
+                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('ui.invoices.due_date') }}</th>
+                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('ui.invoices.plan') }}</th>
+                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('ui.invoices.total') }}</th>
+                            <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('ui.invoices.status') }}</th>
                             <th class="p-4 text-left text-xs font-medium text-gray-700 dark:text-gray-400">
-                                <span class="sr-only">Action</span>
+                                <span class="sr-only">{{ __('ui.invoices.action') }}</span>
                             </th>
                         </tr>
                     </thead>
@@ -101,6 +101,8 @@
                         @foreach ($invoices as $invoice)
                             @php
                                 $invoiceStatus = $invoice->status?->value ?? 'pending';
+                                $invoiceStatusKey = 'ui.invoices.status_labels.'.$invoiceStatus;
+                                $invoiceStatusLabel = trans()->has($invoiceStatusKey) ? __($invoiceStatusKey) : ucfirst($invoiceStatus);
                             @endphp
                             <tr class="transition hover:bg-gray-50 dark:hover:bg-gray-900">
                                 <td class="p-4 whitespace-nowrap">
@@ -123,18 +125,18 @@
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
                                     <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$invoiceStatus] ?? $statusClasses['pending'] }}">
-                                        {{ ucfirst($invoiceStatus) }}
+                                        {{ $invoiceStatusLabel }}
                                     </span>
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
                                     <div class="flex flex-wrap gap-2">
                                         <a href="{{ route('invoices.show', $invoice) }}"
                                             class="shadow-theme-xs inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-                                            Details
+                                            {{ __('ui.common.details') }}
                                         </a>
                                         <a href="{{ route('invoices.download', $invoice) }}"
                                             class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center rounded-lg px-3 py-2 text-xs font-medium text-white transition">
-                                            Download
+                                            {{ __('ui.common.download') }}
                                         </a>
                                     </div>
                                 </td>

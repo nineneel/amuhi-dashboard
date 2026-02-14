@@ -10,22 +10,22 @@
                         <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M12.7083 5L7.5 10.2083L12.7083 15.4167" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        Back to sign in
+                        {{ __('ui.auth_extra.back_to_sign_in') }}
                     </a>
                 </div>
 
                 <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
                     <div class="mb-5 sm:mb-8">
                         <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
-                            Reset Password
+                            {{ __('ui.auth_extra.reset_password_title') }}
                         </h1>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Enter your new password below.
+                            {{ __('ui.auth_extra.reset_password_subtitle') }}
                         </p>
                     </div>
 
                     @if ($errors->any())
-                        <x-ui.alert variant="error" title="Unable to reset password" :message="$errors->first()" class="mb-5" />
+                        <x-ui.alert variant="error" :title="__('ui.auth_extra.unable_to_reset_password')" :message="$errors->first()" class="mb-5" />
                     @endif
 
                     <form method="POST" action="{{ route('password.update') }}">
@@ -35,19 +35,19 @@
 
                         <div class="space-y-5">
                             <div>
-                                <x-form.input label="Password" type="password" name="password" id="password"
-                                    placeholder="Create new password" required autofocus />
+                                <x-form.input :label="__('ui.forms.password')" type="password" name="password" id="password"
+                                    :placeholder="__('ui.auth_extra.create_new_password')" required autofocus />
                             </div>
 
                             <div>
-                                <x-form.input label="Confirm Password" type="password" name="password_confirmation"
-                                    id="password_confirmation" placeholder="Confirm new password" required />
+                                <x-form.input :label="__('ui.forms.confirm_password')" type="password" name="password_confirmation"
+                                    id="password_confirmation" :placeholder="__('ui.forms.placeholder.confirm_new_password')" required />
                             </div>
 
                             <div>
                                 <button type="submit"
                                     class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
-                                    Reset Password
+                                    {{ __('ui.auth_extra.reset_password_title') }}
                                 </button>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                             <img src="/images/logo/auth-logo.png" alt="Logo" />
                         </a>
                         <p class="text-center text-gray-400 dark:text-white/60">
-                            Keep your account protected with a strong password.
+                            {{ __('ui.auth_extra.strong_password_hint') }}
                         </p>
                     </div>
                 </div>
