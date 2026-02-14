@@ -8,7 +8,7 @@
         $statusClasses = [
             'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
             'pending' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
-            'expired' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
+            'expired' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
             'unpaid' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
         ];
 
@@ -44,13 +44,13 @@
 	                    <div>
 	                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.dashboard.welcome_back') }}</p>
 	                        <h2 class="mt-1 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ $user->name }}</h2>
-	                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-	                            {{ __('ui.dashboard.member_status') }}
-	                            <span class="ml-2 inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
-	                                {{ $subscriptionStatusLabel }}
-	                            </span>
-	                        </p>
-	                    </div>
+		                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+		                            {{ __('ui.dashboard.member_status') }}
+		                            <span class="ml-2 inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
+		                                ({{ $subscriptionStatusLabel }})
+		                            </span>
+		                        </p>
+		                    </div>
 
 	                    <div class="grid gap-3 sm:grid-cols-3">
 	                        <div class="rounded-xl border border-gray-200 px-4 py-3 text-center dark:border-gray-800">

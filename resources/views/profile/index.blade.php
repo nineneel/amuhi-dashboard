@@ -7,12 +7,12 @@
         $currentSubscription = $user->subscriptions->sortByDesc('created_at')->first();
         $subscriptionStatus = $currentSubscription?->status?->value ?? \App\SubscriptionStatus::Unpaid->value;
 
-	        $statusClasses = [
-            'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
-            'pending' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
-            'expired' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
-            'unpaid' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
-	        ];
+		        $statusClasses = [
+	            'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
+	            'pending' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
+	            'expired' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
+	            'unpaid' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
+		        ];
 
 	        $subscriptionStatusKey = 'ui.subscriptions.status.'.$subscriptionStatus;
 	        $subscriptionStatusLabel = trans()->has($subscriptionStatusKey) ? __($subscriptionStatusKey) : ucfirst($subscriptionStatus);
@@ -40,10 +40,10 @@
                     <h3 class="mt-4 text-lg font-semibold text-gray-800 dark:text-white/90">{{ $user->name }}</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $user->email }}</p>
 
-	                    <span class="mt-3 inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
-	                        {{ __('ui.profile.subscription') }}: {{ $subscriptionStatusLabel }}
-	                    </span>
-	                </div>
+		                    <span class="mt-3 inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
+		                        {{ __('ui.profile.subscription') }}: ({{ $subscriptionStatusLabel }})
+		                    </span>
+		                </div>
 
 	                <div class="mt-6 grid gap-3">
 	                    <a href="{{ route('profile.edit') }}"

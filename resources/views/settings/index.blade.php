@@ -26,18 +26,28 @@
     @endif
 
     <div class="grid gap-6 xl:grid-cols-12">
-        <div class="xl:col-span-3">
-            <div class="rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-white/[0.03]">
-                <nav class="space-y-1">
-                    @foreach ($sectionTabs as $sectionKey => $label)
-                        <a href="{{ route('settings.index', ['section' => $sectionKey]) }}"
-                            class="flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition {{ $section === $sectionKey ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' }}">
-                            {{ $label }}
-                        </a>
-                    @endforeach
-                </nav>
-            </div>
-        </div>
+	        <div class="xl:col-span-3">
+	            <div class="rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-white/[0.03]">
+	                <nav class="space-y-1">
+	                    @foreach ($sectionTabs as $sectionKey => $label)
+	                        <a href="{{ route('settings.index', ['section' => $sectionKey]) }}"
+	                            class="flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition {{ $section === $sectionKey ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' }}">
+	                            {{ $label }}
+	                        </a>
+	                    @endforeach
+	                </nav>
+
+	                <div class="mt-3 border-t border-gray-200 pt-3 dark:border-gray-800">
+	                    <form method="POST" action="{{ route('logout') }}">
+	                        @csrf
+	                        <button type="submit"
+	                            class="flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5">
+	                            {{ __('ui.buttons.sign_out') }}
+	                        </button>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
 
         <div class="xl:col-span-9">
             <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">

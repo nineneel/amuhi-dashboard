@@ -18,7 +18,7 @@ return [
         'logout' => 'Logout',
     ],
 
-    'common' => [
+	    'common' => [
         'back_to_home' => 'Back to home',
         'success' => 'Success',
         'saved' => 'Saved',
@@ -31,7 +31,7 @@ return [
         'cancel' => 'Cancel',
         'save_changes' => 'Save Changes',
         'open_settings' => 'Open Settings',
-        'manage_subscription' => 'Manage Subscription',
+	        'manage_subscription' => 'Manage Membership',
         'tba' => 'TBA',
         'none' => 'None',
     ],
@@ -105,13 +105,13 @@ return [
         'view_all_notifications' => 'View All Notifications',
     ],
 
-    'dashboard' => [
+	    'dashboard' => [
         'title' => 'Dashboard',
         'access_limited' => 'Access limited',
-        'subscription_required' => 'Subscription required',
-        'subscription_required_message' => 'Your account has limited access. Activate your subscription to unlock events, programs, and invoices.',
+        'subscription_required' => 'Membership required',
+        'subscription_required_message' => 'Your account has limited access. Activate your membership to unlock events, programs, and invoices.',
         'welcome_back' => 'Welcome back',
-        'member_status' => 'Member status:',
+	        'member_status' => 'Membership:',
         'unread_notifications' => 'Unread Notifications',
         'invoices' => 'Invoices',
         'pending_invoices' => 'Pending Invoices',
@@ -225,11 +225,11 @@ return [
         'annual_plan_default' => 'Annual Membership',
         'annual_plan_desc_default' => 'Annual access to member benefits',
         'pay_now_demo' => 'Pay Now (Demo)',
-        'subscription_active' => 'Your subscription is active.',
+        'subscription_active' => 'Your membership is active.',
         'subscription_active_subtitle' => 'You can access Events, Programs, and the Dashboard.',
         'go_to_dashboard' => 'Go to Dashboard',
         'view_invoices' => 'View Invoices',
-        'current_subscription' => 'Current Subscription',
+        'current_subscription' => 'Current Membership',
         'plan' => 'Plan',
         'starts' => 'Starts',
         'ends' => 'Ends',
@@ -237,9 +237,9 @@ return [
         'days' => ':count days',
     ],
 
-    'profile' => [
+	    'profile' => [
         'title' => 'Profile',
-        'subscription' => 'Subscription',
+	        'subscription' => 'Membership',
         'edit_profile' => 'Edit Profile',
         'unable_to_update' => 'Unable to update profile',
         'personal_information' => 'Personal Information',
@@ -250,7 +250,7 @@ return [
         'language' => 'Language',
         'address' => 'Address',
         'bio' => 'Bio',
-        'current_subscription' => 'Current Subscription',
+        'current_subscription' => 'Current Membership',
         'current_subscription_desc' => 'Track your membership plan and period.',
         'status' => 'Status',
         'starts_at' => 'Starts At',
@@ -349,14 +349,14 @@ return [
         'no_payments' => 'No payments recorded.',
     ],
 
-    'subscriptions' => [
-        'status' => [
-            'active' => 'Active',
-            'pending' => 'Pending',
-            'expired' => 'Expired',
-            'unpaid' => 'Unpaid',
-        ],
-    ],
+	    'subscriptions' => [
+	        'status' => [
+	            'active' => 'Active',
+	            'pending' => 'Needs renewal',
+	            'expired' => 'Needs renewal',
+	            'unpaid' => 'Not active',
+	        ],
+	    ],
 
     'welcome' => [
         'badge' => 'AMUHI Dashboard',

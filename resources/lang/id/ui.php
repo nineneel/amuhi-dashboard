@@ -18,7 +18,7 @@ return [
         'logout' => 'Keluar',
     ],
 
-    'common' => [
+	    'common' => [
         'back_to_home' => 'Kembali ke beranda',
         'success' => 'Berhasil',
         'saved' => 'Tersimpan',
@@ -31,7 +31,7 @@ return [
         'cancel' => 'Batal',
         'save_changes' => 'Simpan Perubahan',
         'open_settings' => 'Buka Pengaturan',
-        'manage_subscription' => 'Kelola Langganan',
+	        'manage_subscription' => 'Kelola Keanggotaan',
         'tba' => 'Akan diumumkan',
         'none' => 'Tidak ada',
     ],
@@ -105,15 +105,15 @@ return [
         'view_all_notifications' => 'Lihat Semua Notifikasi',
     ],
 
-    'dashboard' => [
-        'title' => 'Dasbor',
-        'access_limited' => 'Akses terbatas',
-        'subscription_required' => 'Perlu langganan',
-        'subscription_required_message' => 'Akun Anda memiliki akses terbatas. Aktifkan langganan untuk membuka acara, program, dan invoice.',
-        'welcome_back' => 'Selamat datang kembali',
-        'member_status' => 'Status anggota:',
-        'unread_notifications' => 'Notifikasi Belum Dibaca',
-        'invoices' => 'Invoice',
+	    'dashboard' => [
+	        'title' => 'Dasbor',
+	        'access_limited' => 'Akses terbatas',
+	        'subscription_required' => 'Perlu keanggotaan',
+	        'subscription_required_message' => 'Akun Anda memiliki akses terbatas. Aktifkan keanggotaan untuk membuka acara, program, dan invoice.',
+	        'welcome_back' => 'Selamat datang kembali',
+	        'member_status' => 'Keanggotaan:',
+	        'unread_notifications' => 'Notifikasi Belum Dibaca',
+	        'invoices' => 'Invoice',
         'pending_invoices' => 'Invoice Tertunda',
         'upcoming_events' => 'Acara Mendatang',
         'no_upcoming_events' => 'Belum ada acara mendatang saat ini.',
@@ -213,9 +213,9 @@ return [
         ],
     ],
 
-    'payments' => [
-        'title' => 'Pembayaran',
-        'subtitle' => 'Selesaikan pembayaran untuk mengaktifkan akun dan membuka akses ke Dasbor, Acara, dan Program.',
+	    'payments' => [
+	        'title' => 'Pembayaran',
+	        'subtitle' => 'Selesaikan pembayaran untuk mengaktifkan akun dan membuka akses ke Dasbor, Acara, dan Program.',
         'payment_error' => 'Kesalahan pembayaran',
         'membership_package' => 'Paket Keanggotaan',
         'one_time_plus_annual' => 'Biaya pendaftaran satu kali ditambah iuran tahunan.',
@@ -225,21 +225,21 @@ return [
         'annual_plan_default' => 'Keanggotaan Tahunan',
         'annual_plan_desc_default' => 'Akses tahunan ke manfaat anggota',
         'pay_now_demo' => 'Bayar Sekarang (Demo)',
-        'subscription_active' => 'Langganan Anda aktif.',
-        'subscription_active_subtitle' => 'Anda dapat mengakses Acara, Program, dan Dasbor.',
-        'go_to_dashboard' => 'Ke Dasbor',
-        'view_invoices' => 'Lihat Invoice',
-        'current_subscription' => 'Langganan Saat Ini',
-        'plan' => 'Paket',
-        'starts' => 'Mulai',
-        'ends' => 'Berakhir',
-        'total' => 'Total',
+	        'subscription_active' => 'Keanggotaan Anda aktif.',
+	        'subscription_active_subtitle' => 'Anda dapat mengakses Acara, Program, dan Dasbor.',
+	        'go_to_dashboard' => 'Ke Dasbor',
+	        'view_invoices' => 'Lihat Invoice',
+	        'current_subscription' => 'Keanggotaan Saat Ini',
+	        'plan' => 'Paket',
+	        'starts' => 'Mulai',
+	        'ends' => 'Berakhir',
+	        'total' => 'Total',
         'days' => ':count hari',
     ],
 
-    'profile' => [
-        'title' => 'Profil',
-        'subscription' => 'Langganan',
+	    'profile' => [
+	        'title' => 'Profil',
+	        'subscription' => 'Keanggotaan',
         'edit_profile' => 'Edit Profil',
         'unable_to_update' => 'Tidak dapat memperbarui profil',
         'personal_information' => 'Informasi Pribadi',
@@ -250,11 +250,11 @@ return [
         'language' => 'Bahasa',
         'address' => 'Alamat',
         'bio' => 'Bio',
-        'current_subscription' => 'Langganan Saat Ini',
-        'current_subscription_desc' => 'Pantau paket dan periode keanggotaan Anda.',
-        'status' => 'Status',
-        'starts_at' => 'Mulai',
-        'ends_at' => 'Berakhir',
+	        'current_subscription' => 'Keanggotaan Saat Ini',
+	        'current_subscription_desc' => 'Pantau paket dan periode keanggotaan Anda.',
+	        'status' => 'Status',
+	        'starts_at' => 'Mulai',
+	        'ends_at' => 'Berakhir',
         'profile_photo' => 'Foto Profil / Logo Perusahaan',
         'no_photo' => 'Tidak ada foto',
         'accepted_formats' => 'Format: JPG, JPEG, PNG. Maks 2MB.',
@@ -349,14 +349,14 @@ return [
         'no_payments' => 'Belum ada pembayaran.',
     ],
 
-    'subscriptions' => [
-        'status' => [
-            'active' => 'Aktif',
-            'pending' => 'Menunggu',
-            'expired' => 'Kedaluwarsa',
-            'unpaid' => 'Belum bayar',
-        ],
-    ],
+	    'subscriptions' => [
+	        'status' => [
+	            'active' => 'Aktif',
+	            'pending' => 'Perlu diperbaharui',
+	            'expired' => 'Perlu diperbaharui',
+	            'unpaid' => 'Belum',
+	        ],
+	    ],
 
     'welcome' => [
         'badge' => 'AMUHI Dashboard',

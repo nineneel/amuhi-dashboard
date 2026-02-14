@@ -38,12 +38,6 @@ class MenuHelper
                 'name' => __('ui.nav.app_settings'),
                 'path' => '/settings',
             ],
-            [
-                'icon' => 'authentication',
-                'name' => __('ui.nav.logout'),
-                'path' => '/logout',
-                'method' => 'POST',
-            ],
         ];
     }
 

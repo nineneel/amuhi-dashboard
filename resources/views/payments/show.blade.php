@@ -10,12 +10,12 @@
         $isActiveSubscription = $subscriptionStatus === \App\SubscriptionStatus::Active->value
             && ($currentSubscription?->ends_at === null || $currentSubscription->ends_at->isFuture());
 
-	        $statusClasses = [
-            'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
-            'pending' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
-            'expired' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
-            'unpaid' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
-	        ];
+		        $statusClasses = [
+	            'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
+	            'pending' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
+	            'expired' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-400',
+	            'unpaid' => 'bg-error-50 text-error-700 dark:bg-error-500/10 dark:text-error-400',
+		        ];
 
 	        $subscriptionStatusKey = 'ui.subscriptions.status.'.$subscriptionStatus;
 	        $subscriptionStatusLabel = trans()->has($subscriptionStatusKey) ? __($subscriptionStatusKey) : ucfirst($subscriptionStatus);
