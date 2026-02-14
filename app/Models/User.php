@@ -98,6 +98,15 @@ class User extends Authenticatable implements MustVerifyEmail
             ->exists();
     }
 
+    public function syncExpiredSubscriptions(): void
+    {
+        $this->subscriptions()
+            ->where('status', SubscriptionStatus::Active->value)
+            ->whereNotNull('ends_at')
+            ->where('ends_at', '<=', now())
+            ->update(['status' => SubscriptionStatus::Expired->value]);
+    }
+
     public function currentSubscription(): ?Subscription
     {
         return $this->subscriptions()->with('subscriptionPlan')->latest()->first();

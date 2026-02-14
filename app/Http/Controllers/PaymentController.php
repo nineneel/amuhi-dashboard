@@ -24,7 +24,10 @@ class PaymentController extends Controller
     {
         $user = $request->user();
 
+        $user->syncExpiredSubscriptions();
+
         $currentSubscription = $user->currentSubscription();
+        $shouldChargeRegistrationFee = ! $user->subscriptions()->exists();
 
         $annualPlan = SubscriptionPlan::query()
             ->where('name', 'Annual Membership')
@@ -46,7 +49,8 @@ class PaymentController extends Controller
             $annualPlan = $subscriptionPlans->first();
         }
 
-        $totalAmount = (float) ($annualPlan?->price ?? 0) + (float) ($registerPlan?->price ?? 0);
+        $registrationFeeAmount = $shouldChargeRegistrationFee ? (float) ($registerPlan?->price ?? 0) : 0.0;
+        $totalAmount = (float) ($annualPlan?->price ?? 0) + $registrationFeeAmount;
 
         return view('payments.show', [
             'user' => $user,
@@ -55,6 +59,7 @@ class PaymentController extends Controller
             'registerPlan' => $registerPlan,
             'subscriptionPlans' => $subscriptionPlans,
             'totalAmount' => $totalAmount,
+            'shouldChargeRegistrationFee' => $shouldChargeRegistrationFee,
         ]);
     }
 
@@ -63,11 +68,15 @@ class PaymentController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
+        $user->syncExpiredSubscriptions();
+
         if ($user->hasActiveSubscription()) {
             return redirect()
                 ->route('payments.show')
                 ->with('warning', 'Your subscription is already active.');
         }
+
+        $shouldChargeRegistrationFee = ! $user->subscriptions()->exists();
 
         $plan = SubscriptionPlan::query()
             ->whereKey($data['plan_id'])
@@ -83,7 +92,8 @@ class PaymentController extends Controller
         $status = SubscriptionStatus::Active;
         $dates = $this->resolveSubscriptionDates($plan, $status);
         $subscription = $user->currentSubscription();
-        $totalAmount = (float) $plan->price + (float) ($registerPlan?->price ?? 0);
+        $registrationFeeAmount = $shouldChargeRegistrationFee ? (float) ($registerPlan?->price ?? 0) : 0.0;
+        $totalAmount = (float) $plan->price + $registrationFeeAmount;
 
         DB::transaction(function () use ($user, $plan, $status, $dates, &$subscription, $request, $totalAmount) {
             if ($subscription) {
