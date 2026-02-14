@@ -60,10 +60,10 @@
     <div class="pt-8 pb-7 flex xl:justify-center [.sidebar-expanded_&]:justify-start pl-6 xl:pl-0 [.sidebar-expanded_&]:xl:pl-6">
         <a href="{{ route('dashboard') }}">
             <div class="hidden [.sidebar-expanded_&]:block">
-                <img class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" width="150" height="40" />
-                <img class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" width="150" height="40" />
+                <img class="dark:hidden" src="/images/logo/logo.png" alt="Logo" width="150" height="40" />
+                <img class="hidden dark:block dark:brightness-0 dark:invert" src="/images/logo/logo-dark.png" alt="Logo" width="150" height="40" />
             </div>
-            <img class="block [.sidebar-expanded_&]:hidden" src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
+            <img class="block [.sidebar-expanded_&]:hidden" src="/images/logo/logo-icon.png" alt="Logo" width="32" height="32" />
         </a>
     </div>
 
@@ -239,4 +239,4 @@
     class="fixed z-50 h-screen w-full bg-gray-900/50" x-cloak></div>
 
 
-    
+

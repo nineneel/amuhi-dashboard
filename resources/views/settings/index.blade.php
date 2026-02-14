@@ -79,25 +79,25 @@
                         @csrf
                         @method('PUT')
 
-                        <label class="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-                            <input type="checkbox" name="notification_email" value="1"
-                                class="mt-1 h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                @checked($settings?->notification_email ?? true)>
-                            <span>
-                                <span class="block text-sm font-medium text-gray-800 dark:text-white/90">Email notifications</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Receive notifications via email.</span>
-                            </span>
-                        </label>
+                        <x-form.checkbox
+                            name="notification_email"
+                            :checked="$settings?->notification_email ?? true"
+                            containerClass="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800"
+                            labelClass="block"
+                        >
+                            <span class="block text-sm font-medium text-gray-800 dark:text-white/90">Email notifications</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Receive notifications via email.</span>
+                        </x-form.checkbox>
 
-                        <label class="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-                            <input type="checkbox" name="notification_app" value="1"
-                                class="mt-1 h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                @checked($settings?->notification_app ?? true)>
-                            <span>
-                                <span class="block text-sm font-medium text-gray-800 dark:text-white/90">In-app notifications</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Show notifications in the dashboard UI.</span>
-                            </span>
-                        </label>
+                        <x-form.checkbox
+                            name="notification_app"
+                            :checked="$settings?->notification_app ?? true"
+                            containerClass="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800"
+                            labelClass="block"
+                        >
+                            <span class="block text-sm font-medium text-gray-800 dark:text-white/90">In-app notifications</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Show notifications in the dashboard UI.</span>
+                        </x-form.checkbox>
 
                         <button type="submit"
                             class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition">
@@ -112,26 +112,32 @@
                         @csrf
                         @method('PUT')
 
-                        <label class="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-                            <input type="checkbox" name="profile_visible" value="1"
-                                class="mt-1 h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                @checked((bool) ($privacySettings['profile_visible'] ?? true))>
-                            <span class="text-sm text-gray-700 dark:text-gray-300">Allow other users to view my profile.</span>
-                        </label>
+                        <x-form.checkbox
+                            name="profile_visible"
+                            :checked="(bool) ($privacySettings['profile_visible'] ?? true)"
+                            containerClass="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800"
+                            labelClass="text-sm text-gray-700 dark:text-gray-300"
+                        >
+                            Allow other users to view my profile.
+                        </x-form.checkbox>
 
-                        <label class="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-                            <input type="checkbox" name="show_email" value="1"
-                                class="mt-1 h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                @checked((bool) ($privacySettings['show_email'] ?? false))>
-                            <span class="text-sm text-gray-700 dark:text-gray-300">Show my email in profile details.</span>
-                        </label>
+                        <x-form.checkbox
+                            name="show_email"
+                            :checked="(bool) ($privacySettings['show_email'] ?? false)"
+                            containerClass="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800"
+                            labelClass="text-sm text-gray-700 dark:text-gray-300"
+                        >
+                            Show my email in profile details.
+                        </x-form.checkbox>
 
-                        <label class="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-                            <input type="checkbox" name="show_phone" value="1"
-                                class="mt-1 h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                @checked((bool) ($privacySettings['show_phone'] ?? false))>
-                            <span class="text-sm text-gray-700 dark:text-gray-300">Show my phone number in profile details.</span>
-                        </label>
+                        <x-form.checkbox
+                            name="show_phone"
+                            :checked="(bool) ($privacySettings['show_phone'] ?? false)"
+                            containerClass="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-800"
+                            labelClass="text-sm text-gray-700 dark:text-gray-300"
+                        >
+                            Show my phone number in profile details.
+                        </x-form.checkbox>
 
                         <button type="submit"
                             class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition">

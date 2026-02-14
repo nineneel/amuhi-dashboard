@@ -69,15 +69,9 @@
                             </div>
 
                             <div>
-                                <label for="terms" class="flex cursor-pointer items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                    <input id="terms" name="terms" type="checkbox" value="1"
-                                        class="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                        @checked(old('terms'))>
-                                    <span>I agree to the terms and conditions.</span>
-                                </label>
-                                @error('terms')
-                                    <p class="mt-1 text-sm text-error-500">{{ $message }}</p>
-                                @enderror
+                                <x-form.checkbox name="terms" id="terms" :checked="(bool) old('terms')" required>
+                                    I agree to the terms and conditions.
+                                </x-form.checkbox>
                             </div>
 
                             <div>
@@ -105,7 +99,7 @@
                     <x-common.common-grid-shape />
                     <div class="flex max-w-xs flex-col items-center">
                         <a href="{{ url('/') }}" class="mb-4 block">
-                            <img src="/images/logo/auth-logo.svg" alt="Logo" />
+                            <img src="/images/logo/auth-logo.png" alt="Logo" />
                         </a>
                         <p class="text-center text-gray-400 dark:text-white/60">
                             Verify your email after signup to activate your account.

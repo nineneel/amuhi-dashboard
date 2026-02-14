@@ -46,12 +46,15 @@
                             </div>
 
                             <div class="flex items-center justify-between">
-                                <label for="remember" class="flex cursor-pointer items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                    <input id="remember" name="remember" type="checkbox" value="1"
-                                        class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                        @checked(old('remember'))>
+                                <x-form.checkbox
+                                    name="remember"
+                                    id="remember"
+                                    :checked="(bool) old('remember')"
+                                    containerClass="flex cursor-pointer items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+                                    labelClass="font-normal text-gray-600 dark:text-gray-400"
+                                >
                                     Remember me
-                                </label>
+                                </x-form.checkbox>
 
                                 <a href="{{ route('password.request') }}"
                                     class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">
@@ -84,11 +87,11 @@
                     <x-common.common-grid-shape />
                     <div class="flex max-w-xs flex-col items-center">
                         <a href="{{ url('/') }}" class="mb-4 block">
-                            <img src="/images/logo/auth-logo.svg" alt="Logo" />
+                            <img src="/images/logo/auth-logo.png" alt="Logo" />
                         </a>
-                        <p class="text-center text-gray-400 dark:text-white/60">
+                        {{-- <p class="text-center text-gray-400 dark:text-white/60">
                             Manage your AMUHI member account securely.
-                        </p>
+                        </p> --}}
                     </div>
                 </div>
             </div>
