@@ -15,8 +15,8 @@ class SubscriptionPlanSeeder extends Seeder
         SubscriptionPlan::query()->updateOrCreate(
             ['name' => 'Annual Membership'],
             [
-                'description' => 'Full access to all AMUHI programs and events for one year',
-                'price' => 500000,
+                'description' => 'Annual access to all AMUHI programs and events',
+                'price' => 3000000,
                 'duration_days' => 365,
                 'features' => [
                     'Access to all 6 AMUHI programs',
@@ -30,18 +30,21 @@ class SubscriptionPlanSeeder extends Seeder
         );
 
         SubscriptionPlan::query()->updateOrCreate(
-            ['name' => 'Monthly Membership'],
+            ['name' => 'Register as Member'],
             [
-                'description' => 'Full access to all AMUHI programs and events for one month',
-                'price' => 50000,
-                'duration_days' => 30,
+                'description' => 'One-time registration fee to become an AMUHI member',
+                'price' => 2000000,
+                'duration_days' => 0,
                 'features' => [
-                    'Access to all 6 AMUHI programs',
-                    'Event registration',
-                    'Network access',
+                    'Membership registration processing',
+                    'Member onboarding',
                 ],
                 'is_active' => true,
             ]
         );
+
+        SubscriptionPlan::query()
+            ->where('name', 'Monthly Membership')
+            ->update(['is_active' => false]);
     }
 }

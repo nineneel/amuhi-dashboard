@@ -1,8 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.fullscreen-layout')
 
 @section('content')
     @php
         $subscriptionStatus = $currentSubscription?->status?->value ?? \App\SubscriptionStatus::Unpaid->value;
+        $isActiveSubscription = $subscriptionStatus === \App\SubscriptionStatus::Active->value
+            && ($currentSubscription?->ends_at === null || $currentSubscription->ends_at->isFuture());
 
         $statusClasses = [
             'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
@@ -12,123 +14,144 @@
         ];
     @endphp
 
-    <x-common.page-breadcrumb
-        pageTitle="Payment"
-        :items="[
-            ['label' => 'Profile', 'href' => route('profile.index')],
-            ['label' => 'Payment'],
-        ]"
-    />
-
-    @if (session('success'))
-        <x-ui.alert variant="success" title="Success" :message="session('success')" class="mb-6" />
-    @endif
-
-    @if (session('warning'))
-        <x-ui.alert variant="warning" title="Notice" :message="session('warning')" class="mb-6" />
-    @endif
-
-    @if ($errors->any())
-        <x-ui.alert variant="error" title="Payment error" :message="$errors->first()" class="mb-6" />
-    @endif
-
-    <div class="grid gap-6 xl:grid-cols-12">
-        <div class="space-y-6 xl:col-span-8">
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                <h3 class="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">Subscription Plan</h3>
-                <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                    Select a plan, then simulate a successful payment to activate your account in demo mode.
-                </p>
-
-                <form method="POST" action="{{ route('payments.simulate') }}" class="space-y-4">
-                    @csrf
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        @foreach ($plans as $plan)
-                            <label class="cursor-pointer rounded-xl border border-gray-200 p-4 transition hover:border-brand-300 dark:border-gray-800 dark:hover:border-brand-800">
-                                <div class="flex items-start gap-3">
-                                    <input type="radio" name="plan_id" value="{{ $plan->id }}"
-                                        class="mt-1 h-4 w-4 border-gray-300 text-brand-500 focus:ring-brand-500/20 dark:border-gray-700"
-                                        @checked((int) old('plan_id', $selectedPlanId) === $plan->id)>
-                                    <div>
-                                        <p class="text-sm font-semibold text-gray-800 dark:text-white/90">{{ $plan->name }}</p>
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $plan->description }}</p>
-                                        <p class="mt-2 text-sm font-medium text-brand-600 dark:text-brand-400">
-                                            Rp {{ number_format((float) $plan->price, 0, ',', '.') }} / {{ $plan->duration_days }} days
-                                        </p>
-                                        @if (! empty($plan->features))
-                                            <ul class="mt-2 space-y-1 text-xs text-gray-500 dark:text-gray-400">
-                                                @foreach ($plan->features as $feature)
-                                                    <li>• {{ $feature }}</li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </div>
-                                </div>
-                            </label>
-                        @endforeach
-                    </div>
-
-                    <button type="submit"
-                        class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600">
-                        Simulate Successful Payment
-                    </button>
-                </form>
-            </div>
-
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                <h3 class="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">Manual Status Update (Demo)</h3>
-                <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                    Use this only for testing unpaid, pending, active, and expired states.
-                </p>
-
-                <form method="POST" action="{{ route('payments.status') }}" class="grid gap-4 sm:grid-cols-3">
-                    @csrf
-                    @method('PUT')
-
-                    <x-form.select label="Plan" name="plan_id" id="plan_id">
-                        @foreach ($plans as $plan)
-                            <option value="{{ $plan->id }}" @selected((int) old('plan_id', $selectedPlanId) === $plan->id)>{{ $plan->name }}</option>
-                        @endforeach
-                    </x-form.select>
-
-                    <x-form.select label="Status" name="status" id="status">
-                        <option value="unpaid">Unpaid</option>
-                        <option value="pending">Pending</option>
-                        <option value="active">Active</option>
-                        <option value="expired">Expired</option>
-                    </x-form.select>
-
-                    <div class="flex items-end">
-                        <button type="submit"
-                            class="inline-flex w-full items-center justify-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
-                            Update Status
-                        </button>
-                    </div>
-                </form>
-            </div>
+    <div class="mx-auto w-full max-w-4xl p-4 md:p-8">
+        <div class="mb-6">
+            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Payment</h1>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                Complete your payment to activate your account and unlock access to Dashboard, Events, and Programs.
+            </p>
         </div>
 
-        <div class="space-y-6 xl:col-span-4">
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                <h3 class="mb-3 text-base font-semibold text-gray-800 dark:text-white/90">Current Subscription</h3>
-                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
-                    {{ ucfirst($subscriptionStatus) }}
-                </span>
+        @if (session('success'))
+            <x-ui.alert variant="success" title="Success" :message="session('success')" class="mb-6" />
+        @endif
 
-                <dl class="mt-4 space-y-3">
-                    <div>
-                        <dt class="text-xs text-gray-500 dark:text-gray-400">Plan</dt>
-                        <dd class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $currentSubscription?->subscriptionPlan?->name ?? 'None' }}</dd>
+        @if (session('warning'))
+            <x-ui.alert variant="warning" title="Notice" :message="session('warning')" class="mb-6" />
+        @endif
+
+        @if ($errors->any())
+            <x-ui.alert variant="error" title="Payment error" :message="$errors->first()" class="mb-6" />
+        @endif
+
+        <div class="grid gap-6 lg:grid-cols-12">
+            <div class="space-y-6 lg:col-span-8">
+                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Membership Package</h3>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                One-time registration fee plus annual membership.
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Total</p>
+                            <p class="text-xl font-semibold text-brand-600 dark:text-brand-400">
+                                Rp {{ number_format((float) $totalAmount, 0, ',', '.') }}
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <dt class="text-xs text-gray-500 dark:text-gray-400">Starts</dt>
-                        <dd class="text-sm font-medium text-gray-800 dark:text-white/90">{{ optional($currentSubscription?->starts_at)->format('d M Y') ?? '-' }}</dd>
+
+                    <div class="mt-6 divide-y divide-gray-200 rounded-xl border border-gray-200 dark:divide-gray-800 dark:border-gray-800">
+                        <div class="flex items-start justify-between gap-4 p-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                    {{ $registerPlan?->name ?? 'Register as Member' }}
+                                </p>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ $registerPlan?->description ?? 'One-time registration fee' }}
+                                </p>
+                            </div>
+                            <p class="shrink-0 text-sm font-semibold text-gray-900 dark:text-white">
+                                Rp {{ number_format((float) ($registerPlan?->price ?? 0), 0, ',', '.') }}
+                            </p>
+                        </div>
+                        <div class="flex items-start justify-between gap-4 p-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                    {{ $annualPlan?->name ?? 'Annual Membership' }}
+                                </p>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ $annualPlan?->description ?? 'Annual access to member benefits' }}
+                                </p>
+                                @if (! empty($annualPlan?->features))
+                                    <ul class="mt-3 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        @foreach ($annualPlan->features as $feature)
+                                            <li>• {{ $feature }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                            <div class="shrink-0 text-right">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                    Rp {{ number_format((float) ($annualPlan?->price ?? 0), 0, ',', '.') }}
+                                </p>
+                                @if (($annualPlan?->duration_days ?? 0) > 0)
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        {{ (int) $annualPlan->duration_days }} days
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <dt class="text-xs text-gray-500 dark:text-gray-400">Ends</dt>
-                        <dd class="text-sm font-medium text-gray-800 dark:text-white/90">{{ optional($currentSubscription?->ends_at)->format('d M Y') ?? '-' }}</dd>
-                    </div>
-                </dl>
+
+                    @if ($isActiveSubscription)
+                        <div class="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">Your subscription is active.</p>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                You can access Events, Programs, and the Dashboard.
+                            </p>
+                            <div class="mt-4 flex flex-col gap-3 sm:flex-row">
+                                <a href="{{ route('dashboard') }}"
+                                    class="inline-flex w-full items-center justify-center rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-brand-600 sm:w-auto">
+                                    Go to Dashboard
+                                </a>
+                                <a href="{{ route('invoices.index') }}"
+                                    class="inline-flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/[0.03] sm:w-auto">
+                                    View Invoices
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <form method="POST" action="{{ route('payments.simulate') }}" class="mt-6">
+                            @csrf
+                            @if ($annualPlan)
+                                <input type="hidden" name="plan_id" value="{{ $annualPlan->id }}">
+                            @endif
+
+                            <button type="submit"
+                                class="inline-flex w-full items-center justify-center rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
+                                @disabled(! $annualPlan)>
+                                Pay Now (Demo)
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+
+            <div class="space-y-6 lg:col-span-4">
+                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                    <h3 class="mb-3 text-base font-semibold text-gray-900 dark:text-white">Current Subscription</h3>
+                    <span
+                        class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ $statusClasses[$subscriptionStatus] ?? $statusClasses['unpaid'] }}">
+                        {{ ucfirst($subscriptionStatus) }}
+                    </span>
+
+                    <dl class="mt-4 space-y-3">
+                        <div>
+                            <dt class="text-xs text-gray-500 dark:text-gray-400">Plan</dt>
+                            <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ $currentSubscription?->subscriptionPlan?->name ?? 'None' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs text-gray-500 dark:text-gray-400">Starts</dt>
+                            <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ optional($currentSubscription?->starts_at)->format('d M Y') ?? '-' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs text-gray-500 dark:text-gray-400">Ends</dt>
+                            <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ optional($currentSubscription?->ends_at)->format('d M Y') ?? '-' }}</dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
         </div>
     </div>

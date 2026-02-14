@@ -23,19 +23,38 @@ class PaymentController extends Controller
     public function show(Request $request): View
     {
         $user = $request->user();
-        $plans = SubscriptionPlan::query()
+
+        $currentSubscription = $user->currentSubscription();
+
+        $annualPlan = SubscriptionPlan::query()
+            ->where('name', 'Annual Membership')
             ->where('is_active', true)
+            ->first();
+
+        $registerPlan = SubscriptionPlan::query()
+            ->where('name', 'Register as Member')
+            ->where('is_active', true)
+            ->first();
+
+        $subscriptionPlans = SubscriptionPlan::query()
+            ->where('is_active', true)
+            ->where('duration_days', '>', 0)
             ->orderBy('price')
             ->get();
 
-        $currentSubscription = $user->currentSubscription();
-        $selectedPlanId = $currentSubscription?->subscription_plan_id ?? $plans->first()?->id;
+        if (! $annualPlan) {
+            $annualPlan = $subscriptionPlans->first();
+        }
+
+        $totalAmount = (float) ($annualPlan?->price ?? 0) + (float) ($registerPlan?->price ?? 0);
 
         return view('payments.show', [
             'user' => $user,
-            'plans' => $plans,
             'currentSubscription' => $currentSubscription,
-            'selectedPlanId' => $selectedPlanId,
+            'annualPlan' => $annualPlan,
+            'registerPlan' => $registerPlan,
+            'subscriptionPlans' => $subscriptionPlans,
+            'totalAmount' => $totalAmount,
         ]);
     }
 
@@ -44,16 +63,29 @@ class PaymentController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
+        if ($user->hasActiveSubscription()) {
+            return redirect()
+                ->route('payments.show')
+                ->with('warning', 'Your subscription is already active.');
+        }
+
         $plan = SubscriptionPlan::query()
             ->whereKey($data['plan_id'])
             ->where('is_active', true)
+            ->where('duration_days', '>', 0)
             ->firstOrFail();
+
+        $registerPlan = SubscriptionPlan::query()
+            ->where('name', 'Register as Member')
+            ->where('is_active', true)
+            ->first();
 
         $status = SubscriptionStatus::Active;
         $dates = $this->resolveSubscriptionDates($plan, $status);
         $subscription = $user->currentSubscription();
+        $totalAmount = (float) $plan->price + (float) ($registerPlan?->price ?? 0);
 
-        DB::transaction(function () use ($user, $plan, $status, $dates, &$subscription, $request) {
+        DB::transaction(function () use ($user, $plan, $status, $dates, &$subscription, $request, $totalAmount) {
             if ($subscription) {
                 $subscription->update([
                     'subscription_plan_id' => $plan->id,
@@ -74,7 +106,7 @@ class PaymentController extends Controller
                 'user_id' => $user->id,
                 'subscription_id' => $subscription->id,
                 'invoice_number' => 'INV-'.now()->format('Ymd').'-'.Str::upper(Str::random(6)),
-                'amount' => $plan->price,
+                'amount' => $totalAmount,
                 'due_date' => now()->toDateString(),
                 'status' => InvoiceStatus::Paid->value,
             ]);
@@ -117,6 +149,7 @@ class PaymentController extends Controller
         $plan = SubscriptionPlan::query()
             ->whereKey($data['plan_id'])
             ->where('is_active', true)
+            ->where('duration_days', '>', 0)
             ->firstOrFail();
 
         $status = SubscriptionStatus::from($data['status']);

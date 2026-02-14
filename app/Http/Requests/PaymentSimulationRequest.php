@@ -18,7 +18,9 @@ class PaymentSimulationRequest extends FormRequest
             'plan_id' => [
                 'required',
                 'integer',
-                Rule::exists('subscription_plans', 'id')->where('is_active', true),
+                Rule::exists('subscription_plans', 'id')
+                    ->where('is_active', true)
+                    ->where(fn ($query) => $query->where('duration_days', '>', 0)),
             ],
         ];
     }

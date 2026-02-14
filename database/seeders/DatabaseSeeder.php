@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EventSeeder::class);
 
         $plan = SubscriptionPlan::query()
-            ->where('name', 'Monthly Membership')
+            ->where('name', 'Annual Membership')
             ->first();
 
         if (! $plan) {
@@ -79,6 +79,12 @@ class DatabaseSeeder extends Seeder
         if (! $plan) {
             return;
         }
+
+        $registerPlan = SubscriptionPlan::query()
+            ->where('name', 'Register as Member')
+            ->first();
+
+        $invoiceAmount = (float) $plan->price + (float) ($registerPlan?->price ?? 0);
 
         $startsAt = now()->subDays(15);
         $endsAt = $plan->duration_days ? $startsAt->copy()->addDays($plan->duration_days) : null;
@@ -99,25 +105,25 @@ class DatabaseSeeder extends Seeder
         $invoices = [
             [
                 'invoice_number' => 'INV-2026-0001',
-                'amount' => $plan->price,
+                'amount' => $invoiceAmount,
                 'due_date' => now()->subDays(12),
                 'status' => InvoiceStatus::Paid->value,
             ],
             [
                 'invoice_number' => 'INV-2026-0002',
-                'amount' => $plan->price,
+                'amount' => $invoiceAmount,
                 'due_date' => now()->addDays(10),
                 'status' => InvoiceStatus::Pending->value,
             ],
             [
                 'invoice_number' => 'INV-2026-0003',
-                'amount' => $plan->price,
+                'amount' => $invoiceAmount,
                 'due_date' => now()->subDays(3),
                 'status' => InvoiceStatus::Overdue->value,
             ],
             [
                 'invoice_number' => 'INV-2026-0004',
-                'amount' => $plan->price,
+                'amount' => $invoiceAmount,
                 'due_date' => now()->addDays(25),
                 'status' => InvoiceStatus::Cancelled->value,
             ],
