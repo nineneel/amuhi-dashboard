@@ -94,7 +94,7 @@ class TwoFactorController extends Controller
                 'notification_email' => $user->settings?->notification_email ?? true,
                 'notification_app' => $user->settings?->notification_app ?? true,
                 'language' => $user->settings?->language ?? 'id',
-                'theme' => $user->settings?->theme ?? 'light',
+                'theme' => $user->settings?->theme ?? 'dark',
                 'privacy_settings' => $user->settings?->privacy_settings ?? [],
                 'two_factor_recovery_codes' => $recoveryCodes,
             ]

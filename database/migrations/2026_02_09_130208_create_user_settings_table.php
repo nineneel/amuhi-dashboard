@@ -17,7 +17,7 @@ return new class extends Migration
             $table->boolean('notification_email')->default(true);
             $table->boolean('notification_app')->default(true);
             $table->string('language')->default('id');
-            $table->string('theme')->default('light');
+            $table->string('theme')->default('dark');
             $table->json('privacy_settings')->nullable();
             $table->json('two_factor_recovery_codes')->nullable();
             $table->timestamps();

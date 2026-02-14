@@ -43,7 +43,7 @@ class RegisterController extends Controller
                 'notification_email' => true,
                 'notification_app' => true,
                 'language' => 'id',
-                'theme' => 'light',
+                'theme' => 'dark',
                 'privacy_settings' => [],
             ]);
 

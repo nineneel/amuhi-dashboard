@@ -9,7 +9,7 @@
             'account' => __('ui.settings.tabs.account'),
             'notifications' => __('ui.settings.tabs.notifications'),
             'privacy' => __('ui.settings.tabs.privacy'),
-            'appearance' => __('ui.settings.tabs.appearance'),
+            // 'appearance' => __('ui.settings.tabs.appearance'),
             'security' => __('ui.settings.tabs.security'),
             'danger' => __('ui.settings.tabs.danger'),
         ];
@@ -162,11 +162,10 @@
                         @csrf
                         @method('PUT')
 
-                        <x-form.select :label="__('ui.forms.theme_preference')" name="theme" id="theme">
-                            <option value="light" @selected(($settings?->theme ?? 'light') === 'light')>{{ __('ui.settings.theme.light') }}</option>
-                            <option value="dark" @selected(($settings?->theme ?? 'light') === 'dark')>{{ __('ui.settings.theme.dark') }}</option>
-                            <option value="system" @selected(($settings?->theme ?? 'light') === 'system')>{{ __('ui.settings.theme.system') }}</option>
-                        </x-form.select>
+                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 dark:border-gray-800 dark:bg-white/5 dark:text-gray-300">
+                            Dark mode is currently enforced for all users.
+                        </div>
+                        <input type="hidden" name="theme" value="dark" />
 
                         <button type="submit"
                             class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition">

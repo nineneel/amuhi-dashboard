@@ -112,14 +112,10 @@ class SettingsController extends Controller
 
     public function updateAppearance(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'theme' => ['required', 'in:light,dark,system'],
-        ]);
-
         $user = $request->user();
         $user->settings()->updateOrCreate(
             ['user_id' => $user->id],
-            ['theme' => $data['theme']]
+            ['theme' => 'dark']
         );
 
         return redirect()->route('settings.index', ['section' => 'appearance'])

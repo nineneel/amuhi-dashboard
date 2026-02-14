@@ -39,8 +39,8 @@
 
     <div class="grid gap-6 xl:grid-cols-12">
         <div class="space-y-6 xl:col-span-8">
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.dashboard.welcome_back') }}</p>
                         <h2 class="mt-1 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ $user->name }}</h2>
@@ -52,7 +52,7 @@
 		                        </p> --}}
                     </div>
 
-                    <div class="gap-3 sm:grid-cols-3">
+                    <div class="grid w-full grid-cols-1 gap-3 sm:w-auto sm:grid-cols-3">
                         <div class="rounded-xl border border-gray-200 px-4 py-3 text-center dark:border-gray-800">
                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ __('ui.dashboard.unread_notifications') }}</p>
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-gray-200 bg-white px-6 py-4 dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="rounded-2xl border border-gray-200 bg-white p-4 sm:px-6 sm:py-4 dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="mb-3 flex items-center">
                     <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">
                         {{ __('ui.dashboard.upcoming_events') }}</h3>
@@ -103,9 +103,9 @@
                             @endphp
 	                            <div
 	                                class="task rounded-xl border border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-white/5">
-	                                <div class="flex items-stretch gap-4">
+	                                <div class="flex flex-col gap-4 sm:flex-row sm:items-stretch">
 	                                    <div
-	                                        class="w-36 h-44 shrink-0 self-stretch overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+	                                        class="h-40 w-full shrink-0 self-stretch overflow-hidden rounded-xl border border-gray-200 sm:h-44 sm:w-36 dark:border-gray-800">
 	                                        @if ($eventImage)
 	                                            <img src="{{ $eventImage }}" alt="{{ $event->title }}"
 	                                                class="h-full w-full object-cover">
@@ -168,7 +168,7 @@
 
                                         <div class="mt-auto flex flex-wrap items-center gap-2 pt-3">
                                             <a href="{{ route('events.show', $event) }}"
-                                                class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
+                                                class="inline-flex w-full items-center justify-center rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/5">
                                                 {{ __('ui.common.view_details') }}
                                             </a>
                                         </div>
@@ -189,7 +189,7 @@
         </div>
 
         <div class="space-y-6 xl:col-span-4">
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
                 <h3 class="mb-2 text-base font-semibold text-gray-800 dark:text-white/90">
                     {{ __('ui.dashboard.recent_activity') }}</h3>
 
@@ -213,7 +213,7 @@
                 @endif
             </div>
 
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
                 <h3 class="mb-4 text-base font-semibold text-gray-800 dark:text-white/90">
                     {{ __('ui.dashboard.quick_actions') }}</h3>
                 <div class="grid gap-3">
