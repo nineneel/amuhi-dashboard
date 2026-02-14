@@ -177,6 +177,15 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+  html {
+    /* Prevent white "overscroll" gaps in dark mode: html itself carries the `.dark` class. */
+    @apply h-full bg-gray-50;
+  }
+
+  html.dark {
+    @apply bg-gray-900;
+  }
+
   *,
   ::after,
   ::before,
@@ -189,7 +198,7 @@
     cursor: pointer;
   }
   body {
-    @apply relative font-normal font-outfit z-1 bg-gray-50 dark:bg-gray-900;
+    @apply relative z-1 min-h-full bg-gray-50 font-normal font-outfit dark:bg-gray-900;
   }
 }
 

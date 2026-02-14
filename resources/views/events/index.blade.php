@@ -32,12 +32,12 @@
             <div>
                 <h2 class="font-semibold text-gray-800 dark:text-white/90">Overview</h2>
             </div>
-            <div>
+            {{-- <div>
                 <a href="{{ route('events.calendar') }}"
                     class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition">
                     Calendar View
                 </a>
-            </div>
+            </div> --}}
         </div>
 
         <div
@@ -66,7 +66,7 @@
             <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="mb-4 flex items-center justify-between">
                     <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Event List</h3>
-                    <a href="{{ route('events.calendar') }}" class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">Calendar view</a>
+                    {{-- <a href="{{ route('events.calendar') }}" class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">Calendar view</a> --}}
                 </div>
 
                 @if ($events->isEmpty())

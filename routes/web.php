@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\CompleteRegistrationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);
+
+    Route::get('/complete-registration/{token}', [CompleteRegistrationController::class, 'create'])->name('registration.complete');
+    Route::post('/complete-registration', [CompleteRegistrationController::class, 'store'])->name('registration.complete.store');
 
     Route::get('/login', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store']);
@@ -50,7 +54,9 @@ Route::middleware('auth')->group(function () {
         ->name('verification.resend');
 
     Route::middleware('verified')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->middleware('subscribed')
+            ->name('dashboard');
 
         Route::get('/payment', [PaymentController::class, 'show'])->name('payments.show');
         Route::post('/payment', [PaymentController::class, 'simulate'])->name('payments.simulate');

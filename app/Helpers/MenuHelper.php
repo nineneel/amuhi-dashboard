@@ -56,7 +56,7 @@ class MenuHelper
     {
         return [
             [
-                'title' => 'Main',
+                'title' => 'Menu',
                 'items' => self::getMainNavItems(),
             ],
             [

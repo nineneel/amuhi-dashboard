@@ -1,27 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Api\RegisterRequest;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use App\Notifications\CompleteRegistrationNotification;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class RegisterController extends Controller
 {
-    public function create(): View
-    {
-        return view('auth.register');
-    }
-
-    public function store(RegisterRequest $request): RedirectResponse
+    public function store(RegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -50,32 +44,26 @@ class RegisterController extends Controller
             return $user;
         });
 
-        $mailError = null;
-
         try {
             $token = Password::broker()->createToken($user);
             $expiresInMinutes = (int) config('auth.passwords.users.expire', 60);
             $user->notify(new CompleteRegistrationNotification($token, $expiresInMinutes));
         } catch (TransportExceptionInterface $exception) {
-            Log::warning('Complete registration email send failed.', [
+            Log::warning('Complete registration email send failed (API).', [
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'exception' => $exception->getMessage(),
             ]);
 
-            // Keep the flow simple: if we can't deliver the link, remove the new account so they can try again.
             $user->delete();
 
-            $mailError = 'We could not send the email right now. Please try again later.';
+            return response()->json([
+                'message' => 'We could not send the email right now. Please try again later.',
+            ], 503);
         }
 
-        $redirect = redirect()->route('register')
-            ->with('status', 'We emailed you a link to complete your registration. Please check your inbox.');
-
-        if ($mailError) {
-            return redirect()->route('register')->with('mail_error', $mailError);
-        }
-
-        return $redirect;
+        return response()->json([
+            'message' => 'We emailed you a link to complete your registration. Please check your inbox.',
+        ], 202);
     }
 }
