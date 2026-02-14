@@ -18,7 +18,7 @@ return [
         'logout' => 'Logout',
     ],
 
-	    'common' => [
+    'common' => [
         'back_to_home' => 'Back to home',
         'success' => 'Success',
         'saved' => 'Saved',
@@ -31,7 +31,7 @@ return [
         'cancel' => 'Cancel',
         'save_changes' => 'Save Changes',
         'open_settings' => 'Open Settings',
-	        'manage_subscription' => 'Manage Membership',
+        'manage_subscription' => 'Manage Membership',
         'tba' => 'TBA',
         'none' => 'None',
     ],
@@ -105,13 +105,13 @@ return [
         'view_all_notifications' => 'View All Notifications',
     ],
 
-	    'dashboard' => [
+    'dashboard' => [
         'title' => 'Dashboard',
         'access_limited' => 'Access limited',
         'subscription_required' => 'Membership required',
         'subscription_required_message' => 'Your account has limited access. Activate your membership to unlock events, programs, and invoices.',
         'welcome_back' => 'Welcome back',
-	        'member_status' => 'Membership',
+        'member_status' => 'Membership',
         'unread_notifications' => 'Unread Notifications',
         'invoices' => 'Invoices',
         'pending_invoices' => 'Pending Invoices',
@@ -215,7 +215,7 @@ return [
 
     'payments' => [
         'title' => 'Payment',
-        'subtitle' => 'Complete your payment to activate your account and unlock access to Dashboard, Events, and Programs.',
+        'subtitle' => 'Become an official AMUHI member and gain full access to all association programs, events, and resources.',
         'payment_error' => 'Payment error',
         'membership_package' => 'Membership Package',
         'one_time_plus_annual' => 'One-time registration fee plus annual membership.',
@@ -225,8 +225,8 @@ return [
         'annual_plan_default' => 'Annual Membership',
         'annual_plan_desc_default' => 'Annual access to member benefits',
         'pay_now_demo' => 'Pay Now (Demo)',
-        'subscription_active' => 'Your membership is active.',
-        'subscription_active_subtitle' => 'You can access Events, Programs, and the Dashboard.',
+        'subscription_active' => 'You are an official AMUHI member.',
+        'subscription_active_subtitle' => 'You have full access to all association programs, events, and resources.',
         'go_to_dashboard' => 'Go to Dashboard',
         'view_invoices' => 'View Invoices',
         'current_subscription' => 'Current Membership',
@@ -235,11 +235,15 @@ return [
         'ends' => 'Ends',
         'total' => 'Total',
         'days' => ':count days',
+        'order_summary' => 'Order Summary',
+        'included_items' => 'What\'s included',
+        'one_time_fee' => 'One-time fee',
+        'per_year' => '/ year',
     ],
 
-	    'profile' => [
+    'profile' => [
         'title' => 'Profile',
-	        'subscription' => 'Membership',
+        'subscription' => 'Membership',
         'edit_profile' => 'Edit Profile',
         'unable_to_update' => 'Unable to update profile',
         'personal_information' => 'Personal Information',
@@ -349,14 +353,14 @@ return [
         'no_payments' => 'No payments recorded.',
     ],
 
-	    'subscriptions' => [
-	        'status' => [
-	            'active' => 'Active',
-	            'pending' => 'Needs renewal',
-	            'expired' => 'Needs renewal',
-	            'unpaid' => 'Not active',
-	        ],
-	    ],
+    'subscriptions' => [
+        'status' => [
+            'active' => 'Active',
+            'pending' => 'Needs renewal',
+            'expired' => 'Needs renewal',
+            'unpaid' => 'Not active',
+        ],
+    ],
 
     'welcome' => [
         'badge' => 'AMUHI Dashboard',

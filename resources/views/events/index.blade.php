@@ -127,12 +127,14 @@
 	                                                {{ $event->location ?: __('ui.common.tba') }}
 	                                            </p>
 
-	                                            <p class="flex items-center gap-2">
-                                                <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
-                                                    {!! \App\Helpers\MenuHelper::getIconSvg('user-profile') !!}
-                                                </span>
-	                                                {{ trans_choice('ui.dashboard.participants', $event->registrations_count, ['count' => $event->registrations_count]) }}
-	                                            </p>
+	                                            @if ($event->registrations_count >= 3)
+                                                    <p class="flex items-center gap-2">
+                                                    <span class="text-gray-500 dark:text-gray-400 [&_svg]:h-4 [&_svg]:w-4">
+                                                        {!! \App\Helpers\MenuHelper::getIconSvg('user-profile') !!}
+                                                    </span>
+	                                                    {{ trans_choice('ui.dashboard.participants', $event->registrations_count, ['count' => $event->registrations_count]) }}
+	                                                </p>
+                                                @endif
 	                                        </div>
 	                                    </div>
 	                                </div>

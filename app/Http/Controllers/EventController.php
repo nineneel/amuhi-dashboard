@@ -8,10 +8,28 @@ use App\Models\Event;
 use App\Models\Notification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class EventController extends Controller
 {
+    /**
+     * @param  Collection<int, Event>  $events
+     * @return Collection<int, Event>
+     */
+    private function sortByNearestStartDate(Collection $events): Collection
+    {
+        return $events
+            ->sortBy(function (Event $event): int {
+                if (! $event->starts_at) {
+                    return PHP_INT_MAX;
+                }
+
+                return abs($event->starts_at->diffInSeconds(now(), false));
+            })
+            ->values();
+    }
+
     public function index(Request $request): View
     {
         $user = $request->user();
@@ -21,16 +39,15 @@ class EventController extends Controller
                 'eventRegistrations as is_registered' => function ($builder) use ($user) {
                     $builder->where('user_id', $user->id);
                 },
-            ])
-            ->orderByRaw('starts_at is null')
-            ->orderBy('starts_at');
+            ]);
 
-        $allEvents = (clone $baseQuery)->get();
+        $allEvents = $this->sortByNearestStartDate((clone $baseQuery)->get());
         $registeredEvents = (clone $baseQuery)
             ->whereHas('eventRegistrations', function ($builder) use ($user) {
                 $builder->where('user_id', $user->id);
             })
             ->get();
+        $registeredEvents = $this->sortByNearestStartDate($registeredEvents);
 
         return view('events.index', [
             'allEvents' => $allEvents,

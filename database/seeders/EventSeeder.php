@@ -15,71 +15,41 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        $summitStart = now()->addDays(10)->setTime(9, 0);
-        $summitEnd = $summitStart->copy()->addHours(6);
+        $ticketFraudStart = now()->setDate(2025, 2, 8)->setTime(9, 0);
+        $ticketFraudEnd = $ticketFraudStart->copy()->addHours(2);
 
-        $workshopStart = now()->addDays(3)->setTime(13, 30);
-        $workshopEnd = $workshopStart->copy()->addHours(3);
+        $mukernasStart = now()->setDate(2025, 3, 8)->setTime(9, 0);
+        $mukernasEnd = $mukernasStart->copy()->addHours(6);
 
-        $networkStart = now()->subDay()->setTime(18, 0);
-        $networkEnd = $networkStart->copy()->addDays(2)->setTime(21, 0);
-
-        $webinarStart = now()->subDays(14)->setTime(10, 0);
-        $webinarEnd = $webinarStart->copy()->addHours(2);
-
-        $clinicStart = now()->addDays(20)->setTime(9, 30);
-        $clinicEnd = $clinicStart->copy()->addHours(4);
-
-        $bootcampStart = now()->addDays(32)->setTime(9, 0);
-        $bootcampEnd = $bootcampStart->copy()->addHours(7);
+        $hajiStart = now()->setDate(2025, 4, 8)->setTime(9, 0);
+        $hajiEnd = $hajiStart->copy()->addHours(3);
 
         $events = [
             [
-                'title' => 'AMUHI Summit 2026',
-                'description' => 'Annual summit for AMUHI members to share updates, policy guidance, and growth opportunities.',
-                'location' => 'Jakarta Convention Center',
-                'starts_at' => $summitStart,
-                'ends_at' => $summitEnd,
-                'status' => EventStatus::Upcoming,
-            ],
-            [
-                'title' => 'Regulatory Compliance Workshop',
-                'description' => 'Hands-on workshop covering the latest compliance requirements and operational best practices.',
-                'location' => 'AMUHI Training Hub, Bandung',
-                'starts_at' => $workshopStart,
-                'ends_at' => $workshopEnd,
-                'status' => EventStatus::Upcoming,
-            ],
-            [
-                'title' => 'Member Networking Night',
-                'description' => 'Evening gathering to connect with fellow members, partners, and program leaders.',
-                'location' => 'AMUHI Lounge, Jakarta',
-                'starts_at' => $networkStart,
-                'ends_at' => $networkEnd,
-                'status' => EventStatus::Ongoing,
-            ],
-            [
-                'title' => 'Safety & Risk Webinar',
-                'description' => 'Online webinar focused on risk mitigation, safety standards, and audit readiness.',
+                'title' => 'Penipuan Tiket',
+                'description' => 'Webinar edukasi gratis membahas secara mendalam berbagai modus penipuan tiket umrah dan haji, cara mengidentifikasi travel agent palsu, serta langkah preventif untuk melindungi diri dan keluarga.',
                 'location' => 'Online',
-                'starts_at' => $webinarStart,
-                'ends_at' => $webinarEnd,
+                'image' => '/temp-images/penipuan-tiket.jpeg',
+                'starts_at' => $ticketFraudStart,
+                'ends_at' => $ticketFraudEnd,
                 'status' => EventStatus::Past,
             ],
             [
-                'title' => 'Operational Excellence Clinic',
-                'description' => 'Small-group clinic with AMUHI advisors to review operational challenges and solutions.',
-                'location' => 'AMUHI Office, Surabaya',
-                'starts_at' => $clinicStart,
-                'ends_at' => $clinicEnd,
-                'status' => EventStatus::Cancelled,
+                'title' => 'Mukernas 1 Topics',
+                'description' => 'Musyawarah Kerja Nasional perdana membahas roadmap strategis AMUHI, evaluasi program berjalan, serta perumusan kebijakan dan inisiatif baru untuk meningkatkan kualitas layanan industri umrah dan haji Indonesia.',
+                'location' => 'Jakarta',
+                'image' => '/temp-images/mukernas-1.jpeg',
+                'starts_at' => $mukernasStart,
+                'ends_at' => $mukernasEnd,
+                'status' => EventStatus::Upcoming,
             ],
             [
-                'title' => 'Digital Tools Bootcamp',
-                'description' => 'Training session for AMUHI digital tools, dashboards, and reporting workflows.',
-                'location' => 'AMUHI Digital Lab, Jakarta',
-                'starts_at' => $bootcampStart,
-                'ends_at' => $bootcampEnd,
+                'title' => 'Haji 1448H',
+                'description' => 'Sesi persiapan komprehensif untuk jamaah haji tahun 1448H mencakup panduan teknis keberangkatan, tips kesehatan dan kesiapan fisik, manajemen keuangan, serta pembahasan regulasi terbaru dari Kementerian Agama.',
+                'location' => 'Jakarta',
+                'image' => null,
+                'starts_at' => $hajiStart,
+                'ends_at' => $hajiEnd,
                 'status' => EventStatus::Upcoming,
             ],
         ];
@@ -92,6 +62,7 @@ class EventSeeder extends Seeder
                 [
                     'description' => $event['description'],
                     'location' => $event['location'],
+                    'image' => $event['image'],
                     'starts_at' => $event['starts_at'],
                     'ends_at' => $event['ends_at'],
                     'status' => $event['status'],

@@ -30,8 +30,8 @@ it('shows a safe subscription message when the member is already paid', function
     $this->actingAs($user)
         ->get(route('payments.show'))
         ->assertSuccessful()
-        ->assertSee('Your subscription is active.')
-        ->assertDontSee('Pay Now (Demo)');
+        ->assertSee(__('ui.payments.subscription_active'))
+        ->assertDontSee(__('ui.payments.pay_now_demo'));
 });
 
 it('prevents paying again when the member is already paid', function () {
@@ -83,8 +83,8 @@ it('treats an ended active subscription as expired', function () {
     $this->actingAs($user)
         ->get(route('payments.show'))
         ->assertSuccessful()
-        ->assertSee('Expired')
-        ->assertSee('Pay Now (Demo)');
+        ->assertSee(__('ui.subscriptions.status.expired'))
+        ->assertSee(__('ui.payments.pay_now_demo'));
 });
 
 it('does not charge the registration fee again for existing members', function () {
