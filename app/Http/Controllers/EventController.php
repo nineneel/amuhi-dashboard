@@ -38,11 +38,22 @@ class EventController extends Controller
         ]);
     }
 
-    public function calendar(): RedirectResponse
+    public function calendar(Request $request): View
     {
-        return redirect()
-            ->route('events.index')
-            ->with('warning', 'Calendar view is temporarily unavailable.');
+        $user = $request->user();
+        $events = Event::query()
+            ->withExists([
+                'eventRegistrations as is_registered' => function ($builder) use ($user) {
+                    $builder->where('user_id', $user->id);
+                },
+            ])
+            ->orderByRaw('starts_at is null')
+            ->orderBy('starts_at')
+            ->get();
+
+        return view('events.calendar', [
+            'events' => $events,
+        ]);
     }
 
     public function show(Event $event, Request $request): View

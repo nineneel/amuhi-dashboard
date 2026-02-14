@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\InvoiceStatus;
 use App\Models\Invoice;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +21,9 @@ class InvoiceController extends Controller
 
         $summary = [
             'total' => $invoices->count(),
-            'paid' => $invoices->where('status', InvoiceStatus::Paid)->count(),
-            'pending' => $invoices->where('status', InvoiceStatus::Pending)->count(),
-            'overdue' => $invoices->where('status', InvoiceStatus::Overdue)->count(),
+            'paid' => $invoices->filter(fn (Invoice $invoice) => $invoice->status?->value === InvoiceStatus::Paid->value)->count(),
+            'pending' => $invoices->filter(fn (Invoice $invoice) => $invoice->status?->value === InvoiceStatus::Pending->value)->count(),
+            'overdue' => $invoices->filter(fn (Invoice $invoice) => $invoice->status?->value === InvoiceStatus::Overdue->value)->count(),
         ];
 
         return view('invoices.index', [
@@ -43,17 +43,21 @@ class InvoiceController extends Controller
         ]);
     }
 
-    public function download(Invoice $invoice, Request $request): Response
+    public function download(Invoice $invoice, Request $request, ViewFactory $viewFactory): Response
     {
         $this->ensureInvoiceOwner($invoice, $request);
 
         $invoice->load(['subscription.subscriptionPlan', 'payments', 'user.profile']);
+        $html = $viewFactory->make('invoices.pdf', ['invoice' => $invoice])->render();
+        $filename = 'invoice-'.$invoice->invoice_number.'.html';
 
-        $pdf = Pdf::loadView('invoices.pdf', [
-            'invoice' => $invoice,
-        ]);
-
-        return $pdf->download('invoice-'.$invoice->invoice_number.'.pdf');
+        return response()->streamDownload(
+            function () use ($html): void {
+                echo $html;
+            },
+            $filename,
+            ['Content-Type' => 'text/html; charset=UTF-8']
+        );
     }
 
     private function ensureInvoiceOwner(Invoice $invoice, Request $request): void

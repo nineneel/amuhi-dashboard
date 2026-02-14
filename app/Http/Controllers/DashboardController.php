@@ -21,7 +21,7 @@ class DashboardController extends Controller
                     $builder->where('user_id', $user->id);
                 },
             ])
-            ->whereIn('status', [EventStatus::Upcoming, EventStatus::Ongoing])
+            ->whereIn('status', [EventStatus::Upcoming->value, EventStatus::Ongoing->value])
             ->orderBy('starts_at')
             ->take(4)
             ->get();
@@ -46,11 +46,15 @@ class DashboardController extends Controller
 
         $stats = [
             'registered_events' => $user->eventRegistrations()->count(),
+            'total_invoices' => $user->invoices()->count(),
+            'pending_invoices' => $user->invoices()
+                ->where('status', InvoiceStatus::Pending->value)
+                ->count(),
             'open_invoices' => $user->invoices()
-                ->whereIn('status', [InvoiceStatus::Pending, InvoiceStatus::Overdue])
+                ->whereIn('status', [InvoiceStatus::Pending->value, InvoiceStatus::Overdue->value])
                 ->count(),
             'upcoming_events' => Event::query()
-                ->whereIn('status', [EventStatus::Upcoming, EventStatus::Ongoing])
+                ->whereIn('status', [EventStatus::Upcoming->value, EventStatus::Ongoing->value])
                 ->count(),
             'unread_notifications' => $user->notifications()
                 ->whereNull('read_at')
