@@ -11,14 +11,6 @@
         <div class="relative flex min-h-screen w-full flex-col lg:flex-row">
 	            <div class="flex w-full flex-1 items-center justify-center px-4 py-10 sm:px-6 lg:w-7/12 lg:px-10">
 	                <div class="w-full max-w-lg lg:max-w-2xl">
-	                    <a href="{{ url('/') }}"
-	                        class="inline-flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                        <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M12.7083 5L7.5 10.2083L12.7083 15.4167" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-	                        {{ __('ui.common.back_to_home') }}
-	                    </a>
-
 	                    <div class="mt-6 rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-theme-lg backdrop-blur dark:border-gray-800 dark:bg-gray-900/60 sm:p-8">
 	                        <div class="mb-6">
 	                            <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
