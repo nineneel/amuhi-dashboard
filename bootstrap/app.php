@@ -2,7 +2,9 @@
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnsureAdminRole;
 use App\Http\Middleware\EnsureEmailIsVerified;
+use App\Http\Middleware\EnsureSuperAdminRole;
 use App\Http\Middleware\EnsureSubscriptionActive;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -22,6 +24,7 @@ use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -30,6 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function (): void {
+            Route::middleware('web')
+                ->prefix('admin')
+                ->group(base_path('routes/admin.php'));
+        },
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->use([
@@ -63,6 +71,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'password.confirm' => RequirePassword::class,
             'signed' => ValidateSignature::class,
             'subscribed' => EnsureSubscriptionActive::class,
+            'admin' => EnsureAdminRole::class,
+            'super_admin' => EnsureSuperAdminRole::class,
             'throttle' => ThrottleRequests::class,
         ]);
     })
