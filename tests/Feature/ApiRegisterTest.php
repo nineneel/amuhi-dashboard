@@ -9,6 +9,7 @@ uses(RefreshDatabase::class);
 
 it('registers via API and sends a complete-registration email', function () {
     Notification::fake();
+    config()->set('app.url', 'https://portal.amuhi.id');
 
     $payload = [
         'member_type' => 'personal',
@@ -19,8 +20,10 @@ it('registers via API and sends a complete-registration email', function () {
         'terms' => true,
     ];
 
-    $this->postJson('/api/v1/register', $payload)
-        ->assertStatus(202)
+    $this->withServerVariables([
+        'HTTP_HOST' => '127.0.0.1',
+    ])->postJson('/api/v1/register', $payload)
+        ->assertAccepted()
         ->assertJsonStructure(['message']);
 
     $user = User::query()->where('email', $payload['email'])->first();
@@ -28,7 +31,18 @@ it('registers via API and sends a complete-registration email', function () {
     expect($user->profile)->not->toBeNull();
     expect($user->settings)->not->toBeNull();
 
-    Notification::assertSentTo($user, CompleteRegistrationNotification::class);
+    Notification::assertSentTo(
+        $user,
+        CompleteRegistrationNotification::class,
+        function (CompleteRegistrationNotification $notification) use ($user): bool {
+            $mail = $notification->toMail($user);
+            $host = parse_url($mail->actionUrl, PHP_URL_HOST);
+
+            expect($host)->toBe('portal.amuhi.id');
+
+            return true;
+        }
+    );
 });
 
 it('validates required fields for API registration', function () {
@@ -63,4 +77,3 @@ it('rate limits API registration to reduce abuse', function () {
         'terms' => true,
     ])->assertStatus(429);
 });
-

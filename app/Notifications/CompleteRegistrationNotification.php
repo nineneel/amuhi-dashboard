@@ -30,10 +30,13 @@ class CompleteRegistrationNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = route('registration.complete', [
+        $path = route('registration.complete', [
             'token' => $this->token,
             'email' => $notifiable->email,
-        ]);
+        ], absolute: false);
+
+        $path = str_starts_with($path, '/') ? $path : '/'.$path;
+        $url = rtrim((string) config('app.url'), '/').$path;
 
         return (new MailMessage)
             ->subject('Complete your registration')
@@ -54,4 +57,3 @@ class CompleteRegistrationNotification extends Notification
         return [];
     }
 }
-
