@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminSeeder::class);
         $this->call(SubscriptionPlanSeeder::class);
         $this->call(EventSeeder::class);
+        $this->call(NewsSeeder::class);
+        $this->call(TestimonySeeder::class);
+        $this->call(SiteSettingSeeder::class);
 
         $user = User::query()->updateOrCreate(
             ['email' => 'test@example.com'],
