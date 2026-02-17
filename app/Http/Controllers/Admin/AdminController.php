@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminStoreRequest;
+use App\Http\Requests\Admin\AdminUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -52,45 +54,67 @@ class AdminController extends Controller
         ]);
     }
 
-    public function create(): RedirectResponse
+    public function create(): View
     {
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('warning', 'Admin creation UI will be available in the next step.');
+        return view('admin.admins.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(AdminStoreRequest $request): RedirectResponse
     {
+        User::query()->create($request->validated());
+
         return redirect()
             ->route('admin.admins.index')
-            ->with('warning', 'Admin creation UI will be available in the next step.');
+            ->with('status', 'Admin account created successfully.');
     }
 
-    public function show(string $id): RedirectResponse
+    public function edit(User $admin): View
     {
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('warning', 'Admin detail UI will be available in the next step.');
+        $this->ensureManageableAdmin($admin);
+
+        return view('admin.admins.edit', [
+            'admin' => $admin,
+        ]);
     }
 
-    public function edit(string $id): RedirectResponse
+    public function update(AdminUpdateRequest $request, User $admin): RedirectResponse
     {
+        $this->ensureManageableAdmin($admin);
+
+        $admin->update([
+            'role' => $request->validated('role'),
+        ]);
+
         return redirect()
             ->route('admin.admins.index')
-            ->with('warning', 'Admin edit UI will be available in the next step.');
+            ->with('status', 'Admin role updated successfully.');
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function destroy(User $admin): RedirectResponse
     {
+        $this->ensureManageableAdmin($admin);
+
+        if (auth()->id() === $admin->id) {
+            return back()->with('warning', 'You cannot remove your own admin access.');
+        }
+
+        $admin->update([
+            'role' => Role::Member,
+        ]);
+
         return redirect()
             ->route('admin.admins.index')
-            ->with('warning', 'Admin edit UI will be available in the next step.');
+            ->with('status', 'Admin access removed successfully.');
     }
 
-    public function destroy(string $id): RedirectResponse
+    private function ensureManageableAdmin(User $admin): void
     {
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('warning', 'Admin removal UI will be available in the next step.');
+        $roleValue = $admin->role instanceof Role
+            ? $admin->role->value
+            : (string) $admin->role;
+
+        if (! in_array($roleValue, [Role::Admin->value, Role::SuperAdmin->value], true)) {
+            abort(404);
+        }
     }
 }

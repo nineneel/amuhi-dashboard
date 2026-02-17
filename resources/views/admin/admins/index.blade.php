@@ -14,11 +14,17 @@
                 </p>
             </div>
 
-            <button type="button"
-                class="inline-flex items-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600"
-                @click="$dispatch('open-modal-admin-permissions')">
-                View Access Rules
-            </button>
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('admin.admins.create') }}"
+                    class="inline-flex items-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600">
+                    Add Admin
+                </a>
+                <button type="button"
+                    class="inline-flex items-center rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs transition hover:bg-gray-600"
+                    @click="$dispatch('open-modal-admin-permissions')">
+                    View Access Rules
+                </button>
+            </div>
         </div>
 
         @if (session('warning'))
@@ -64,6 +70,7 @@
                 ['label' => 'Email', 'key' => 'email', 'sortable' => true],
                 ['label' => 'Role', 'key' => 'role', 'sortable' => true],
                 ['label' => 'Created', 'key' => 'created_at', 'sortable' => true],
+                ['label' => 'Actions', 'key' => 'actions'],
             ],
             'sortable' => true,
             'sortField' => $sortField,
@@ -92,10 +99,16 @@
                     <td class="px-5 py-4 sm:px-6">
                         <p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ $admin->created_at?->format('d M Y') }}</p>
                     </td>
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex flex-wrap gap-2">
+                            <a href="{{ route('admin.admins.edit', $admin) }}"
+                                class="rounded-lg bg-gray-700 px-3 py-1.5 text-theme-xs font-medium text-white hover:bg-gray-600">Edit</a>
+                        </div>
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="px-5 py-8 text-center sm:px-6">
+                    <td colspan="5" class="px-5 py-8 text-center sm:px-6">
                         <p class="text-theme-sm text-gray-500 dark:text-gray-400">No admin users found for the selected filters.</p>
                     </td>
                 </tr>
