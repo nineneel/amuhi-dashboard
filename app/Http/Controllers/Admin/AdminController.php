@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminStoreRequest;
+use App\Http\Requests\Admin\AdminUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -24,8 +27,8 @@ class AdminController extends Controller
             $sortDirection = 'desc';
         }
 
-        $roleFilter = (string) $request->query('role');
-        $search = trim((string) $request->query('search'));
+        $roleFilter = (string) $request->query('role', '');
+        $search = trim((string) $request->query('search', ''));
 
         $admins = User::query()
             ->whereIn('role', [Role::Admin->value, Role::SuperAdmin->value])
@@ -52,45 +55,63 @@ class AdminController extends Controller
         ]);
     }
 
-    public function create(): RedirectResponse
+    public function create(): View
     {
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('warning', 'Admin creation UI will be available in the next step.');
+        return view('admin.admins.create', [
+            'roles' => [Role::Admin, Role::SuperAdmin],
+        ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(AdminStoreRequest $request): RedirectResponse
     {
+        User::query()->create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'role' => $request->input('role'),
+        ]);
+
         return redirect()
             ->route('admin.admins.index')
-            ->with('warning', 'Admin creation UI will be available in the next step.');
+            ->with('success', 'Admin account created successfully.');
     }
 
-    public function show(string $id): RedirectResponse
+    public function show(User $admin): RedirectResponse
     {
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('warning', 'Admin detail UI will be available in the next step.');
+        return redirect()->route('admin.admins.edit', $admin);
     }
 
-    public function edit(string $id): RedirectResponse
+    public function edit(User $admin): View
     {
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('warning', 'Admin edit UI will be available in the next step.');
+        return view('admin.admins.edit', [
+            'admin' => $admin,
+            'roles' => [Role::Admin, Role::SuperAdmin],
+        ]);
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(AdminUpdateRequest $request, User $admin): RedirectResponse
     {
+        $admin->update([
+            'role' => $request->input('role'),
+        ]);
+
         return redirect()
             ->route('admin.admins.index')
-            ->with('warning', 'Admin edit UI will be available in the next step.');
+            ->with('success', 'Admin role updated successfully.');
     }
 
-    public function destroy(string $id): RedirectResponse
+    public function destroy(User $admin): RedirectResponse
     {
+        if ($admin->is(auth()->user())) {
+            return redirect()
+                ->route('admin.admins.index')
+                ->with('error', 'You cannot remove your own admin access.');
+        }
+
+        $admin->update(['role' => Role::Member]);
+
         return redirect()
             ->route('admin.admins.index')
-            ->with('warning', 'Admin removal UI will be available in the next step.');
+            ->with('success', 'Admin access removed successfully.');
     }
 }

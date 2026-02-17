@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\News;
 use App\Models\Subscription;
 use App\Models\User;
 use App\SubscriptionStatus;
@@ -34,9 +35,9 @@ class DashboardController extends Controller
                     'trend' => 5.2,
                 ],
                 [
-                    'title' => 'Admin Accounts',
-                    'value' => number_format(User::query()->whereIn('role', ['admin', 'super_admin'])->count()),
-                    'icon' => 'shield',
+                    'title' => 'Published News',
+                    'value' => number_format(News::query()->where('status', 'published')->count()),
+                    'icon' => 'news',
                     'trend' => 0.0,
                 ],
             ],
