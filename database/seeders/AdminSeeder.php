@@ -12,8 +12,8 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminEmail = (string) config('cms.admin.email', 'admin@amuhi.id');
-        $adminName = (string) config('cms.admin.name', 'Super Admin');
+        $adminEmail = (string) config('cms.admin.email', 'milenialumrahhaji@gmail.com');
+        $adminName = (string) config('cms.admin.name', 'Admin AMUHI');
         $configuredPassword = config('cms.admin.password');
 
         $password = null;

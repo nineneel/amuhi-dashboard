@@ -4,16 +4,17 @@ use App\Enums\Role;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
-it('seeds sjrnl27 member account with expected credentials', function () {
+it('seeds only the default super admin user', function () {
     $this->seed(DatabaseSeeder::class);
 
-    $member = User::query()->where('email', 'sjrnl27@gmail.com')->first();
+    $admin = User::query()->where('email', 'milenialumrahhaji@gmail.com')->first();
 
-    expect($member)->not->toBeNull();
-    expect($member->role)->toBe(Role::Member);
-    expect(Hash::check('12345678', $member->password))->toBeTrue();
+    expect($admin)->not->toBeNull();
+    expect($admin->role)->toBe(Role::SuperAdmin);
+    expect($admin->name)->toBe('Admin AMUHI');
+    expect(User::query()->where('email', 'test@example.com')->exists())->toBeFalse();
+    expect(User::query()->where('email', 'sjrnl27@gmail.com')->exists())->toBeFalse();
 });
