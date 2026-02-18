@@ -20,6 +20,10 @@
     </div>
 
     @foreach ($filters as $filter)
+        @if (($filter['name'] ?? null) === 'per_page')
+            @continue
+        @endif
+
         @php
             $name = $filter['name'] ?? null;
             $label = $filter['label'] ?? null;

@@ -38,6 +38,26 @@ it('shows only member users on users index', function () {
         ->assertDontSee($superAdminUser->name);
 });
 
+it('renders rows selector in table footer with pagination controls', function () {
+    $admin = User::factory()->admin()->create();
+    User::factory()->count(20)->create();
+
+    $response = $this->actingAs($admin)
+        ->get(route('admin.users.index'));
+
+    $response
+        ->assertSuccessful()
+        ->assertDontSee('id="per_page"', false)
+        ->assertSee('id="table_per_page"', false)
+        ->assertSee(__('ui.admin.previous'))
+        ->assertSee(__('ui.admin.next'));
+
+    $content = $response->getContent();
+
+    expect($content)->not->toBeFalse();
+    expect(strpos($content, '</table>'))->toBeLessThan(strpos($content, 'id="table_per_page"'));
+});
+
 it('shows user detail', function () {
     $admin = User::factory()->admin()->create();
     $user = User::factory()->create();
