@@ -17,7 +17,7 @@ class EnsureSubscriptionActive
 
         $user->syncExpiredSubscriptions();
 
-        if (! $user->hasActiveSubscription()) {
+        if (! $user->canAccessPortalFeatures()) {
             return redirect()
                 ->route('payments.show')
                 ->with('warning', 'Subscription required. Please complete payment to access this section.');

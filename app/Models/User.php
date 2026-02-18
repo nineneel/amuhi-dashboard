@@ -116,6 +116,11 @@ class User extends Authenticatable implements MustVerifyEmail
             ->exists();
     }
 
+    public function canAccessPortalFeatures(): bool
+    {
+        return $this->isAdmin() || $this->hasActiveSubscription();
+    }
+
     public function syncExpiredSubscriptions(): void
     {
         $this->subscriptions()

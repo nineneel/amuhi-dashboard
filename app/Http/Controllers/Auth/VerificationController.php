@@ -61,7 +61,7 @@ class VerificationController extends Controller
             return redirect()->route('login');
         }
 
-        if (! $user->hasActiveSubscription()) {
+        if (! $user->canAccessPortalFeatures()) {
             return redirect()->route('payments.show');
         }
 
