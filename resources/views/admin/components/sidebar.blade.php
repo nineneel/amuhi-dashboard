@@ -70,6 +70,12 @@
                                             x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                                             class="menu-item-text flex items-center gap-2">
                                             {{ $item['name'] }}
+                                            @if (($item['badge_count'] ?? 0) > 0)
+                                                <span
+                                                    class="inline-flex min-w-6 animate-pulse items-center justify-center rounded-full bg-error-100 px-2 py-0.5 text-xs font-semibold text-error-700 dark:bg-error-500/20 dark:text-error-200">
+                                                    {{ $item['badge_count'] }}
+                                                </span>
+                                            @endif
                                         </span>
                                     </a>
                                 </li>

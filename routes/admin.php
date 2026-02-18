@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\PaymentApprovalController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SubscriptionController;
@@ -41,6 +42,12 @@ Route::name('admin.')->group(function (): void {
 
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
         Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
+
+        Route::get('/payment-approvals', [PaymentApprovalController::class, 'index'])->name('payment-approvals.index');
+        Route::get('/payment-approvals/{payment}', [PaymentApprovalController::class, 'show'])->name('payment-approvals.show');
+        Route::post('/payment-approvals/{payment}/approve', [PaymentApprovalController::class, 'approve'])->name('payment-approvals.approve');
+        Route::post('/payment-approvals/{payment}/insufficient', [PaymentApprovalController::class, 'markInsufficient'])->name('payment-approvals.insufficient');
+        Route::post('/payment-approvals/{payment}/reject', [PaymentApprovalController::class, 'reject'])->name('payment-approvals.reject');
 
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');

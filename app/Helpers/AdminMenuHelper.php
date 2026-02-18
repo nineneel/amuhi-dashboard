@@ -2,15 +2,19 @@
 
 namespace App\Helpers;
 
+use App\Enums\PaymentApprovalStatus;
+use App\Models\Payment;
 use App\Models\User;
 
 class AdminMenuHelper
 {
     /**
-     * @return array<int, array{title: string, items: list<array{name: string, icon: string, path: string}>}>
+     * @return array<int, array{title: string, items: list<array{name: string, icon: string, path: string, badge_count?: int}>}>
      */
     public static function getMenuGroups(?User $user = null): array
     {
+        $pendingPaymentApprovalsCount = self::getPendingPaymentApprovalsCount();
+
         $menuGroups = [
             [
                 'title' => 'Dashboard',
@@ -33,6 +37,7 @@ class AdminMenuHelper
                     ['name' => 'Subscriptions', 'icon' => 'subscription', 'path' => '/admin/subscriptions'],
                     ['name' => 'Invoices', 'icon' => 'invoice', 'path' => '/admin/invoices'],
                     ['name' => 'Payments', 'icon' => 'payment', 'path' => '/admin/payments'],
+                    ['name' => 'Payment Approvals', 'icon' => 'check-circle', 'path' => '/admin/payment-approvals', 'badge_count' => $pendingPaymentApprovalsCount],
                 ],
             ],
         ];
@@ -57,6 +62,16 @@ class AdminMenuHelper
         return $menuGroups;
     }
 
+    public static function getPendingPaymentApprovalsCount(): int
+    {
+        return Payment::query()
+            ->where('payment_method', 'manual')
+            ->whereHas('latestApprovalHistory', function ($query): void {
+                $query->where('new_approval_status', PaymentApprovalStatus::PendingReview->value);
+            })
+            ->count();
+    }
+
     /**
      * @return array<string, string>
      */
@@ -71,6 +86,7 @@ class AdminMenuHelper
             'subscription' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h6m-6 4h6m-6 4h6M6 3v18l2-2 2 2 2-2 2 2 2-2 2 2V3l-2 2-2-2-2 2-2-2-2 2-2-2Z"/></svg>',
             'invoice' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m8-2h3m-3 3h3m-4 3v6m4-3H8M19 4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1ZM8 12v6h8v-6H8Z"/></svg>',
             'payment' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z"/></svg>',
+            'check-circle' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>',
             'shield' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 11.5 11 13l4-3.5M12 20a16.405 16.405 0 0 1-5.092-5.804A16.694 16.694 0 0 1 5 6.666L12 4l7 2.667a16.695 16.695 0 0 1-1.908 7.529A16.406 16.406 0 0 1 12 20Z"/></svg>',
             'settings' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>',
             'user' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>',

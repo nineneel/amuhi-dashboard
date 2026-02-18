@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use App\MemberType;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -56,6 +57,16 @@ class DatabaseSeeder extends Seeder
                     'show_email' => false,
                     'show_phone' => true,
                 ],
+            ]
+        );
+
+        User::query()->updateOrCreate(
+            ['email' => 'sjrnl27@gmail.com'],
+            [
+                'name' => 'Member SJRNL27',
+                'email_verified_at' => now(),
+                'password' => Hash::make('12345678'),
+                'role' => Role::Member,
             ]
         );
     }
