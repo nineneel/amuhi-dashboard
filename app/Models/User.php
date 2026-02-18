@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use App\SubscriptionStatus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -51,8 +53,24 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => Role::class,
             'two_factor_enabled' => 'boolean',
         ];
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === Role::SuperAdmin;
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, [Role::Admin, Role::SuperAdmin], true);
+    }
+
+    public function isMember(): bool
+    {
+        return $this->role === Role::Member;
     }
 
     public function profile(): HasOne
@@ -96,6 +114,11 @@ class User extends Authenticatable implements MustVerifyEmail
             ->where('status', SubscriptionStatus::Active->value)
             ->where(fn ($q) => $q->whereNull('ends_at')->orWhere('ends_at', '>', now()))
             ->exists();
+    }
+
+    public function canAccessPortalFeatures(): bool
+    {
+        return $this->isAdmin() || $this->hasActiveSubscription();
     }
 
     public function syncExpiredSubscriptions(): void

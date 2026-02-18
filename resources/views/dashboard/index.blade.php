@@ -3,7 +3,7 @@
 @section('content')
     @php
         $subscriptionStatus = $subscription?->status?->value ?? \App\SubscriptionStatus::Unpaid->value;
-        $hasActiveSubscription = $user->hasActiveSubscription();
+        $hasPortalAccess = $user->canAccessPortalFeatures();
 
         $statusClasses = [
             'active' => 'bg-success-50 text-success-700 dark:bg-success-500/10 dark:text-success-400',
@@ -33,7 +33,7 @@
         <x-ui.alert variant="warning" :title="__('ui.dashboard.access_limited')" :message="session('warning')" class="mb-6" />
     @endif
 
-    @if (!$hasActiveSubscription)
+    @if (!$hasPortalAccess)
         <x-ui.alert variant="warning" :title="__('ui.dashboard.subscription_required')" :message="__('ui.dashboard.subscription_required_message')" class="mb-6" />
     @endif
 
@@ -231,15 +231,15 @@
                     </a>
 
                     <a href="{{ route('events.index') }}"
-                        class="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium transition dark:border-gray-800 {{ $hasActiveSubscription ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' : 'cursor-not-allowed text-gray-400 dark:text-gray-500' }}">
+                        class="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium transition dark:border-gray-800 {{ $hasPortalAccess ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' : 'cursor-not-allowed text-gray-400 dark:text-gray-500' }}">
                         {{ __('ui.dashboard.browse_events') }}
                     </a>
                     <a href="{{ route('programs.index') }}"
-                        class="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium transition dark:border-gray-800 {{ $hasActiveSubscription ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' : 'cursor-not-allowed text-gray-400 dark:text-gray-500' }}">
+                        class="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium transition dark:border-gray-800 {{ $hasPortalAccess ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' : 'cursor-not-allowed text-gray-400 dark:text-gray-500' }}">
                         {{ __('ui.dashboard.explore_programs') }}
                     </a>
                     <a href="{{ route('invoices.index') }}"
-                        class="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium transition dark:border-gray-800 {{ $hasActiveSubscription ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' : 'cursor-not-allowed text-gray-400 dark:text-gray-500' }}">
+                        class="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium transition dark:border-gray-800 {{ $hasPortalAccess ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5' : 'cursor-not-allowed text-gray-400 dark:text-gray-500' }}">
                         {{ __('ui.dashboard.check_invoices') }}
                     </a>
                 </div>

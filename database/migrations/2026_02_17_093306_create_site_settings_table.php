@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('location');
+        Schema::create('site_settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('key')->unique();
+            $table->json('value');
+            $table->string('group')->default('general');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('image');
-        });
+        Schema::dropIfExists('site_settings');
     }
 };

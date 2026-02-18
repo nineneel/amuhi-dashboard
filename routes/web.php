@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\CompleteRegistrationController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -60,7 +60,8 @@ Route::middleware('auth')->group(function () {
             ->name('dashboard');
 
         Route::get('/payment', [PaymentController::class, 'show'])->name('payments.show');
-        Route::post('/payment', [PaymentController::class, 'simulate'])->name('payments.simulate');
+        Route::post('/payment/upload-proof', [PaymentController::class, 'uploadProof'])->name('payments.upload-proof');
+        Route::post('/payment/reupload-proof', [PaymentController::class, 'reuploadProof'])->name('payments.reupload-proof');
         Route::put('/payment/status', [PaymentController::class, 'updateStatus'])->name('payments.status');
 
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

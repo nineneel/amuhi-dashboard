@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PaymentSimulationRequest;
+use App\Enums\PaymentApprovalStatus;
+use App\Enums\Role;
+use App\Http\Requests\PaymentProofUploadRequest;
 use App\Http\Requests\SubscriptionStatusUpdateRequest;
 use App\InvoiceStatus;
 use App\Models\ActivityLog;
@@ -10,11 +12,14 @@ use App\Models\Invoice;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\SubscriptionPlan;
+use App\Models\User;
+use App\Notifications\InAppMessageNotification;
 use App\PaymentStatus;
 use App\SubscriptionStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -52,6 +57,15 @@ class PaymentController extends Controller
         $registrationFeeAmount = $shouldChargeRegistrationFee ? (float) ($registerPlan?->price ?? 0) : 0.0;
         $totalAmount = (float) ($annualPlan?->price ?? 0) + $registrationFeeAmount;
 
+        $pendingPayment = Payment::query()
+            ->with(['invoice', 'latestApprovalHistory.respondedBy', 'approvalHistories.actor', 'approvalHistories.respondedBy'])
+            ->whereHas('invoice', fn ($q) => $q->where('user_id', $user->id))
+            ->whereHas('latestApprovalHistory', function ($query): void {
+                $query->where('new_approval_status', '!=', PaymentApprovalStatus::Approved->value);
+            })
+            ->latest()
+            ->first();
+
         return view('payments.show', [
             'user' => $user,
             'currentSubscription' => $currentSubscription,
@@ -60,10 +74,11 @@ class PaymentController extends Controller
             'subscriptionPlans' => $subscriptionPlans,
             'totalAmount' => $totalAmount,
             'shouldChargeRegistrationFee' => $shouldChargeRegistrationFee,
+            'pendingPayment' => $pendingPayment,
         ]);
     }
 
-    public function simulate(PaymentSimulationRequest $request): RedirectResponse
+    public function uploadProof(PaymentProofUploadRequest $request): RedirectResponse
     {
         $user = $request->user();
         $data = $request->validated();
@@ -74,6 +89,19 @@ class PaymentController extends Controller
             return redirect()
                 ->route('payments.show')
                 ->with('warning', 'Your subscription is already active.');
+        }
+
+        $existingPendingPayment = Payment::query()
+            ->whereHas('invoice', fn ($q) => $q->where('user_id', $user->id))
+            ->whereHas('latestApprovalHistory', function ($query): void {
+                $query->where('new_approval_status', PaymentApprovalStatus::PendingReview->value);
+            })
+            ->first();
+
+        if ($existingPendingPayment) {
+            return redirect()
+                ->route('payments.show')
+                ->with('warning', 'You already have a payment pending review.');
         }
 
         $shouldChargeRegistrationFee = ! $user->subscriptions()->exists();
@@ -89,66 +117,156 @@ class PaymentController extends Controller
             ->where('is_active', true)
             ->first();
 
-        $status = SubscriptionStatus::Active;
-        $dates = $this->resolveSubscriptionDates($plan, $status);
-        $subscription = $user->currentSubscription();
         $registrationFeeAmount = $shouldChargeRegistrationFee ? (float) ($registerPlan?->price ?? 0) : 0.0;
         $totalAmount = (float) $plan->price + $registrationFeeAmount;
 
-        DB::transaction(function () use ($user, $plan, $status, $dates, &$subscription, $request, $totalAmount) {
-            if ($subscription) {
-                $subscription->update([
-                    'subscription_plan_id' => $plan->id,
-                    'status' => $status,
-                    'starts_at' => $dates['starts_at'],
-                    'ends_at' => $dates['ends_at'],
-                ]);
-            } else {
-                $subscription = $user->subscriptions()->create([
-                    'subscription_plan_id' => $plan->id,
-                    'status' => $status,
-                    'starts_at' => $dates['starts_at'],
-                    'ends_at' => $dates['ends_at'],
-                ]);
-            }
+        $proofPath = $request->file('proof_image')->store('payment-proofs', 'public');
 
+        DB::transaction(function () use ($user, $plan, $request, $totalAmount, $proofPath) {
+            // Create invoice without subscription - subscription will be created on approval
             $invoice = Invoice::query()->create([
                 'user_id' => $user->id,
-                'subscription_id' => $subscription->id,
+                'subscription_id' => null,
                 'invoice_number' => 'INV-'.now()->format('Ymd').'-'.Str::upper(Str::random(6)),
                 'amount' => $totalAmount,
-                'due_date' => now()->toDateString(),
-                'status' => InvoiceStatus::Paid->value,
+                'due_date' => now()->addDays(7)->toDateString(),
+                'status' => InvoiceStatus::Pending->value,
             ]);
 
-            Payment::query()->create([
+            $payment = Payment::query()->create([
                 'invoice_id' => $invoice->id,
-                'gateway_transaction_id' => 'demo-pay-'.Str::upper(Str::random(8)),
+                'gateway_transaction_id' => 'MANUAL-'.Str::upper(Str::random(8)),
                 'amount' => $invoice->amount,
-                'status' => PaymentStatus::Success->value,
-                'paid_at' => now(),
+                'status' => PaymentStatus::Pending->value,
+                'payment_method' => 'manual',
+                'subscription_plan_id' => $plan->id,
             ]);
+
+            $payment->recordApprovalHistory(
+                newStatus: PaymentApprovalStatus::PendingReview,
+                proofImage: $proofPath,
+                actorId: $user->id,
+                actorRole: $user->role->value,
+                notes: null,
+            );
 
             ActivityLog::query()->create([
                 'user_id' => $user->id,
-                'action' => 'Invoice paid',
-                'description' => 'Invoice #'.$invoice->invoice_number.' was paid successfully.',
-                'subject_type' => Invoice::class,
-                'subject_id' => $invoice->id,
+                'action' => 'Payment proof uploaded',
+                'description' => 'Payment proof uploaded for Invoice #'.$invoice->invoice_number,
+                'subject_type' => Payment::class,
+                'subject_id' => $payment->id,
                 'ip_address' => $request->ip(),
             ]);
 
-            Notification::query()->create([
-                'user_id' => $user->id,
-                'type' => 'invoice',
-                'title' => 'Payment received',
-                'message' => 'Invoice #'.$invoice->invoice_number.' has been paid.',
-                'sent_via' => 'app',
-            ]);
+            $this->notifyAdmins($user, $invoice);
         });
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Payment successful! (Demo Mode)');
+        return redirect()->route('payments.show')
+            ->with('success', 'Payment proof uploaded successfully. Please wait for admin review.');
+    }
+
+    public function reuploadProof(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'proof_image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
+        ], [
+            'proof_image.required' => 'Please upload your payment proof image.',
+            'proof_image.image' => 'The file must be an image.',
+            'proof_image.mimes' => 'The image must be a JPG, JPEG, or PNG file.',
+            'proof_image.max' => 'The image must not exceed 5MB.',
+        ]);
+
+        $user = $request->user();
+
+        $payment = Payment::query()
+            ->whereHas('invoice', fn ($q) => $q->where('user_id', $user->id))
+            ->whereHas('latestApprovalHistory', function ($query): void {
+                $query->whereIn('new_approval_status', [
+                    PaymentApprovalStatus::Rejected->value,
+                    PaymentApprovalStatus::InsufficientNominal->value,
+                ]);
+            })
+            ->latest()
+            ->first();
+
+        if (! $payment) {
+            return redirect()
+                ->route('payments.show')
+                ->with('error', 'No payment found that can be re-uploaded.');
+        }
+
+        $proofPath = $request->file('proof_image')->store('payment-proofs', 'public');
+        $previousStatus = $payment->currentApprovalStatus();
+
+        $payment->recordApprovalHistory(
+            newStatus: PaymentApprovalStatus::PendingReview,
+            previousStatus: $previousStatus,
+            proofImage: $proofPath,
+            actorId: $user->id,
+            actorRole: $user->role->value,
+            notes: null,
+        );
+
+        ActivityLog::query()->create([
+            'user_id' => $user->id,
+            'action' => 'Payment proof re-uploaded',
+            'description' => 'Payment proof re-uploaded for Invoice #'.$payment->invoice->invoice_number,
+            'subject_type' => Payment::class,
+            'subject_id' => $payment->id,
+            'ip_address' => $request->ip(),
+        ]);
+
+        $this->notifyAdmins($user, $payment->invoice);
+
+        return redirect()->route('payments.show')
+            ->with('success', 'Payment proof re-uploaded successfully. Please wait for admin review.');
+    }
+
+    private function notifyAdmins(User $user, Invoice $invoice): void
+    {
+        $admins = User::query()
+            ->with('settings')
+            ->whereIn('role', [Role::Admin, Role::SuperAdmin])
+            ->get();
+
+        $title = 'New Payment Proof Uploaded';
+        $message = "User {$user->name} has uploaded payment proof for Invoice #{$invoice->invoice_number}.";
+        $actionUrl = route('admin.payment-approvals.index');
+
+        foreach ($admins as $admin) {
+            Notification::query()->create([
+                'user_id' => $admin->id,
+                'type' => 'payment_approval',
+                'title' => $title,
+                'message' => $message,
+                'sent_via' => 'app',
+            ]);
+
+            $this->sendEmailNotification($admin, $title, $message, 'Review payment', $actionUrl);
+        }
+    }
+
+    private function sendEmailNotification(
+        User $recipient,
+        string $title,
+        string $message,
+        ?string $actionLabel = null,
+        ?string $actionUrl = null
+    ): void {
+        if (! ($recipient->settings?->notification_email ?? true)) {
+            return;
+        }
+
+        try {
+            $recipient->notify(new InAppMessageNotification($title, $message, $actionLabel, $actionUrl));
+        } catch (\Throwable $throwable) {
+            Log::error('Failed to send payment email notification.', [
+                'user_id' => $recipient->id,
+                'title' => $title,
+                'error' => $throwable->getMessage(),
+            ]);
+        }
     }
 
     public function updateStatus(SubscriptionStatusUpdateRequest $request): RedirectResponse

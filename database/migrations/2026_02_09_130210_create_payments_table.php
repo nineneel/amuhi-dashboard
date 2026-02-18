@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('gateway_transaction_id')->nullable();
             $table->decimal('amount', 10, 2);
             $table->string('status');
+            $table->string('payment_method')->default('manual');
+            $table->foreignId('subscription_plan_id')->nullable()->constrained('subscription_plans')->nullOnDelete();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });

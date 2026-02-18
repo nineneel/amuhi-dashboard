@@ -34,3 +34,29 @@ it('shows forum in the sidebar for subscribed members', function () {
         ->assertSee('href="/forum"', false);
 });
 
+it('uses dark theme by default in dashboard layout and keeps sidebar dark scoped', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $plan = SubscriptionPlan::factory()->create([
+        'duration_days' => 365,
+        'is_active' => true,
+    ]);
+
+    Subscription::factory()
+        ->for($user)
+        ->for($plan)
+        ->create([
+            'status' => SubscriptionStatus::Active,
+            'starts_at' => now()->subDay(),
+            'ends_at' => now()->addDays(30),
+        ]);
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertSuccessful()
+        ->assertSee('class="h-full dark"', false)
+        ->assertDontSee('data-theme-toggle', false)
+        ->assertSee('data-theme-scope="dark"', false);
+});
