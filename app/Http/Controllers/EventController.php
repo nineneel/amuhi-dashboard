@@ -6,9 +6,12 @@ use App\EventStatus;
 use App\Models\ActivityLog;
 use App\Models\Event;
 use App\Models\Notification;
+use App\Models\User;
+use App\Notifications\InAppMessageNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class EventController extends Controller
@@ -121,6 +124,14 @@ class EventController extends Controller
                 'message' => 'You are registered for '.$event->title.'.',
                 'sent_via' => 'app',
             ]);
+
+            $this->sendEmailNotification(
+                $user,
+                'Registration confirmed',
+                'You are registered for '.$event->title.'.',
+                'View event',
+                route('events.show', $event)
+            );
         }
 
         $message = $registration->wasRecentlyCreated
@@ -128,5 +139,29 @@ class EventController extends Controller
             : 'You are already registered for this event.';
 
         return back()->with('success', $message);
+    }
+
+    private function sendEmailNotification(
+        User $recipient,
+        string $title,
+        string $message,
+        ?string $actionLabel = null,
+        ?string $actionUrl = null
+    ): void {
+        $recipient->loadMissing('settings');
+
+        if (! ($recipient->settings?->notification_email ?? true)) {
+            return;
+        }
+
+        try {
+            $recipient->notify(new InAppMessageNotification($title, $message, $actionLabel, $actionUrl));
+        } catch (\Throwable $throwable) {
+            Log::error('Failed to send event email notification.', [
+                'user_id' => $recipient->id,
+                'title' => $title,
+                'error' => $throwable->getMessage(),
+            ]);
+        }
     }
 }

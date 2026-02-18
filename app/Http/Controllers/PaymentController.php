@@ -13,11 +13,13 @@ use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
+use App\Notifications\InAppMessageNotification;
 use App\PaymentStatus;
 use App\SubscriptionStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -224,16 +226,45 @@ class PaymentController extends Controller
     private function notifyAdmins(User $user, Invoice $invoice): void
     {
         $admins = User::query()
+            ->with('settings')
             ->whereIn('role', [Role::Admin, Role::SuperAdmin])
             ->get();
+
+        $title = 'New Payment Proof Uploaded';
+        $message = "User {$user->name} has uploaded payment proof for Invoice #{$invoice->invoice_number}.";
+        $actionUrl = route('admin.payment-approvals.index');
 
         foreach ($admins as $admin) {
             Notification::query()->create([
                 'user_id' => $admin->id,
                 'type' => 'payment_approval',
-                'title' => 'New Payment Proof Uploaded',
-                'message' => "User {$user->name} has uploaded payment proof for Invoice #{$invoice->invoice_number}.",
+                'title' => $title,
+                'message' => $message,
                 'sent_via' => 'app',
+            ]);
+
+            $this->sendEmailNotification($admin, $title, $message, 'Review payment', $actionUrl);
+        }
+    }
+
+    private function sendEmailNotification(
+        User $recipient,
+        string $title,
+        string $message,
+        ?string $actionLabel = null,
+        ?string $actionUrl = null
+    ): void {
+        if (! ($recipient->settings?->notification_email ?? true)) {
+            return;
+        }
+
+        try {
+            $recipient->notify(new InAppMessageNotification($title, $message, $actionLabel, $actionUrl));
+        } catch (\Throwable $throwable) {
+            Log::error('Failed to send payment email notification.', [
+                'user_id' => $recipient->id,
+                'title' => $title,
+                'error' => $throwable->getMessage(),
             ]);
         }
     }

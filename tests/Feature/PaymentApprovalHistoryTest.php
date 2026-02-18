@@ -6,15 +6,19 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
+use App\Notifications\InAppMessageNotification;
 use App\PaymentStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
 it('updates the same approval row when admin approves payment and shows it on admin page', function () {
+    Notification::fake();
+
     $admin = User::factory()->admin()->create();
     $member = User::factory()->create();
     $plan = SubscriptionPlan::factory()->create([
@@ -38,6 +42,17 @@ it('updates the same approval row when admin approves payment and shows it on ad
         ])
         ->assertRedirect(route('admin.payment-approvals.index'));
 
+    Notification::assertSentTo(
+        $member,
+        InAppMessageNotification::class,
+        function (InAppMessageNotification $notification, array $channels): bool {
+            expect($channels)->toContain('mail');
+            expect($notification->title)->toBe(__('ui.admin.payment_approved'));
+
+            return true;
+        }
+    );
+
     expect($payment->fresh()->currentApprovalStatus())->toBe(PaymentApprovalStatus::Approved);
 
     $this->assertDatabaseCount('payment_approvals', 1);
@@ -59,6 +74,56 @@ it('updates the same approval row when admin approves payment and shows it on ad
         ->assertSuccessful()
         ->assertSee(__('ui.admin.approval_history'))
         ->assertSee('Transfer amount validated.');
+});
+
+it('emails admins when a member uploads payment proof', function () {
+    Storage::fake('public');
+    Notification::fake();
+
+    $member = User::factory()->create();
+    $admin = User::factory()->admin()->create();
+    $superAdmin = User::factory()->superAdmin()->create();
+
+    SubscriptionPlan::factory()->create([
+        'name' => 'Register as Member',
+        'duration_days' => 0,
+        'is_active' => true,
+    ]);
+
+    $annualPlan = SubscriptionPlan::factory()->create([
+        'name' => 'Annual Membership',
+        'duration_days' => 365,
+        'is_active' => true,
+    ]);
+
+    $this->actingAs($member)
+        ->post(route('payments.upload-proof'), [
+            'plan_id' => $annualPlan->id,
+            'proof_image' => UploadedFile::fake()->image('proof-image.jpg'),
+        ])
+        ->assertRedirect(route('payments.show'))
+        ->assertSessionHas('success');
+
+    Notification::assertSentTo(
+        $admin,
+        InAppMessageNotification::class,
+        function (InAppMessageNotification $notification, array $channels): bool {
+            expect($channels)->toContain('mail');
+            expect($notification->title)->toBe('New Payment Proof Uploaded');
+
+            return true;
+        }
+    );
+
+    Notification::assertSentTo(
+        $superAdmin,
+        InAppMessageNotification::class,
+        function (InAppMessageNotification $notification): bool {
+            expect($notification->title)->toBe('New Payment Proof Uploaded');
+
+            return true;
+        }
+    );
 });
 
 it('records reupload history and shows the timeline on the user payment page', function () {

@@ -11,11 +11,14 @@ use App\Models\ActivityLog;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\PaymentApproval;
+use App\Models\User;
+use App\Notifications\InAppMessageNotification;
 use App\PaymentStatus;
 use App\SubscriptionStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class PaymentApprovalController extends Controller
@@ -142,15 +145,12 @@ class PaymentApprovalController extends Controller
                 'ip_address' => $request->ip(),
             ]);
 
-            Notification::query()->create([
-                'user_id' => $payment->invoice->user_id,
-                'type' => 'payment_status',
-                'title' => __('ui.admin.payment_approved'),
-                'message' => __('ui.admin.your_payment_for_invoice_invoice_number_has_been_approved_your_subscription_is_now_active', [
-                    'invoice_number' => $payment->invoice->invoice_number,
-                ]),
-                'sent_via' => 'app',
+            $title = __('ui.admin.payment_approved');
+            $message = __('ui.admin.your_payment_for_invoice_invoice_number_has_been_approved_your_subscription_is_now_active', [
+                'invoice_number' => $payment->invoice->invoice_number,
             ]);
+
+            $this->notifyPaymentStatus($payment->invoice->user, $title, $message);
         });
 
         return redirect()
@@ -190,15 +190,12 @@ class PaymentApprovalController extends Controller
                 'ip_address' => $request->ip(),
             ]);
 
-            Notification::query()->create([
-                'user_id' => $payment->invoice->user_id,
-                'type' => 'payment_status',
-                'title' => __('ui.admin.insufficient_payment'),
-                'message' => __('ui.admin.your_payment_for_invoice_invoice_number_has_insufficient_nominal_please_re_upload_with_the_correct_amount', [
-                    'invoice_number' => $payment->invoice->invoice_number,
-                ]),
-                'sent_via' => 'app',
+            $title = __('ui.admin.insufficient_payment');
+            $message = __('ui.admin.your_payment_for_invoice_invoice_number_has_insufficient_nominal_please_re_upload_with_the_correct_amount', [
+                'invoice_number' => $payment->invoice->invoice_number,
             ]);
+
+            $this->notifyPaymentStatus($payment->invoice->user, $title, $message);
         });
 
         return redirect()
@@ -242,19 +239,53 @@ class PaymentApprovalController extends Controller
                 'ip_address' => $request->ip(),
             ]);
 
-            Notification::query()->create([
-                'user_id' => $payment->invoice->user_id,
-                'type' => 'payment_status',
-                'title' => __('ui.admin.payment_rejected'),
-                'message' => __('ui.admin.your_payment_for_invoice_invoice_number_has_been_rejected_please_re_upload_valid_proof', [
-                    'invoice_number' => $payment->invoice->invoice_number,
-                ]),
-                'sent_via' => 'app',
+            $title = __('ui.admin.payment_rejected');
+            $message = __('ui.admin.your_payment_for_invoice_invoice_number_has_been_rejected_please_re_upload_valid_proof', [
+                'invoice_number' => $payment->invoice->invoice_number,
             ]);
+
+            $this->notifyPaymentStatus($payment->invoice->user, $title, $message);
         });
 
         return redirect()
             ->route('admin.payment-approvals.index')
             ->with('success', __('ui.admin.payment_rejected_success'));
+    }
+
+    private function notifyPaymentStatus(User $recipient, string $title, string $message): void
+    {
+        Notification::query()->create([
+            'user_id' => $recipient->id,
+            'type' => 'payment_status',
+            'title' => $title,
+            'message' => $message,
+            'sent_via' => 'app',
+        ]);
+
+        $this->sendEmailNotification($recipient, $title, $message, 'View payment', route('payments.show'));
+    }
+
+    private function sendEmailNotification(
+        User $recipient,
+        string $title,
+        string $message,
+        ?string $actionLabel = null,
+        ?string $actionUrl = null
+    ): void {
+        $recipient->loadMissing('settings');
+
+        if (! ($recipient->settings?->notification_email ?? true)) {
+            return;
+        }
+
+        try {
+            $recipient->notify(new InAppMessageNotification($title, $message, $actionLabel, $actionUrl));
+        } catch (\Throwable $throwable) {
+            Log::error('Failed to send payment status email notification.', [
+                'user_id' => $recipient->id,
+                'title' => $title,
+                'error' => $throwable->getMessage(),
+            ]);
+        }
     }
 }
