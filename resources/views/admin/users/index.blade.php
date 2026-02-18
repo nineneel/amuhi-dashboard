@@ -62,9 +62,6 @@
                     <td class="px-5 py-4 sm:px-6">
                         @include('admin.components.table-action-icons', [
                             'viewUrl' => route('admin.users.show', $user),
-                            'editUrl' => route('admin.users.edit', $user),
-                            'deleteUrl' => route('admin.users.destroy', $user),
-                            'deleteConfirm' => 'Delete this user?',
                         ])
                     </td>
                 </tr>

@@ -14,6 +14,18 @@ it('shows user index to admin', function () {
         ->assertSuccessful();
 });
 
+it('shows only view action icon on users index', function () {
+    $admin = User::factory()->admin()->create();
+    User::factory()->create();
+
+    $this->actingAs($admin)
+        ->get(route('admin.users.index'))
+        ->assertSuccessful()
+        ->assertSee('aria-label="View"', false)
+        ->assertDontSee('aria-label="Edit"', false)
+        ->assertDontSee('aria-label="Delete"', false);
+});
+
 it('can search users by name', function () {
     $admin = User::factory()->admin()->create();
     User::factory()->create(['name' => 'John Doe']);

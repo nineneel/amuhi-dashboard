@@ -35,6 +35,11 @@ class AdminMenuHelper
                     ['name' => __('ui.admin.users'), 'icon' => 'users', 'path' => '/admin/users'],
                     ['name' => __('ui.admin.events'), 'icon' => 'calendar', 'path' => '/admin/events'],
                     ['name' => __('ui.admin.subscriptions'), 'icon' => 'subscription', 'path' => '/admin/subscriptions'],
+                ],
+            ],
+            [
+                'title' => __('ui.admin.payment_menu'),
+                'items' => [
                     ['name' => __('ui.admin.invoices'), 'icon' => 'invoice', 'path' => '/admin/invoices'],
                     ['name' => __('ui.admin.payments'), 'icon' => 'payment', 'path' => '/admin/payments'],
                     ['name' => __('ui.admin.payment_approvals'), 'icon' => 'check-circle', 'path' => '/admin/payment-approvals', 'badge_count' => $pendingPaymentApprovalsCount],
@@ -59,7 +64,32 @@ class AdminMenuHelper
             ],
         ];
 
-        return $menuGroups;
+        $disabledMenuPaths = self::temporarilyDisabledMenuPaths();
+
+        return array_values(array_filter(array_map(
+            static function (array $menuGroup) use ($disabledMenuPaths): array {
+                $menuGroup['items'] = array_values(array_filter(
+                    $menuGroup['items'],
+                    static fn (array $item): bool => ! in_array($item['path'], $disabledMenuPaths, true),
+                ));
+
+                return $menuGroup;
+            },
+            $menuGroups,
+        ), static fn (array $menuGroup): bool => $menuGroup['items'] !== []));
+    }
+
+    /**
+     * @return list<string>
+     */
+    private static function temporarilyDisabledMenuPaths(): array
+    {
+        return [
+            '/admin/news',
+            '/admin/testimonies',
+            '/admin/events',
+            '/admin/profile',
+        ];
     }
 
     public static function getPendingPaymentApprovalsCount(): int
