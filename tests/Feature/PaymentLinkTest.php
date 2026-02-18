@@ -30,6 +30,9 @@ it('shows a safe subscription message when the member is already paid', function
     $this->actingAs($user)
         ->get(route('payments.show'))
         ->assertSuccessful()
+        ->assertSee('class="h-full dark"', false)
+        ->assertSee('class="dark bg-gray-900"', false)
+        ->assertSee('data-theme-scope="dark"', false)
         ->assertSee(__('ui.payments.subscription_active'))
         ->assertDontSee(__('ui.payments.pay_now_demo'));
 });

@@ -1,4 +1,6 @@
 @extends('layouts.fullscreen-layout')
+@section('htmlClass', 'h-full dark')
+@section('bodyClass', 'dark bg-gray-900')
 
 @section('content')
     @php
@@ -32,7 +34,8 @@
         $latestProofImage = $hasPendingPayment ? $pendingPayment->latestProofImagePath() : null;
     @endphp
 
-    <div class="mx-auto w-full max-w-4xl p-4 md:p-8">
+    <div data-theme-scope="dark" class="min-h-screen bg-gray-900">
+        <div class="mx-auto w-full max-w-4xl p-4 md:p-8">
         {{-- User info card --}}
         <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -559,5 +562,6 @@
             </div>
         </div>
 
+        </div>
     </div>
 @endsection
