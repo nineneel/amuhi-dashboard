@@ -24,7 +24,7 @@ class LoginController extends Controller
 
         if (! Auth::attempt($credentials, $remember)) {
             return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
+                'email' => __('ui.admin.the_provided_credentials_do_not_match_our_records'),
             ])->withInput($request->only('email'));
         }
 
@@ -40,7 +40,7 @@ class LoginController extends Controller
             $request->session()->regenerateToken();
 
             return back()->withErrors([
-                'email' => 'You do not have access to the admin area.',
+                'email' => __('ui.admin.you_do_not_have_access_to_the_admin_area'),
             ])->withInput($request->only('email'));
         }
 

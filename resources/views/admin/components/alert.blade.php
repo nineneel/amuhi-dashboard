@@ -17,7 +17,7 @@
 
 <div {{ $attributes->class(['w-full rounded-xl border p-4', $containerClass]) }}>
     @if ($title)
-        <h4 class="mb-1 text-sm font-semibold">{{ $title }}</h4>
+        <h4 class="mb-1 text-sm font-semibold">{{ __($title) }}</h4>
     @endif
 
     @if ($message)

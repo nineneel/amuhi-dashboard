@@ -4,7 +4,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">User Details</h1>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.user_details') }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Viewing profile for {{ $user->name }}.
                 </p>
@@ -24,28 +24,28 @@
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div class="lg:col-span-1">
                 <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">Profile Info</h2>
+                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.profile_info') }}</h2>
                     <ul class="divide-y divide-gray-100 dark:divide-gray-800">
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Name</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.name') }}</span>
                             <span class="w-2/3 text-sm font-medium text-gray-700 dark:text-gray-300">{{ $user->name }}</span>
                         </li>
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Email</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.email') }}</span>
                             <span class="w-2/3 text-sm text-gray-700 dark:text-gray-300">{{ $user->email }}</span>
                         </li>
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Role</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.role') }}</span>
                             <span class="w-2/3 text-sm text-gray-700 dark:text-gray-300">
                                 {{ ucwords(str_replace('_', ' ', is_object($user->role) ? $user->role->value : $user->role)) }}
                             </span>
                         </li>
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Joined</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.joined') }}</span>
                             <span class="w-2/3 text-sm text-gray-700 dark:text-gray-300">{{ $user->created_at?->format('d M Y') }}</span>
                         </li>
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Verified</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.verified') }}</span>
                             <span class="w-2/3">
                                 @if ($user->email_verified_at)
                                     @include('admin.components.badge', ['type' => 'success', 'text' => 'Verified'])
@@ -60,18 +60,18 @@
 
             <div class="space-y-6 lg:col-span-2">
                 <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">Subscriptions</h2>
+                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.subscriptions') }}</h2>
                     @if ($user->subscriptions->isEmpty())
-                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">No subscriptions found.</p>
+                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_subscriptions_found') }}</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full">
                                 <thead>
                                     <tr class="border-b border-gray-100 dark:border-gray-800">
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Plan</th>
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Started</th>
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Ends</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.plan') }}</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.status') }}</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.started') }}</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.ends') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -101,18 +101,18 @@
                 </div>
 
                 <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">Invoices</h2>
+                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.invoices') }}</h2>
                     @if ($user->invoices->isEmpty())
-                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">No invoices found.</p>
+                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_invoices_found') }}</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full">
                                 <thead>
                                     <tr class="border-b border-gray-100 dark:border-gray-800">
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Invoice #</th>
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Amount</th>
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
-                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">Date</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.invoice_hash') }}</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.amount') }}</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.status') }}</th>
+                                        <th class="pb-3 text-left text-theme-xs font-medium text-gray-500 dark:text-gray-400">{{ __('ui.admin.date') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

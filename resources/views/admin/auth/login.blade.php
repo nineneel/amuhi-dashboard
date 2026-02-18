@@ -12,26 +12,26 @@
                             <path d="M12.7083 5L7.5 10.2083L12.7083 15.4167" stroke="" stroke-width="1.5"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        Back to portal login
+                        {{ __('ui.admin.back_to_portal_login') }}
                     </a>
                 </div>
 
                 <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
                     <div class="mb-5 sm:mb-8">
                         <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
-                            Admin Sign In
+                            {{ __('ui.admin.admin_sign_in') }}
                         </h1>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Sign in with your admin account to access the CMS.
+                            {{ __('ui.admin.sign_in_with_your_admin_account_to_access_the_cms') }}
                         </p>
                     </div>
 
                     @if (session('status'))
-                        <x-ui.alert variant="success" title="Success" :message="session('status')" class="mb-5" />
+                        <x-ui.alert variant="success" :title="__('ui.admin.success')" :message="session('status')" class="mb-5" />
                     @endif
 
                     @if ($errors->any())
-                        <x-ui.alert variant="error" title="Unable to sign in" :message="$errors->first()" class="mb-5" />
+                        <x-ui.alert variant="error" :title="__('ui.admin.unable_to_sign_in')" :message="$errors->first()" class="mb-5" />
                     @endif
 
                     <form action="{{ route('admin.login.store') }}" method="POST">
@@ -39,31 +39,31 @@
                         <div class="space-y-5">
                             <div>
                                 <x-form.input label="Email" type="email" name="email" id="email"
-                                    placeholder="admin@amuhi.id" :value="old('email')" required autofocus />
+                                    placeholder="{{ __('ui.admin.admin_amuhi_id') }}" :value="old('email')" required autofocus />
                             </div>
 
                             <div>
                                 <x-form.input label="Password" type="password" name="password" id="password"
-                                    placeholder="Enter your password" required />
+                                    placeholder="{{ __('ui.admin.enter_your_password') }}" required />
                             </div>
 
                             <div class="flex items-center justify-between">
                                 <x-form.checkbox name="remember" id="remember" :checked="(bool) old('remember')"
                                     containerClass="flex cursor-pointer items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
                                     labelClass="font-normal text-gray-600 dark:text-gray-400">
-                                    Remember me
+                                    {{ __('ui.admin.remember_me') }}
                                 </x-form.checkbox>
 
                                 <a href="{{ route('password.request') }}"
                                     class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                                    Forgot password?
+                                    {{ __('ui.admin.forgot_password') }}
                                 </a>
                             </div>
 
                             <div>
                                 <button type="submit"
                                     class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
-                                    Sign In to Admin
+                                    {{ __('ui.admin.sign_in_to_admin') }}
                                 </button>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                             <img src="/images/logo/auth-logo.png" alt="AMUHI Admin" />
                         </a>
                         <p class="text-center text-gray-400 dark:text-white/60">
-                            AMUHI Content Management System
+                            {{ __('ui.admin.amuhi_content_management_system') }}
                         </p>
                     </div>
                 </div>

@@ -57,7 +57,7 @@ class EventController extends Controller
 
         return redirect()
             ->route('admin.events.index')
-            ->with('success', 'Event created successfully.');
+            ->with('success', __('ui.admin.event_created_successfully'));
     }
 
     public function show(Event $event): View
@@ -92,7 +92,7 @@ class EventController extends Controller
 
         return redirect()
             ->route('admin.events.index')
-            ->with('success', 'Event updated successfully.');
+            ->with('success', __('ui.admin.event_updated_successfully'));
     }
 
     public function destroy(Event $event): RedirectResponse
@@ -105,6 +105,6 @@ class EventController extends Controller
 
         return redirect()
             ->route('admin.events.index')
-            ->with('success', 'Event deleted successfully.');
+            ->with('success', __('ui.admin.event_deleted_successfully'));
     }
 }

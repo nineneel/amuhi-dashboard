@@ -57,7 +57,7 @@
             @if (trim($slot) !== '')
                 {{ $slot }}
             @else
-                {{ $label }}
+                {{ __($label) }}
                 @if ($required)
                     <span class="text-error-500">*</span>
                 @endif

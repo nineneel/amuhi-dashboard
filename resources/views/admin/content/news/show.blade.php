@@ -4,7 +4,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">News Preview</h1>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.news_preview') }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $news->title }}</p>
             </div>
             <div class="flex items-center gap-3">
@@ -50,10 +50,10 @@
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div class="lg:col-span-1">
                 <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">Article Info</h2>
+                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.article_info') }}</h2>
                     <ul class="divide-y divide-gray-100 dark:divide-gray-800">
                         <li class="flex items-start gap-3 py-2.5">
-                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">Status</span>
+                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.status') }}</span>
                             <span class="w-3/5">
                                 @php
                                     $statusBadge = match ($statusValue) {
@@ -67,32 +67,32 @@
                             </span>
                         </li>
                         <li class="flex items-start gap-3 py-2.5">
-                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">Category</span>
+                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.category') }}</span>
                             <span class="w-3/5 text-sm text-gray-700 dark:text-gray-300">{{ $news->category }}</span>
                         </li>
                         <li class="flex items-start gap-3 py-2.5">
-                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">Author</span>
+                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.author') }}</span>
                             <span class="w-3/5 text-sm text-gray-700 dark:text-gray-300">{{ $news->author_name }}</span>
                         </li>
                         <li class="flex items-start gap-3 py-2.5">
-                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">Read Time</span>
+                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.read_time') }}</span>
                             <span class="w-3/5 text-sm text-gray-700 dark:text-gray-300">{{ $news->read_time_minutes }} min</span>
                         </li>
                         <li class="flex items-start gap-3 py-2.5">
-                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">Published</span>
+                            <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.published') }}</span>
                             <span class="w-3/5 text-sm text-gray-700 dark:text-gray-300">
                                 {{ $news->published_at?->format('d M Y') ?? '-' }}
                             </span>
                         </li>
                         @if ($news->badge)
                             <li class="flex items-start gap-3 py-2.5">
-                                <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">Badge</span>
+                                <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.badge') }}</span>
                                 <span class="w-3/5 text-sm text-gray-700 dark:text-gray-300">{{ $news->badge }}</span>
                             </li>
                         @endif
                         @if (!empty($news->tags))
                             <li class="flex items-start gap-3 py-2.5">
-                                <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">Tags</span>
+                                <span class="w-2/5 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.tags') }}</span>
                                 <span class="w-3/5 text-sm text-gray-700 dark:text-gray-300">
                                     {{ implode(', ', $news->tags) }}
                                 </span>

@@ -52,7 +52,7 @@ class TestimonyController extends Controller
 
         return redirect()
             ->route('admin.testimonies.index')
-            ->with('success', 'Testimony created successfully.');
+            ->with('success', __('ui.admin.testimony_created_successfully'));
     }
 
     public function edit(Testimony $testimony): View
@@ -71,7 +71,7 @@ class TestimonyController extends Controller
 
         return redirect()
             ->route('admin.testimonies.index')
-            ->with('success', 'Testimony updated successfully.');
+            ->with('success', __('ui.admin.testimony_updated_successfully'));
     }
 
     public function destroy(Testimony $testimony): RedirectResponse
@@ -80,7 +80,7 @@ class TestimonyController extends Controller
 
         return redirect()
             ->route('admin.testimonies.index')
-            ->with('success', 'Testimony deleted successfully.');
+            ->with('success', __('ui.admin.testimony_deleted_successfully'));
     }
 
     public function reorder(Request $request): JsonResponse

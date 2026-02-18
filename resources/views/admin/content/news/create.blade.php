@@ -4,8 +4,8 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Create News Article</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Write and publish a new news article.</p>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.create_news_article') }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.write_and_publish_a_new_news_article') }}</p>
             </div>
             <a href="{{ route('admin.news.index') }}"
                 class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
@@ -32,8 +32,8 @@
                     ])
                         <div class="space-y-5">
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Title</label>
-                                <input type="text" name="title" value="{{ old('title') }}" placeholder="Enter article title"
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.title') }}</label>
+                                <input type="text" name="title" value="{{ old('title') }}" placeholder="{{ __('ui.admin.enter_article_title') }}"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 @error('title')
                                     <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -41,8 +41,8 @@
                             </div>
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Slug</label>
-                                <input type="text" name="slug" value="{{ old('slug') }}" placeholder="article-url-slug"
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.slug') }}</label>
+                                <input type="text" name="slug" value="{{ old('slug') }}" placeholder="{{ __('ui.admin.article_url_slug') }}"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 @error('slug')
                                     <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -50,8 +50,8 @@
                             </div>
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Summary</label>
-                                <textarea name="summary" rows="3" placeholder="Brief summary of the article"
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.summary') }}</label>
+                                <textarea name="summary" rows="3" placeholder="{{ __('ui.admin.brief_summary_of_the_article') }}"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">{{ old('summary') }}</textarea>
                                 @error('summary')
                                     <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -59,7 +59,7 @@
                             </div>
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Content Blocks</label>
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.content_blocks') }}</label>
                                 @include('admin.components.content-editor', ['blocks' => old('content', [])])
                                 @error('content')
                                     <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -76,8 +76,8 @@
                     ])
                         <div class="space-y-5">
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Author Name</label>
-                                <input type="text" name="author_name" value="{{ old('author_name') }}" placeholder="Author's name"
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.author_name') }}</label>
+                                <input type="text" name="author_name" value="{{ old('author_name') }}" placeholder="{{ __('ui.admin.author_s_name') }}"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 @error('author_name')
                                     <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -85,8 +85,8 @@
                             </div>
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Category</label>
-                                <input type="text" name="category" value="{{ old('category') }}" placeholder="e.g. Berita, Tips"
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.category') }}</label>
+                                <input type="text" name="category" value="{{ old('category') }}" placeholder="{{ __('ui.admin.e_g_berita_tips') }}"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 @error('category')
                                     <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -95,27 +95,27 @@
 
                             <div>
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tags <span class="text-gray-400">(comma separated)</span>
+                                    {{ __('ui.admin.tags') }} <span class="text-gray-400">{{ __('ui.admin.comma_separated') }}</span>
                                 </label>
                                 <input type="text" name="tags_input" value="{{ old('tags_input', is_array(old('tags')) ? implode(', ', old('tags')) : '') }}"
-                                    placeholder="tag1, tag2, tag3"
+                                    placeholder="{{ __('ui.admin.tag1_tag2_tag3') }}"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                             </div>
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Badge <span class="text-gray-400">(optional)</span></label>
-                                <input type="text" name="badge" value="{{ old('badge') }}" placeholder="e.g. Hot, New"
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.badge') }} <span class="text-gray-400">{{ __('ui.admin.optional') }}</span></label>
+                                <input type="text" name="badge" value="{{ old('badge') }}" placeholder="{{ __('ui.admin.e_g_hot_new') }}"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                             </div>
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Read Time (minutes)</label>
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.read_time_minutes') }}</label>
                                 <input type="number" name="read_time_minutes" value="{{ old('read_time_minutes', 5) }}" min="1"
                                     class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
                             </div>
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Status</label>
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.status') }}</label>
                                 <div class="relative">
                                     <select name="status"
                                         class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">

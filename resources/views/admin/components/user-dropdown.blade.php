@@ -8,7 +8,7 @@
         : (string) ($authUser?->role ?? 'admin');
 
     $roleLabel = str_replace('_', ' ', $roleValue);
-    $roleLabel = ucwords($roleLabel);
+    $roleLabel = __(ucwords($roleLabel));
 
     $roleBadgeType = $roleValue === Role::SuperAdmin->value ? 'info' : 'neutral';
 @endphp
@@ -57,13 +57,13 @@
             <li>
                 <a href="/admin/profile"
                     class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
-                    Profile
+                    {{ __('ui.admin.profile') }}
                 </a>
             </li>
             <li>
                 <a href="{{ route('dashboard') }}"
                     class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
-                    Back to Portal
+                    {{ __('ui.admin.back_to_portal') }}
                 </a>
             </li>
         </ul>
@@ -73,7 +73,7 @@
             <button type="submit"
                 class="group mt-3 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                 @click="closeDropdown()">
-                Logout
+                {{ __('ui.admin.logout') }}
             </button>
         </form>
     </div>

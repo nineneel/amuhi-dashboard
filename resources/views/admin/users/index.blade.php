@@ -4,8 +4,8 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Users</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Member directory for portal users.</p>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.users') }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.member_directory_for_portal_users') }}</p>
             </div>
         </div>
 
@@ -71,7 +71,7 @@
             @empty
                 <tr>
                     <td colspan="3" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No member users found.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_member_users_found') }}</p>
                     </td>
                 </tr>
             @endforelse

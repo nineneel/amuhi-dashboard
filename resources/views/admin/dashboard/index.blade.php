@@ -7,7 +7,7 @@
 @section('content')
     <div class="space-y-6">
         <div>
-            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Admin Dashboard</h1>
+            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.admin_dashboard') }}</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 Overview of portal activity and CMS navigation.
             </p>
@@ -43,8 +43,8 @@
         <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-base font-semibold text-gray-800 dark:text-white/90">Quick Actions</h2>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Go back to portal or review admin management.</p>
+                    <h2 class="text-base font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.quick_actions') }}</h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.go_back_to_portal_or_review_admin_management') }}</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
@@ -66,10 +66,10 @@
         ])
             <tr class="border-b border-gray-100 dark:border-gray-800">
                 <td class="px-5 py-4 sm:px-6">
-                    <p class="text-theme-sm font-medium text-gray-800 dark:text-white/90">Admin Navigation</p>
+                    <p class="text-theme-sm font-medium text-gray-800 dark:text-white/90">{{ __('ui.admin.admin_navigation') }}</p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
-                    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Sidebar and header are now role-aware.</p>
+                    <p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.sidebar_and_header_are_now_role_aware') }}</p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
                     @include('admin.components.badge', ['type' => 'success', 'text' => 'Completed'])
@@ -77,10 +77,10 @@
             </tr>
             <tr class="border-b border-gray-100 dark:border-gray-800">
                 <td class="px-5 py-4 sm:px-6">
-                    <p class="text-theme-sm font-medium text-gray-800 dark:text-white/90">Reusable Components</p>
+                    <p class="text-theme-sm font-medium text-gray-800 dark:text-white/90">{{ __('ui.admin.reusable_components') }}</p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
-                    <p class="text-theme-sm text-gray-500 dark:text-gray-400">Stats cards, forms, filters, table, pagination, modal, alerts.</p>
+                    <p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.stats_cards_forms_filters_table_pagination_modal_alerts') }}</p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
                     @include('admin.components.badge', ['type' => 'success', 'text' => 'Completed'])

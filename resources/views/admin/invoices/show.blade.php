@@ -14,7 +14,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Invoice Details</h1>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.invoice_details') }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Invoice {{ $invoice->invoice_number }}</p>
             </div>
             <a href="{{ route('admin.invoices.index') }}"
@@ -30,7 +30,7 @@
             @endcomponent
 
             @component('admin.components.form-card', ['title' => 'Member'])
-                <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $invoice->user?->name ?? 'Unknown user' }}</p>
+                <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $invoice->user?->name ?? __('ui.admin.unknown_user') }}</p>
                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ $invoice->user?->email ?? '-' }}</p>
             @endcomponent
 
@@ -73,7 +73,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No payments recorded for this invoice.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_payments_recorded_for_this_invoice') }}</p>
                     </td>
                 </tr>
             @endforelse

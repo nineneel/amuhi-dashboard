@@ -7,8 +7,8 @@
 @section('content')
     <div class="space-y-6">
         <div>
-            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Payments</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Monitor incoming payment transactions.</p>
+            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.payments') }}</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.monitor_incoming_payment_transactions') }}</p>
         </div>
 
         <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
@@ -61,7 +61,7 @@
                 @endphp
                 <tr class="border-b border-gray-100 dark:border-gray-800">
                     <td class="px-5 py-4 sm:px-6">
-                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $payment->gateway_transaction_id ?? 'Payment #'.$payment->id }}</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $payment->gateway_transaction_id ?? __('ui.admin.payment_id', ['id' => $payment->id]) }}</p>
                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ $payment->created_at?->format('d M Y H:i') }}</p>
                     </td>
                     <td class="px-5 py-4 sm:px-6">
@@ -82,7 +82,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No payments found.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_payments_found') }}</p>
                     </td>
                 </tr>
             @endforelse

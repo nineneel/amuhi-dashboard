@@ -4,7 +4,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Edit Event</h1>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.edit_event') }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Update details for {{ $event->title }}.</p>
             </div>
             <a href="{{ route('admin.events.index') }}"
@@ -31,9 +31,9 @@
 
                 <div class="space-y-5">
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Title</label>
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.title') }}</label>
                         <input type="text" name="title" value="{{ old('title', $event->title) }}"
-                            placeholder="Enter event title"
+                            placeholder="{{ __('ui.admin.enter_event_title') }}"
                             class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                         @error('title')
                             <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -41,8 +41,8 @@
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Description</label>
-                        <textarea name="description" rows="4" placeholder="Enter event description"
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.description') }}</label>
+                        <textarea name="description" rows="4" placeholder="{{ __('ui.admin.enter_event_description') }}"
                             class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">{{ old('description', $event->description) }}</textarea>
                         @error('description')
                             <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -50,9 +50,9 @@
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Location</label>
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.location') }}</label>
                         <input type="text" name="location" value="{{ old('location', $event->location) }}"
-                            placeholder="e.g. Online / Gedung A"
+                            placeholder="{{ __('ui.admin.e_g_online_gedung_a') }}"
                             class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                         @error('location')
                             <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -61,7 +61,7 @@
 
                     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                         <div>
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Starts At</label>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.starts_at') }}</label>
                             <input type="datetime-local" name="starts_at"
                                 value="{{ old('starts_at', $event->starts_at?->format('Y-m-d\TH:i')) }}"
                                 class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
@@ -71,7 +71,7 @@
                         </div>
 
                         <div>
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Ends At</label>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.ends_at') }}</label>
                             <input type="datetime-local" name="ends_at"
                                 value="{{ old('ends_at', $event->ends_at?->format('Y-m-d\TH:i')) }}"
                                 class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
@@ -82,7 +82,7 @@
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Status</label>
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('ui.admin.status') }}</label>
                         <div class="relative">
                             <select name="status"
                                 class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
@@ -111,7 +111,7 @@
 
                     <div>
                         <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Cover Image <span class="text-gray-400">(leave empty to keep current)</span>
+                            {{ __('ui.admin.cover_image') }} <span class="text-gray-400">{{ __('ui.admin.leave_empty_to_keep_current') }}</span>
                         </label>
                         @if ($event->image)
                             <div class="mb-2">

@@ -11,10 +11,10 @@
 
 <div {{ $attributes->class(['rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]']) }}>
     <div class="px-6 py-5">
-        <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ $title }}</h3>
+        <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ __($title) }}</h3>
 
         @if ($description)
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $description }}</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __($description) }}</p>
         @endif
     </div>
 

@@ -56,7 +56,7 @@ class UserController extends Controller
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', 'User updated successfully.');
+            ->with('success', __('ui.admin.user_updated_successfully'));
     }
 
     public function destroy(User $user): RedirectResponse
@@ -65,6 +65,6 @@ class UserController extends Controller
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', 'User deleted successfully.');
+            ->with('success', __('ui.admin.user_deleted_successfully'));
     }
 }

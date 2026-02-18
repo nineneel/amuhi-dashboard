@@ -4,8 +4,8 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Events</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage portal events and registrations.</p>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.events') }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.manage_portal_events_and_registrations') }}</p>
             </div>
             <a href="{{ route('admin.events.create') }}"
                 class="inline-flex items-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600">
@@ -72,7 +72,7 @@
                 <tr class="border-b border-gray-100 dark:border-gray-800">
                     <td class="px-5 py-4 sm:px-6">
                         <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $event->title }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $event->location ?? 'No location' }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $event->location ?? __('ui.admin.no_location') }}</p>
                     </td>
                     <td class="px-5 py-4 sm:px-6">
                         @include('admin.components.badge', ['type' => $statusBadge, 'text' => ucfirst($statusValue)])
@@ -92,7 +92,7 @@
             @empty
                 <tr>
                     <td colspan="4" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No events found.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_events_found') }}</p>
                     </td>
                 </tr>
             @endforelse

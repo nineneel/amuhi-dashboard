@@ -20,7 +20,7 @@ it('allows super admins to access super admin routes', function () {
     $this->actingAs($superAdmin)
         ->get(route('admin.admins.index'))
         ->assertSuccessful()
-        ->assertSee('Admin Management');
+        ->assertSee(__('ui.admin.admin_management'));
 });
 
 it('forbids members from accessing super admin routes', function () {

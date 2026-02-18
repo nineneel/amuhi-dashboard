@@ -9,7 +9,7 @@ uses(RefreshDatabase::class);
 it('renders the admin login page', function () {
     $this->get(route('admin.login'))
         ->assertSuccessful()
-        ->assertSee('Admin Sign In');
+        ->assertSee(__('ui.admin.admin_sign_in'));
 });
 
 it('allows admin users to login with valid credentials', function () {

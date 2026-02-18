@@ -57,7 +57,7 @@ class NewsController extends Controller
 
         return redirect()
             ->route('admin.news.index')
-            ->with('success', 'News article created successfully.');
+            ->with('success', __('ui.admin.news_article_created_successfully'));
     }
 
     public function show(News $news): View
@@ -83,7 +83,7 @@ class NewsController extends Controller
 
         return redirect()
             ->route('admin.news.index')
-            ->with('success', 'News article updated successfully.');
+            ->with('success', __('ui.admin.news_article_updated_successfully'));
     }
 
     public function destroy(News $news): RedirectResponse
@@ -92,7 +92,7 @@ class NewsController extends Controller
 
         return redirect()
             ->route('admin.news.index')
-            ->with('success', 'News article deleted successfully.');
+            ->with('success', __('ui.admin.news_article_deleted_successfully'));
     }
 
     public function publish(News $news): RedirectResponse
@@ -104,7 +104,7 @@ class NewsController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'News article published successfully.');
+            ->with('success', __('ui.admin.news_article_published_successfully'));
     }
 
     public function unpublish(News $news): RedirectResponse
@@ -116,7 +116,7 @@ class NewsController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'News article unpublished.');
+            ->with('success', __('ui.admin.news_article_unpublished'));
     }
 
     /**

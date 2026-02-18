@@ -4,8 +4,8 @@
     <div class="space-y-6" x-data="testimonyReorder()">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Testimonies</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage testimonials and display order.</p>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.testimonies') }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.manage_testimonials_and_display_order') }}</p>
             </div>
             <a href="{{ route('admin.testimonies.create') }}"
                 class="inline-flex items-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600">
@@ -99,7 +99,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No testimonies found.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_testimonies_found') }}</p>
                     </td>
                 </tr>
             @endforelse

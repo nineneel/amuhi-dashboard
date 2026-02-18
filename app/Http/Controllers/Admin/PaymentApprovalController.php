@@ -83,7 +83,7 @@ class PaymentApprovalController extends Controller
         if (! $payment->isPendingReview()) {
             return redirect()
                 ->route('admin.payment-approvals.show', $payment)
-                ->with('error', 'This payment cannot be approved.');
+                ->with('error', __('ui.admin.this_payment_cannot_be_approved'));
         }
 
         $admin = $request->user();
@@ -132,8 +132,11 @@ class PaymentApprovalController extends Controller
 
             ActivityLog::query()->create([
                 'user_id' => $admin->id,
-                'action' => 'Payment approved',
-                'description' => 'Payment #'.$payment->id.' for Invoice #'.$payment->invoice->invoice_number.' was approved.',
+                'action' => __('ui.admin.payment_approved_action'),
+                'description' => __('ui.admin.payment_payment_id_for_invoice_invoice_number_was_approved', [
+                    'payment_id' => $payment->id,
+                    'invoice_number' => $payment->invoice->invoice_number,
+                ]),
                 'subject_type' => Payment::class,
                 'subject_id' => $payment->id,
                 'ip_address' => $request->ip(),
@@ -142,15 +145,17 @@ class PaymentApprovalController extends Controller
             Notification::query()->create([
                 'user_id' => $payment->invoice->user_id,
                 'type' => 'payment_status',
-                'title' => 'Payment Approved',
-                'message' => 'Your payment for Invoice #'.$payment->invoice->invoice_number.' has been approved. Your subscription is now active.',
+                'title' => __('ui.admin.payment_approved'),
+                'message' => __('ui.admin.your_payment_for_invoice_invoice_number_has_been_approved_your_subscription_is_now_active', [
+                    'invoice_number' => $payment->invoice->invoice_number,
+                ]),
                 'sent_via' => 'app',
             ]);
         });
 
         return redirect()
             ->route('admin.payment-approvals.index')
-            ->with('success', 'Payment approved successfully.');
+            ->with('success', __('ui.admin.payment_approved_successfully'));
     }
 
     public function markInsufficient(RejectPaymentRequest $request, Payment $payment): RedirectResponse
@@ -158,7 +163,7 @@ class PaymentApprovalController extends Controller
         if (! $payment->isPendingReview()) {
             return redirect()
                 ->route('admin.payment-approvals.show', $payment)
-                ->with('error', 'This payment status cannot be changed.');
+                ->with('error', __('ui.admin.this_payment_status_cannot_be_changed'));
         }
 
         $admin = $request->user();
@@ -175,8 +180,11 @@ class PaymentApprovalController extends Controller
 
             ActivityLog::query()->create([
                 'user_id' => $admin->id,
-                'action' => 'Payment marked insufficient',
-                'description' => 'Payment #'.$payment->id.' for Invoice #'.$payment->invoice->invoice_number.' was marked as insufficient.',
+                'action' => __('ui.admin.payment_marked_insufficient'),
+                'description' => __('ui.admin.payment_payment_id_for_invoice_invoice_number_was_marked_as_insufficient', [
+                    'payment_id' => $payment->id,
+                    'invoice_number' => $payment->invoice->invoice_number,
+                ]),
                 'subject_type' => Payment::class,
                 'subject_id' => $payment->id,
                 'ip_address' => $request->ip(),
@@ -185,15 +193,17 @@ class PaymentApprovalController extends Controller
             Notification::query()->create([
                 'user_id' => $payment->invoice->user_id,
                 'type' => 'payment_status',
-                'title' => 'Insufficient Payment',
-                'message' => 'Your payment for Invoice #'.$payment->invoice->invoice_number.' has insufficient nominal. Please re-upload with the correct amount.',
+                'title' => __('ui.admin.insufficient_payment'),
+                'message' => __('ui.admin.your_payment_for_invoice_invoice_number_has_insufficient_nominal_please_re_upload_with_the_correct_amount', [
+                    'invoice_number' => $payment->invoice->invoice_number,
+                ]),
                 'sent_via' => 'app',
             ]);
         });
 
         return redirect()
             ->route('admin.payment-approvals.index')
-            ->with('success', 'Payment marked as insufficient.');
+            ->with('success', __('ui.admin.payment_marked_as_insufficient'));
     }
 
     public function reject(RejectPaymentRequest $request, Payment $payment): RedirectResponse
@@ -201,7 +211,7 @@ class PaymentApprovalController extends Controller
         if (! $payment->isPendingReview()) {
             return redirect()
                 ->route('admin.payment-approvals.show', $payment)
-                ->with('error', 'This payment cannot be rejected.');
+                ->with('error', __('ui.admin.this_payment_cannot_be_rejected'));
         }
 
         $admin = $request->user();
@@ -222,8 +232,11 @@ class PaymentApprovalController extends Controller
 
             ActivityLog::query()->create([
                 'user_id' => $admin->id,
-                'action' => 'Payment rejected',
-                'description' => 'Payment #'.$payment->id.' for Invoice #'.$payment->invoice->invoice_number.' was rejected.',
+                'action' => __('ui.admin.payment_rejected_action'),
+                'description' => __('ui.admin.payment_payment_id_for_invoice_invoice_number_was_rejected', [
+                    'payment_id' => $payment->id,
+                    'invoice_number' => $payment->invoice->invoice_number,
+                ]),
                 'subject_type' => Payment::class,
                 'subject_id' => $payment->id,
                 'ip_address' => $request->ip(),
@@ -232,14 +245,16 @@ class PaymentApprovalController extends Controller
             Notification::query()->create([
                 'user_id' => $payment->invoice->user_id,
                 'type' => 'payment_status',
-                'title' => 'Payment Rejected',
-                'message' => 'Your payment for Invoice #'.$payment->invoice->invoice_number.' has been rejected. Please re-upload valid proof.',
+                'title' => __('ui.admin.payment_rejected'),
+                'message' => __('ui.admin.your_payment_for_invoice_invoice_number_has_been_rejected_please_re_upload_valid_proof', [
+                    'invoice_number' => $payment->invoice->invoice_number,
+                ]),
                 'sent_via' => 'app',
             ]);
         });
 
         return redirect()
             ->route('admin.payment-approvals.index')
-            ->with('success', 'Payment rejected.');
+            ->with('success', __('ui.admin.payment_rejected_success'));
     }
 }

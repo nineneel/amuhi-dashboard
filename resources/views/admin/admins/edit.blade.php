@@ -4,7 +4,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Edit Admin</h1>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.edit_admin') }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Update role for {{ $admin->name }}.
                 </p>
@@ -34,18 +34,18 @@
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div class="lg:col-span-1">
                 <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">Admin Info</h2>
+                    <h2 class="mb-5 text-base font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.admin_info') }}</h2>
                     <ul class="divide-y divide-gray-100 dark:divide-gray-800">
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Name</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.name') }}</span>
                             <span class="w-2/3 text-sm font-medium text-gray-700 dark:text-gray-300">{{ $admin->name }}</span>
                         </li>
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Email</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.email') }}</span>
                             <span class="w-2/3 text-sm text-gray-700 dark:text-gray-300">{{ $admin->email }}</span>
                         </li>
                         <li class="flex items-start gap-5 py-2.5">
-                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">Joined</span>
+                            <span class="w-1/3 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.joined') }}</span>
                             <span class="w-2/3 text-sm text-gray-700 dark:text-gray-300">{{ $admin->created_at?->format('d M Y') }}</span>
                         </li>
                     </ul>

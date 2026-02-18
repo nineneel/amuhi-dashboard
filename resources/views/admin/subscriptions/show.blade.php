@@ -14,8 +14,8 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Subscription Details</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">View subscription and billing activity.</p>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.subscription_details') }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.view_subscription_and_billing_activity') }}</p>
             </div>
             <a href="{{ route('admin.subscriptions.index') }}"
                 class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/[0.03]">
@@ -26,7 +26,7 @@
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
             @component('admin.components.form-card', ['title' => 'Member'])
                 @include('admin.components.avatar-cell', [
-                    'name' => $subscription->user?->name ?? 'Unknown user',
+                    'name' => $subscription->user?->name ?? __('ui.admin.unknown_user'),
                     'subtitle' => $subscription->user?->email,
                     'size' => 'md',
                 ])
@@ -72,7 +72,7 @@
             @empty
                 <tr>
                     <td colspan="4" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No invoices for this subscription.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_invoices_for_this_subscription') }}</p>
                     </td>
                 </tr>
             @endforelse

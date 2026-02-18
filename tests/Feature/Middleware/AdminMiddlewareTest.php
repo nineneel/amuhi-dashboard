@@ -27,7 +27,7 @@ it('allows admins to access admin routes', function () {
     $this->actingAs($admin)
         ->get(route('admin.dashboard'))
         ->assertSuccessful()
-        ->assertSee('Admin Dashboard');
+        ->assertSee(__('ui.admin.admin_dashboard'));
 });
 
 it('allows super admins to access admin routes', function () {
@@ -36,5 +36,5 @@ it('allows super admins to access admin routes', function () {
     $this->actingAs($superAdmin)
         ->get(route('admin.dashboard'))
         ->assertSuccessful()
-        ->assertSee('Admin Dashboard');
+        ->assertSee(__('ui.admin.admin_dashboard'));
 });

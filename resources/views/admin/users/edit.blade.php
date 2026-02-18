@@ -4,7 +4,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Edit User</h1>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.edit_user') }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Update details for {{ $user->name }}.
                 </p>
@@ -37,7 +37,7 @@
                             Name
                         </label>
                         <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                            placeholder="Enter full name"
+                            placeholder="{{ __('ui.admin.enter_full_name') }}"
                             class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                         @error('name')
                             <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>
@@ -49,7 +49,7 @@
                             Email
                         </label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                            placeholder="Enter email address"
+                            placeholder="{{ __('ui.admin.enter_email_address') }}"
                             class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                         @error('email')
                             <p class="mt-1 text-theme-xs text-error-500">{{ $message }}</p>

@@ -4,7 +4,7 @@
                 <button
                     class="hidden h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400 xl:flex lg:h-10 lg:w-10"
                     :class="{ 'bg-gray-100 dark:bg-white/[0.03]': !$store.sidebar.isExpanded }"
-                    @click="$store.sidebar.toggleExpanded()" aria-label="Toggle Sidebar">
+                    @click="$store.sidebar.toggleExpanded()" aria-label="{{ __('ui.admin.toggle_sidebar') }}">
                     <svg x-show="!$store.sidebar.isMobileOpen" width="16" height="12" viewBox="0 0 16 12" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -21,7 +21,7 @@
 
                 <button class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 xl:hidden lg:h-10 lg:w-10"
                     :class="{ 'bg-gray-100 dark:bg-white/[0.03]': $store.sidebar.isMobileOpen }"
-                    @click="$store.sidebar.toggleMobileOpen()" aria-label="Toggle Mobile Menu">
+                    @click="$store.sidebar.toggleMobileOpen()" aria-label="{{ __('ui.admin.toggle_mobile_menu') }}">
                     <svg x-show="!$store.sidebar.isMobileOpen" width="16" height="12" viewBox="0 0 16 12" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -43,7 +43,7 @@
                 </a>
 
                 <div class="hidden items-center xl:flex">
-                    <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">CMS Dashboard</span>
+                    <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.cms_dashboard') }}</span>
                 </div>
             </div>
 

@@ -7,8 +7,8 @@
 @section('content')
     <div class="space-y-6">
         <div>
-            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Invoices</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Review billing records and payment status.</p>
+            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.invoices') }}</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.review_billing_records_and_payment_status') }}</p>
         </div>
 
         <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
@@ -82,7 +82,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No invoices found.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_invoices_found') }}</p>
                     </td>
                 </tr>
             @endforelse

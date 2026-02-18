@@ -74,7 +74,7 @@ class AdminController extends Controller
 
         return redirect()
             ->route('admin.admins.index')
-            ->with('success', 'Admin account created successfully.');
+            ->with('success', __('ui.admin.admin_account_created_successfully'));
     }
 
     public function show(User $admin): RedirectResponse
@@ -98,7 +98,7 @@ class AdminController extends Controller
 
         return redirect()
             ->route('admin.admins.index')
-            ->with('success', 'Admin role updated successfully.');
+            ->with('success', __('ui.admin.admin_role_updated_successfully'));
     }
 
     public function destroy(User $admin): RedirectResponse
@@ -106,13 +106,13 @@ class AdminController extends Controller
         if ($admin->is(auth()->user())) {
             return redirect()
                 ->route('admin.admins.index')
-                ->with('error', 'You cannot remove your own admin access.');
+                ->with('error', __('ui.admin.you_cannot_remove_your_own_admin_access'));
         }
 
         $admin->update(['role' => Role::Member]);
 
         return redirect()
             ->route('admin.admins.index')
-            ->with('success', 'Admin access removed successfully.');
+            ->with('success', __('ui.admin.admin_access_removed_successfully'));
     }
 }

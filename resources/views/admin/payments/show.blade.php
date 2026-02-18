@@ -14,7 +14,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Payment Details</h1>
+                <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.payment_details') }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Payment #{{ $payment->id }}</p>
             </div>
             <a href="{{ route('admin.payments.index') }}"
@@ -42,15 +42,15 @@
         @component('admin.components.form-card', ['title' => 'Related Invoice'])
             <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                 <div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Invoice Number</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('ui.admin.invoice_number') }}</p>
                     <p class="text-sm text-gray-800 dark:text-white/90">{{ $payment->invoice?->invoice_number ?? '-' }}</p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Member</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('ui.admin.member') }}</p>
                     <p class="text-sm text-gray-800 dark:text-white/90">{{ $payment->invoice?->user?->name ?? '-' }}</p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Plan</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('ui.admin.plan') }}</p>
                     <p class="text-sm text-gray-800 dark:text-white/90">{{ $payment->invoice?->subscription?->subscriptionPlan?->name ?? '-' }}</p>
                 </div>
             </div>

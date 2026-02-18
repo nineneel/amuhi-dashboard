@@ -40,7 +40,7 @@
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand-50 text-sm font-semibold text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
                         @if ($profilePhoto)
-                            <img src="{{ $profilePhoto }}" alt="Profile photo" class="h-full w-full object-cover" />
+                            <img src="{{ $profilePhoto }}" alt="{{ __('ui.profile.photo_alt') }}" class="h-full w-full object-cover" />
                         @else
                             {{ $userInitial }}
                         @endif
@@ -153,7 +153,7 @@
                                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('ui.payments.proof_image') }}</p>
                                         <a href="{{ asset('storage/' . $latestProofImage) }}" target="_blank"
                                             class="mt-2 inline-block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
-                                            <img src="{{ asset('storage/' . $latestProofImage) }}" alt="Payment proof"
+                                            <img src="{{ asset('storage/' . $latestProofImage) }}" alt="{{ __('ui.payments.proof_image_alt') }}"
                                                 class="h-36 w-28 object-cover transition hover:scale-105" />
                                         </a>
                                     @endif
@@ -203,7 +203,7 @@
                                                                 </svg>
                                                             </template>
                                                             <span class="text-sm text-gray-600 dark:text-gray-400" x-text="fileName || '{{ __('ui.payments.click_to_upload') }}'"></span>
-                                                            <span class="mt-1 text-xs text-gray-500 dark:text-gray-500">JPG, JPEG, PNG (max 5MB)</span>
+                                                            <span class="mt-1 text-xs text-gray-500 dark:text-gray-500">{{ __('ui.payments.upload_format_hint') }}</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -233,13 +233,13 @@
                                 <table class="w-full min-w-[1100px]">
                                     <thead>
                                         <tr class="border-b border-gray-100 dark:border-gray-800">
-                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Date</th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Status</th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Type</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('ui.payments.history_date') }}</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('ui.payments.history_status') }}</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('ui.payments.history_type') }}</th>
                                             <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('ui.payments.previous_status') }}</th>
                                             <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('ui.payments.reviewed_by') }}</th>
                                             <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('ui.payments.admin_notes') }}</th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Proof</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('ui.payments.history_proof') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -458,7 +458,7 @@
                                                         </svg>
                                                     </template>
                                                     <span class="text-sm text-gray-600 dark:text-gray-400" x-text="fileName || '{{ __('ui.payments.click_to_upload') }}'"></span>
-                                                    <span class="mt-1 text-xs text-gray-500 dark:text-gray-500">JPG, JPEG, PNG (max 5MB)</span>
+                                                    <span class="mt-1 text-xs text-gray-500 dark:text-gray-500">{{ __('ui.payments.upload_format_hint') }}</span>
                                                 </label>
                                             </div>
                                             @error('proof_image')

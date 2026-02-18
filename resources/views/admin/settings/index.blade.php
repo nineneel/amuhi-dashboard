@@ -36,8 +36,8 @@
 
     <div class="space-y-6">
         <div>
-            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Site Settings</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Update general, SEO, and contact configuration.</p>
+            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.site_settings') }}</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.update_general_seo_and_contact_configuration') }}</p>
         </div>
 
         @if (session('success'))

@@ -21,7 +21,7 @@ class RejectPaymentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'admin_notes.required' => 'Please provide a reason for this action.',
+            'admin_notes.required' => __('ui.admin.please_provide_a_reason_for_this_action'),
         ];
     }
 }

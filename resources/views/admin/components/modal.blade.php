@@ -37,7 +37,7 @@
 
         @if ($title)
             <h3 id="modal-title-{{ $id }}" class="mb-4 text-title-sm font-semibold text-gray-800 dark:text-white/90">
-                {{ $title }}
+                {{ __($title) }}
             </h3>
         @endif
 

@@ -20,7 +20,7 @@
 <div>
     @if ($label)
         <label for="{{ $id }}" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-            {{ $label }}
+            {{ __($label) }}
             @if ($required)
                 <span class="text-error-500">*</span>
             @endif
@@ -30,7 +30,7 @@
     <div @if ($type === 'password') x-data="{ showPassword: false }" class="relative" @endif>
         <input :type="{{ $type === 'password' ? "showPassword ? 'text' : 'password'" : "'$type'" }}"
             id="{{ $id }}" name="{{ $name }}"
-            @if (! $isFileInput) value="{{ old($name, $value) }}" placeholder="{{ $placeholder }}" @endif
+            @if (! $isFileInput) value="{{ old($name, $value) }}" placeholder="{{ __($placeholder) }}" @endif
             {{ $required ? 'required' : '' }} {{ $disabled ? 'disabled' : '' }}
             {{ $attributes->merge(['class' => $inputClasses . ($errors->has($name) ? ' border-error-500' : '')]) }} />
 

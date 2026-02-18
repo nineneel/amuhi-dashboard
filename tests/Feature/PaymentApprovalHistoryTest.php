@@ -57,7 +57,7 @@ it('updates the same approval row when admin approves payment and shows it on ad
     $this->actingAs($admin)
         ->get(route('admin.payment-approvals.show', $payment))
         ->assertSuccessful()
-        ->assertSee('Approval History')
+        ->assertSee(__('ui.admin.approval_history'))
         ->assertSee('Transfer amount validated.');
 });
 
@@ -154,7 +154,7 @@ it('shows latest history status on admin payment approval index', function () {
     $this->actingAs($admin)
         ->get(route('admin.payment-approvals.index'))
         ->assertSuccessful()
-        ->assertSee('Need Approval')
+        ->assertSee(__('ui.admin.need_approval'))
         ->assertSee('bg-error-50')
         ->assertSee('animate-ping')
         ->assertDontSee('Need to review')

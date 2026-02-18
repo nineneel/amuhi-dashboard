@@ -7,8 +7,8 @@
 @section('content')
     <div class="space-y-6">
         <div>
-            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">Subscriptions</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Track user subscriptions and plan assignments.</p>
+            <h1 class="text-title-sm font-semibold text-gray-800 dark:text-white/90">{{ __('ui.admin.subscriptions') }}</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.track_user_subscriptions_and_plan_assignments') }}</p>
         </div>
 
         <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
@@ -62,7 +62,7 @@
                 <tr class="border-b border-gray-100 dark:border-gray-800">
                     <td class="px-5 py-4 sm:px-6">
                         @include('admin.components.avatar-cell', [
-                            'name' => $subscription->user?->name ?? 'Unknown user',
+                            'name' => $subscription->user?->name ?? __('ui.admin.unknown_user'),
                             'subtitle' => $subscription->user?->email,
                         ])
                     </td>
@@ -84,7 +84,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No subscriptions found.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.admin.no_subscriptions_found') }}</p>
                     </td>
                 </tr>
             @endforelse
