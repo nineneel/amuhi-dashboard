@@ -3,6 +3,7 @@
     'sortable' => false,
     'sortField' => null,
     'sortDirection' => 'asc',
+    'paginator' => null,
 ])
 
 @php
@@ -52,4 +53,8 @@
             </tbody>
         </table>
     </div>
+
+    @if ($paginator)
+        @include('admin.components.pagination', ['paginator' => $paginator])
+    @endif
 </div>

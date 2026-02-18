@@ -24,6 +24,20 @@ it('can search users by name', function () {
         ->assertSuccessful();
 });
 
+it('shows only member users on users index', function () {
+    $admin = User::factory()->admin()->create();
+    $member = User::factory()->create(['name' => 'Member User']);
+    $adminUser = User::factory()->admin()->create(['name' => 'Admin User']);
+    $superAdminUser = User::factory()->superAdmin()->create(['name' => 'Super Admin User']);
+
+    $this->actingAs($admin)
+        ->get(route('admin.users.index'))
+        ->assertSuccessful()
+        ->assertSee($member->name)
+        ->assertDontSee($adminUser->name)
+        ->assertDontSee($superAdminUser->name);
+});
+
 it('shows user detail', function () {
     $admin = User::factory()->admin()->create();
     $user = User::factory()->create();

@@ -29,6 +29,7 @@ class AdminController extends Controller
 
         $roleFilter = (string) $request->query('role', '');
         $search = trim((string) $request->query('search', ''));
+        $perPage = (int) $request->query('per_page', 15);
 
         $admins = User::query()
             ->whereIn('role', [Role::Admin->value, Role::SuperAdmin->value])
@@ -45,7 +46,7 @@ class AdminController extends Controller
                 });
             })
             ->orderBy($sortField, $sortDirection)
-            ->paginate(10)
+            ->paginate($perPage)
             ->withQueryString();
 
         return view('admin.admins.index', [

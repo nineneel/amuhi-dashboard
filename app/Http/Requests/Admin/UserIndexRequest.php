@@ -15,7 +15,6 @@ class UserIndexRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:255'],
-            'role' => ['nullable', 'string', 'in:member,admin,super_admin'],
             'per_page' => ['nullable', 'integer', 'min:5', 'max:100'],
         ];
     }

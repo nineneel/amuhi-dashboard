@@ -45,9 +45,9 @@ it('renders reusable admin components in admin management page', function () {
         ->get(route('admin.admins.index'))
         ->assertSuccessful()
         ->assertSee('Admin Management')
-        ->assertSee('Filters')
-        ->assertSee('Apply Filters')
-        ->assertSee('View Access Rules')
+        ->assertSee('Search')
+        ->assertSee('Apply')
+        ->assertSee('Access Rules')
         ->assertSee('Admin Access Rules')
         ->assertSee($superAdmin->email)
         ->assertSee($admin->email);

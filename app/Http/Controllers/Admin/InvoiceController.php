@@ -13,6 +13,7 @@ class InvoiceController extends Controller
     {
         $search = trim((string) $request->query('search', ''));
         $status = (string) $request->query('status', '');
+        $perPage = (int) $request->query('per_page', 15);
 
         $invoices = Invoice::query()
             ->with(['user', 'subscription.subscriptionPlan'])
@@ -27,7 +28,7 @@ class InvoiceController extends Controller
             })
             ->when($status !== '', fn ($query) => $query->where('status', $status))
             ->orderBy('created_at', 'desc')
-            ->paginate(15)
+            ->paginate($perPage)
             ->withQueryString();
 
         return view('admin.invoices.index', [

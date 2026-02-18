@@ -18,6 +18,7 @@ class NewsController extends Controller
         $search = trim((string) $request->query('search', ''));
         $status = (string) $request->query('status', '');
         $category = (string) $request->query('category', '');
+        $perPage = (int) $request->query('per_page', 15);
 
         $news = News::query()
             ->when($search !== '', function ($query) use ($search): void {
@@ -29,7 +30,7 @@ class NewsController extends Controller
             ->when($status !== '', fn ($query) => $query->where('status', $status))
             ->when($category !== '', fn ($query) => $query->where('category', $category))
             ->orderBy('created_at', 'desc')
-            ->paginate(15)
+            ->paginate($perPage)
             ->withQueryString();
 
         $categories = News::query()->distinct()->pluck('category')->filter()->sort()->values();
@@ -50,7 +51,9 @@ class NewsController extends Controller
 
     public function store(NewsStoreRequest $request): RedirectResponse
     {
-        News::query()->create($request->validated());
+        $payload = $this->normalizeNewsPayload($request->validated(), (string) $request->input('tags_input', ''));
+
+        News::query()->create($payload);
 
         return redirect()
             ->route('admin.news.index')
@@ -74,7 +77,9 @@ class NewsController extends Controller
 
     public function update(NewsUpdateRequest $request, News $news): RedirectResponse
     {
-        $news->update($request->validated());
+        $payload = $this->normalizeNewsPayload($request->validated(), (string) $request->input('tags_input', ''));
+
+        $news->update($payload);
 
         return redirect()
             ->route('admin.news.index')
@@ -112,5 +117,67 @@ class NewsController extends Controller
         return redirect()
             ->back()
             ->with('success', 'News article unpublished.');
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     */
+    private function normalizeNewsPayload(array $payload, string $tagsInput = ''): array
+    {
+        if ($tagsInput !== '') {
+            $payload['tags'] = $this->parseCommaSeparatedValues($tagsInput);
+        }
+
+        $payload['content'] = collect($payload['content'] ?? [])
+            ->map(function ($block): array {
+                if (! is_array($block)) {
+                    return [
+                        'type' => 'paragraph',
+                        'text' => (string) $block,
+                    ];
+                }
+
+                $type = (string) ($block['type'] ?? 'paragraph');
+
+                if ($type === 'list') {
+                    $rawItems = $block['items'] ?? [];
+                    $items = is_array($rawItems)
+                        ? $rawItems
+                        : preg_split('/\r\n|\r|\n/', (string) $rawItems);
+
+                    return [
+                        'type' => 'list',
+                        'items' => collect($items)->map(fn ($item) => trim((string) $item))->filter()->values()->all(),
+                    ];
+                }
+
+                $normalized = [
+                    'type' => $type,
+                    'text' => trim((string) ($block['text'] ?? '')),
+                ];
+
+                if ($type === 'quote') {
+                    $normalized['cite'] = trim((string) ($block['cite'] ?? ''));
+                }
+
+                return $normalized;
+            })
+            ->values()
+            ->all();
+
+        return $payload;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function parseCommaSeparatedValues(string $value): array
+    {
+        return collect(explode(',', $value))
+            ->map(fn (string $item) => trim($item))
+            ->filter()
+            ->values()
+            ->all();
     }
 }

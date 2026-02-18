@@ -13,11 +13,24 @@ use Illuminate\View\View;
 
 class TestimonyController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = trim((string) $request->query('search', ''));
+        $isActive = (string) $request->query('is_active', '');
+        $perPage = (int) $request->query('per_page', 15);
+
         $testimonies = Testimony::query()
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($q) use ($search): void {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('role', 'like', "%{$search}%")
+                        ->orWhere('text', 'like', "%{$search}%");
+                });
+            })
+            ->when($isActive !== '', fn ($query) => $query->where('is_active', $isActive === '1'))
             ->ordered()
-            ->paginate(15);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('admin.content.testimonies.index', [
             'testimonies' => $testimonies,

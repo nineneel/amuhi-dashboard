@@ -10,7 +10,7 @@
 | Phase 2 | Admin Layout & Navigation | 🟢 Completed | 100% |
 | Phase 3 | CMS Content Models | 🟢 Completed | 100% |
 | Phase 4 | Admin Controllers | 🟢 Completed | 100% |
-| Phase 5 | Admin Views | 🔴 Not Started | 0% |
+| Phase 5 | Admin Views | 🟢 Completed | 100% |
 | Phase 6 | API for Marketing Website | 🔴 Not Started | 0% |
 
 **Legend**: 🔴 Not Started | 🟡 In Progress | 🟢 Completed | ⏸️ Blocked
@@ -464,7 +464,7 @@
 
 - [x] **Create UserController**
   - File: `app/Http/Controllers/Admin/UserController.php`
-  - Method: `index()` - List users with filters
+  - Method: `index()` - List member users with filters (admin/super_admin managed in admins page)
   - Method: `show($user)` - View user details
   - Method: `edit($user)` - Edit user form
   - Method: `update($user)` - Update user
@@ -472,7 +472,7 @@
 
 - [x] **Create UserIndexRequest (filters)**
   - File: `app/Http/Requests/Admin/UserIndexRequest.php`
-  - Validate: search, role filter, status filter, per_page
+  - Validate: search, status filter, per_page
 
 - [x] **Create UserUpdateRequest**
   - File: `app/Http/Requests/Admin/UserUpdateRequest.php`
@@ -692,9 +692,26 @@
 > 3. **MODIFY** the copied file for admin use
 > 4. **NEVER** create UI from scratch if similar component exists
 
+### 5.0 Table Revision Rules (All Index Tables)
+
+- [x] **Apply Basic Table 3 pattern to all index tables**
+  - Source pattern: `views_old/components/tables/basic-tables/basic-tables-three.blade.php`
+  - Use the same filter bar and table/list structure style
+
+- [x] **Use icon-only actions for all table action columns**
+  - Replace text actions (`View`, `Edit`, `Delete`) with action icons
+  - Keep accessible labels (`aria-label`) on icon buttons/links
+
+- [x] **Add avatar cell and remove ID column**
+  - Add avatar/profile style column like Basic Table 3 where entity identity is shown
+  - Remove `ID` column from all admin index tables
+
+- [x] **Apply pagination on all index tables**
+  - Users, Admins, Events, News, Testimonies, Subscriptions, Invoices, Payments
+
 ### 5.1 Dashboard Views
 
-- [ ] **Create dashboard index view**
+- [x] **Create dashboard index view**
   - File: `resources/views/admin/dashboard/index.blade.php`
   - **COPY FROM**: `views_old/pages/dashboard.blade.php` or `views_old/components/ecommerce/`
   - Include: Stats cards grid
@@ -702,62 +719,63 @@
 
 ### 5.2 User Views
 
-- [ ] **Create users index view**
+- [x] **Create users index view**
   - File: `resources/views/admin/users/index.blade.php`
-  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-one.blade.php`
-  - Include: Filters (search, role)
+  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-three.blade.php`
+  - Include: Member users only (exclude admin/super_admin from this page)
+  - Include: Filters in Basic Table 3 layout (no role filter needed on this page)
   - Include: Data table with users
   - Include: Pagination
 
-- [ ] **Create users show view**
+- [x] **Create users show view**
   - File: `resources/views/admin/users/show.blade.php`
   - **COPY FROM**: `views_old/components/ecommerce/transactions/customer-details.blade.php`
   - Display: User details, profile info
   - Display: Subscription status
   - Display: Activity history
 
-- [ ] **Create users edit view**
+- [x] **Create users edit view**
   - File: `resources/views/admin/users/edit.blade.php`
   - **COPY FROM**: `views_old/components/form/example-form/example-form-one.blade.php`
   - Form: Edit user details
 
 ### 5.3 Admin Views (SuperAdmin)
 
-- [ ] **Create admins index view**
+- [x] **Create admins index view**
   - File: `resources/views/admin/admins/index.blade.php`
-  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-one.blade.php`
+  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-three.blade.php`
   - Table: List admins with role badge
 
-- [ ] **Create admins create view**
+- [x] **Create admins create view**
   - File: `resources/views/admin/admins/create.blade.php`
   - **COPY FROM**: `views_old/components/form/example-form/example-form-one.blade.php`
   - Form: Create new admin
 
-- [ ] **Create admins edit view**
+- [x] **Create admins edit view**
   - File: `resources/views/admin/admins/edit.blade.php`
   - **COPY FROM**: `views_old/components/form/example-form/example-form-one.blade.php`
   - Form: Update admin role
 
 ### 5.4 Event Views
 
-- [ ] **Create events index view**
+- [x] **Create events index view**
   - File: `resources/views/admin/events/index.blade.php`
-  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-one.blade.php`
+  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-three.blade.php`
   - Table: List events with status
 
-- [ ] **Create events create view**
+- [x] **Create events create view**
   - File: `resources/views/admin/events/create.blade.php`
   - **COPY FROM**: `views_old/components/form/example-form/example-form-two.blade.php`
   - Form: Create event
   - Include: Image upload (optional)
 
-- [ ] **Create events edit view**
+- [x] **Create events edit view**
   - File: `resources/views/admin/events/edit.blade.php`
   - **COPY FROM**: `views_old/components/form/example-form/example-form-two.blade.php`
   - Form: Edit event
   - Include: Image upload (optional)
 
-- [ ] **Create events show view**
+- [x] **Create events show view**
   - File: `resources/views/admin/events/show.blade.php`
   - **COPY FROM**: `views_old/components/ecommerce/transactions/order-details.blade.php`
   - Display: Event details
@@ -765,29 +783,29 @@
 
 ### 5.5 News Views
 
-- [ ] **Create news index view**
+- [x] **Create news index view**
   - File: `resources/views/admin/content/news/index.blade.php`
-  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-one.blade.php`
+  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-three.blade.php`
   - Table: List news with status, category
   - Filters: Status, category, search
 
-- [ ] **Create news create view**
+- [x] **Create news create view**
   - File: `resources/views/admin/content/news/create.blade.php`
   - **COPY FROM**: `views_old/components/form/example-form/example-form-two.blade.php`
   - Form: All news fields
   - Component: Content block editor (paragraph, heading, list, quote)
 
-- [ ] **Create news edit view**
+- [x] **Create news edit view**
   - File: `resources/views/admin/content/news/edit.blade.php`
   - **COPY FROM**: Same as create view
   - Form: Same as create, pre-filled
 
-- [ ] **Create news show view**
+- [x] **Create news show view**
   - File: `resources/views/admin/content/news/show.blade.php`
   - **COPY FROM**: `views_old/components/ecommerce/transactions/order-details.blade.php`
   - Display: News preview
 
-- [ ] **Create content block editor component**
+- [x] **Create content block editor component**
   - File: `resources/views/admin/components/content-editor.blade.php`
   - **REFERENCE**: `views_old/components/form/form-elements/text-area-inputs.blade.php`
   - Feature: Add/remove blocks
@@ -796,71 +814,75 @@
 
 ### 5.6 Testimony Views
 
-- [ ] **Create testimonies index view**
+- [x] **Create testimonies index view**
   - File: `resources/views/admin/content/testimonies/index.blade.php`
-  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-one.blade.php`
+  - **COPY FROM**: `views_old/components/tables/basic-tables/basic-tables-three.blade.php`
   - Table: List testimonies
   - Feature: Drag-and-drop reorder
 
-- [ ] **Create testimonies create view**
+- [x] **Create testimonies create view**
   - File: `resources/views/admin/content/testimonies/create.blade.php`
   - **COPY FROM**: `views_old/components/form/example-form/example-form-one.blade.php`
   - Form: Testimony fields
   - Preview: YouTube video embed
 
-- [ ] **Create testimonies edit view**
+- [x] **Create testimonies edit view**
   - File: `resources/views/admin/content/testimonies/edit.blade.php`
   - **COPY FROM**: Same as create view
   - Form: Same as create
 
 ### 5.7 Subscription Views
 
-- [ ] **Create subscriptions index view**
+- [x] **Create subscriptions index view**
   - File: `resources/views/admin/subscriptions/index.blade.php`
   - Table: Subscriptions with user, plan, status
 
-- [ ] **Create subscriptions show view**
+- [x] **Create subscriptions show view**
   - File: `resources/views/admin/subscriptions/show.blade.php`
   - Display: Subscription details
 
 ### 5.8 Invoice Views
 
-- [ ] **Create invoices index view**
+- [x] **Create invoices index view**
   - File: `resources/views/admin/invoices/index.blade.php`
   - Table: Invoices with user, amount, status
 
-- [ ] **Create invoices show view**
+- [x] **Create invoices show view**
   - File: `resources/views/admin/invoices/show.blade.php`
   - Display: Invoice details
 
 ### 5.9 Payment Views
 
-- [ ] **Create payments index view**
+- [x] **Create payments index view**
   - File: `resources/views/admin/payments/index.blade.php`
   - Table: Payments with invoice, amount, status
 
-- [ ] **Create payments show view**
+- [x] **Create payments show view**
   - File: `resources/views/admin/payments/show.blade.php`
   - Display: Payment details
 
 ### 5.10 Settings Views
 
-- [ ] **Create settings index view**
+- [x] **Create settings index view**
   - File: `resources/views/admin/settings/index.blade.php`
   - Form: Site settings
   - Sections: General, SEO, Contact
 
 ### 5.11 Phase 5 Verification Checklist
 
-- [ ] All views render without errors
-- [ ] Forms submit correctly
-- [ ] Validation errors display
-- [ ] Flash messages display
-- [ ] Tables paginate correctly
-- [ ] Filters work correctly
-- [ ] Dark mode applied
-- [ ] Mobile responsive
-- [ ] Content editor works
+- [x] All views render without errors
+- [x] Forms submit correctly
+- [x] Validation errors display
+- [x] Flash messages display
+- [x] Tables paginate correctly
+- [x] Filters work correctly
+- [x] Action columns use icons only (no action text)
+- [x] Avatar/profile cell style applied on index tables
+- [x] ID column removed from index tables
+- [x] Users index shows members only
+- [x] Dark mode applied
+- [x] Mobile responsive
+- [x] Content editor works
 
 ---
 

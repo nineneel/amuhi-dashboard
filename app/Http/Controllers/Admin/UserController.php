@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserIndexRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
@@ -14,17 +15,16 @@ class UserController extends Controller
     public function index(UserIndexRequest $request): View
     {
         $search = trim((string) $request->query('search', ''));
-        $role = (string) $request->query('role', '');
         $perPage = (int) $request->query('per_page', 15);
 
         $users = User::query()
+            ->where('role', Role::Member)
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($q) use ($search): void {
                     $q->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
                 });
             })
-            ->when($role !== '', fn ($query) => $query->where('role', $role))
             ->orderBy('created_at', 'desc')
             ->paginate($perPage)
             ->withQueryString();

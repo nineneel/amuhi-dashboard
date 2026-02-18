@@ -210,7 +210,7 @@ Settings
 ### 4.2 User Management
 **File**: `app/Http/Controllers/Admin/UserController.php`
 - CRUD for users (index, show, edit, update, destroy)
-- Filter by role (members only for Admin, all for SuperAdmin)
+- Users index must list `member` users only (admins/super_admins are managed in admin pages)
 - Subscription status view
 
 ### 4.3 Admin Management (SuperAdmin only)
@@ -256,6 +256,15 @@ Settings
 > 2. Copy the file to admin directory
 > 3. Modify the copied file for admin use
 > 4. Never create UI from scratch if a similar component exists
+
+### 5.0 Table Revision Rules (All Index Tables)
+- Use `Basic Table 3` visual pattern for table/list pages.
+- Remove `ID` column from all admin index tables.
+- Add avatar/profile cell style like `Basic Table 3` for entity identity rows where applicable.
+- Action column must use icon-only controls (view/edit/delete), not text labels.
+- Keep table filters in `Basic Table 3` style layout.
+- Apply pagination on all index tables.
+- Users index must show `member` users only. Admin and super admin users belong in `admins` pages.
 
 ### 5.1 Directory Structure
 ```
@@ -315,7 +324,7 @@ resources/views/admin/
 | **Dashboard** | |
 | `admin/dashboard/index.blade.php` | `pages/dashboard.blade.php` or `components/ecommerce/` |
 | **Tables/Lists** | |
-| Index views (users, news, etc.) | `components/tables/basic-tables/` |
+| Index views (users, news, etc.) | `components/tables/basic-tables/basic-tables-three.blade.php` |
 | **Forms** | |
 | Create/Edit views | `components/form/example-form/` |
 | Form inputs | `components/form/form-elements/` |

@@ -13,6 +13,7 @@ class SubscriptionController extends Controller
     {
         $search = trim((string) $request->query('search', ''));
         $status = (string) $request->query('status', '');
+        $perPage = (int) $request->query('per_page', 15);
 
         $subscriptions = Subscription::query()
             ->with(['user', 'subscriptionPlan'])
@@ -24,7 +25,7 @@ class SubscriptionController extends Controller
             })
             ->when($status !== '', fn ($query) => $query->where('status', $status))
             ->orderBy('created_at', 'desc')
-            ->paginate(15)
+            ->paginate($perPage)
             ->withQueryString();
 
         return view('admin.subscriptions.index', [
