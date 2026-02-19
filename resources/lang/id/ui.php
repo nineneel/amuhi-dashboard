@@ -81,7 +81,7 @@ return [
         'language' => 'Bahasa',
         'member_type' => 'Tipe Anggota',
         'select_member_type' => 'Pilih tipe anggota',
-        'phone_number' => 'Nomor Telepon',
+        'phone_number' => 'Nomor WhatsApp',
         'pt_name_optional' => 'Nama PT (Opsional)',
         'theme_preference' => 'Preferensi tema',
         'confirm_password' => 'Konfirmasi Kata Sandi',
@@ -90,7 +90,7 @@ return [
             'enter_email' => 'Masukkan email Anda',
             'enter_password' => 'Masukkan kata sandi Anda',
             'enter_full_name' => 'Masukkan nama lengkap Anda',
-            'enter_phone' => 'Masukkan nomor telepon Anda',
+            'enter_phone' => 'Masukkan nomor WhatsApp Anda',
             'enter_company' => 'Masukkan nama perusahaan atau PT',
             'enter_current_password' => 'Masukkan kata sandi saat ini',
             'enter_new_password' => 'Masukkan kata sandi baru',
@@ -469,7 +469,7 @@ return [
 
         'privacy_profile_visible' => 'Izinkan pengguna lain melihat profil saya.',
         'privacy_show_email' => 'Tampilkan email saya di detail profil.',
-        'privacy_show_phone' => 'Tampilkan nomor telepon saya di detail profil.',
+        'privacy_show_phone' => 'Tampilkan nomor WhatsApp saya di detail profil.',
 
         'theme' => [
             'light' => 'Terang',

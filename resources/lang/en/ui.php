@@ -81,7 +81,7 @@ return [
         'language' => 'Language',
         'member_type' => 'Member Type',
         'select_member_type' => 'Select member type',
-        'phone_number' => 'Phone Number',
+        'phone_number' => 'WhatsApp Number',
         'pt_name_optional' => 'PT Name (Optional)',
         'theme_preference' => 'Theme preference',
         'confirm_password' => 'Confirm Password',
@@ -90,7 +90,7 @@ return [
             'enter_email' => 'Enter your email',
             'enter_password' => 'Enter your password',
             'enter_full_name' => 'Enter your full name',
-            'enter_phone' => 'Enter your phone number',
+            'enter_phone' => 'Enter your WhatsApp',
             'enter_company' => 'Enter company or PT name',
             'enter_current_password' => 'Enter current password',
             'enter_new_password' => 'Enter new password',
@@ -469,7 +469,7 @@ return [
 
         'privacy_profile_visible' => 'Allow other users to view my profile.',
         'privacy_show_email' => 'Show my email in profile details.',
-        'privacy_show_phone' => 'Show my phone number in profile details.',
+        'privacy_show_phone' => 'Show my WhatsApp in profile details.',
 
         'theme' => [
             'light' => 'Light',

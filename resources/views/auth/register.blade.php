@@ -62,8 +62,8 @@
                                     class="!border-[#2c58a8]/25 !bg-white/80 !text-[#2c58a8] focus:!border-[#2c58a8]/55 focus:!ring-[#2c58a8]/20 dark:!border-[#82a7e5]/35 dark:!bg-[#091838]/85 dark:!text-[#e6f0ff] dark:focus:!border-[#95d9f0]/70 dark:focus:!ring-[#95d9f0]/20"
                                 >
                                     <option value="">{{ __('ui.forms.select_member_type') }}</option>
-                                    <option value="ppui_pihk" @selected(old('member_type') === 'ppui_pihk')>PPIU PIHK</option>
-                                    <option value="pt" @selected(old('member_type') === 'pt')>PT</option>
+                                    <option value="ppui_pihk" @selected(old('member_type') === 'ppui_pihk')>PPIU / PIHK</option>
+                                    <option value="pt" @selected(old('member_type') === 'pt')>PT Umum</option>
                                     <option value="personal" @selected(old('member_type') === 'personal')>Personal</option>
                                 </x-form.select>
                             </div>
