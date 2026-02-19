@@ -424,7 +424,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('ui.payments.account_name') }}</p>
-                                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">AMUHI</p>
+                                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">Perkumpulan Asosiasi Milenial Umroh Haji Indonesia</p>
                                             </div>
                                             <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('ui.payments.amount_to_transfer') }}</p>
