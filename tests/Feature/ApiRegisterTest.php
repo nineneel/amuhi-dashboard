@@ -56,6 +56,27 @@ it('validates required fields for API registration', function () {
         ->assertJsonStructure(['message', 'errors']);
 });
 
+it('returns localized unique email validation messages for API registration', function (string $locale, string $expectedMessage) {
+    config()->set('app.locale', $locale);
+
+    User::factory()->create([
+        'email' => 'existing-user@example.com',
+    ]);
+
+    $this->postJson('/api/v1/register', [
+        'member_type' => 'personal',
+        'name' => 'Test User',
+        'phone' => '081234567890',
+        'email' => 'existing-user@example.com',
+        'terms' => true,
+    ])
+        ->assertUnprocessable()
+        ->assertJsonPath('errors.email.0', $expectedMessage);
+})->with([
+    'indonesian' => ['id', 'Kolom email sudah digunakan.'],
+    'english' => ['en', 'The email has already been taken.'],
+]);
+
 it('rate limits API registration to reduce abuse', function () {
     Notification::fake();
 

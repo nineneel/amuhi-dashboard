@@ -3,10 +3,10 @@
 namespace App\Http\Requests\Api;
 
 use App\MemberType;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
 class RegisterRequest extends FormRequest
 {
@@ -24,13 +24,6 @@ class RegisterRequest extends FormRequest
             'phone' => ['required', 'string', 'max:25'],
             'company_name' => ['nullable', 'string', 'max:255'],
             'terms' => ['accepted'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'terms.accepted' => 'You must agree to the terms and conditions.',
         ];
     }
 

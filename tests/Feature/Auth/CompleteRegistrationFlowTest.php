@@ -46,7 +46,7 @@ it('completes registration by setting a password and verifying the email', funct
 
     $this->get(route('registration.complete', ['token' => $token, 'email' => $user->email]))
         ->assertSuccessful()
-        ->assertSee('Complete Registration');
+        ->assertSee(trans('ui.auth_extra.complete_registration_title', [], 'id'));
 
     $this->post(route('registration.complete.store'), [
         'token' => $token,
@@ -64,3 +64,22 @@ it('completes registration by setting a password and verifying the email', funct
     expect(Hash::check('new-password-123', $user->password))->toBeTrue();
 });
 
+it('shows localized unique email validation on web registration', function () {
+    User::factory()->create([
+        'email' => 'existing-web@example.com',
+    ]);
+
+    $this->post(route('register'), [
+        'member_type' => 'personal',
+        'name' => 'Test User',
+        'phone' => '08123456789',
+        'email' => 'existing-web@example.com',
+        'terms' => 'on',
+    ])->assertSessionHasErrors([
+        'email' => trans(
+            'validation.unique',
+            ['attribute' => trans('validation.attributes.email', [], 'id')],
+            'id'
+        ),
+    ]);
+});
