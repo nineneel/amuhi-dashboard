@@ -26,7 +26,7 @@
             <div class="grid gap-5 sm:grid-cols-2">
                 <div class="sm:col-span-2">
                     <x-form.select :label="__('ui.forms.member_type')" name="member_type" id="member_type" required>
-                        <option value="ppui_pihk" @selected(old('member_type', $profile?->member_type?->value) === 'ppui_pihk')>PPUI PIHK</option>
+                        <option value="ppui_pihk" @selected(old('member_type', $profile?->member_type?->value) === 'ppui_pihk')>PPIU PIHK</option>
                         <option value="pt" @selected(old('member_type', $profile?->member_type?->value) === 'pt')>PT</option>
                         <option value="personal" @selected(old('member_type', $profile?->member_type?->value) === 'personal')>Personal</option>
                     </x-form.select>
