@@ -3,8 +3,8 @@
 it('renders the login page with the new auth ui assets', function () {
     $this->get(route('login'))
         ->assertSuccessful()
-        ->assertSee('auth-flare-orb')
-        ->assertSee('authFlareFloat')
+        ->assertSee('images/auth/amuhi-auth-background.mp4')
+        ->assertSee('<video', false)
         ->assertSee('images/logo/amuhi-logo.png')
         ->assertSee(__('ui.buttons.sign_in'));
 });
@@ -12,8 +12,8 @@ it('renders the login page with the new auth ui assets', function () {
 it('renders the register page with the same auth ui assets', function () {
     $this->get(route('register'))
         ->assertSuccessful()
-        ->assertSee('auth-flare-orb')
-        ->assertSee('authFlareFloat')
+        ->assertSee('images/auth/amuhi-auth-background.mp4')
+        ->assertSee('<video', false)
         ->assertSee('images/logo/amuhi-logo.png')
         ->assertSee(__('ui.buttons.complete_registration'));
 });

@@ -9,6 +9,7 @@ uses(RefreshDatabase::class);
 it('renders the admin login page', function () {
     $this->get(route('admin.login'))
         ->assertSuccessful()
+        ->assertDontSee('images/auth/amuhi-auth-background.mp4')
         ->assertSee(__('ui.admin.admin_sign_in'));
 });
 
